@@ -40,7 +40,10 @@
       </div>
 
       <div class="self-center space-x-4">
-        <HeartIcon class="h-5 w-5 text-red-500"/>
+        <HeartIcon
+          class="h-5 w-5 text-red-500 cursor-pointer"
+          @click="sendToFavourite"
+        />
       </div>
     </div>
   </div>
@@ -92,6 +95,9 @@ export default {
       if (this.activeGroup !== oldActiveGroupIndex) {
         this.$emit('setMarkersOnMap', this.activeGroup)
       }
+    },
+    sendToFavourite() {
+      alert('Heart clicked!')
     }
   }
 }

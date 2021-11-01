@@ -1,5 +1,5 @@
 ## Run app on dev server
 
-cd vue-wspollokator-app
-npm install
-npm run dev
+1. cd vue-wspollokator-app
+2. npm install
+3. npm run dev

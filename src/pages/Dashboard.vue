@@ -4,63 +4,9 @@
     style="height: 100vh; max-height: 100vh"
   >
     <div style="max-height: 20%">
-      <div class="flex-none navbar border-base-100 text-black" style=" border-bottom: 2px solid #ddd">
-        <div class="flex-none px-4">
-          <span class="text-lg font-bold">
-            <a href="/">Współlokator</a>
-          </span>
-        </div>
-        <div class="flex-1 px-2 mx-2">
-          <div class="items-stretch hidden lg:flex">
-          </div>
-        </div>
-        <div class="flex-none">
-          <a
-            href="/favourite"
-            class="btn btn-ghost btn-sm rounded-btn"
-          >
-            Zapisane
-          </a>
-          <a
-            href="/my-profile"
-            class="btn btn-ghost btn-sm rounded-btn"
-          >
-            Mój profil
-          </a>
-          <a
-            href="/logout"
-            class="btn btn-ghost btn-sm rounded-btn"
-          >
-            Wyloguj się
-          </a>
-        </div>
-      </div>
+      <Navbar />
 
-      <div class="flex-none shadow-md px-6 py-4">
-        <p>Filtry</p>
-        <div class="flex flex-row">
-          <div class="form-control">
-            <label class="cursor-pointer flex flex-row content-center items-center pr-4">
-              <span class="label-text pr-2">Zwierzęta domowe</span>
-              <input type="checkbox" checked="checked" class="toggle">
-            </label>
-          </div>
-
-          <div class="form-control">
-            <label class="cursor-pointer flex flex-row content-center items-center pr-4">
-              <span class="label-text pr-2">Osoby palące</span>
-              <input type="checkbox" class="toggle">
-            </label>
-          </div>
-
-          <div class="form-control">
-            <label class="cursor-pointer flex flex-row content-center items-center pr-4">
-              <span class="label-text pr-2">Zapisane</span>
-              <input type="checkbox" class="toggle">
-            </label>
-          </div>
-        </div>
-      </div>
+      <Filters />
     </div>
 
     <div
@@ -90,10 +36,14 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
 import DashboardList from "../components/dashboard/DashboardList.vue"
+import Navbar from '../components/reusable-components/Navbar.vue'
+import Filters from '../components/reusable-components/Filters.vue'
 
 export default {
   components: {
-    DashboardList
+    Filters,
+    DashboardList,
+    Navbar
   },
   data () {
     return {
