@@ -3,9 +3,15 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {},
-    maxHeight: {
-      'map': '90vh',
-     }
+    fontFamily: {
+      'sans': ['Poppins', 'Sans-serif']
+    },
+    height: {
+      'map': '90vh'
+    },
+    minWidth: {
+      '120': '120px'
+    }
   },
   variants: {
     extend: {},
@@ -13,4 +19,10 @@ module.exports = {
   plugins: [
     require('daisyui')
   ],
+  daisyui: {
+    themes: [
+      'light', // first one will be the default theme
+      // 'dark'
+    ],
+  }
 }

@@ -1,7 +1,7 @@
 <template>
-  <Index />
+  <Dashboard />
 </template>
 
 <script setup>
-import Index from './components/Index.vue'
+import Dashboard from './pages/Dashboard.vue'
 </script>
