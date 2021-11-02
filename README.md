@@ -1,5 +1,6 @@
 ## Run app on dev server
 
-1. cd vue-wspollokator-app
-2. npm install
-3. npm run dev
+1. git clone
+2. cd vue-wspollokator-app-skeleton
+3. npm install
+4. npm run dev

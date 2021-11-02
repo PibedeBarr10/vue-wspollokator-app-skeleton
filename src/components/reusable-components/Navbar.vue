@@ -2,7 +2,9 @@
   <div class="flex-none navbar border-base-100 text-black" style=" border-bottom: 2px solid #ddd">
     <div class="flex-none px-4">
       <span class="text-lg font-extrabold">
-        <a href="/">Współlokator</a>
+        <router-link to="/">
+          Współlokator
+        </router-link>
       </span>
     </div>
     <div class="flex-1 px-2 mx-2">
@@ -10,24 +12,24 @@
       </div>
     </div>
     <div class="flex-none">
-      <a
-        href="/favourite"
-        class="btn btn-ghost btn-sm rounded-btn"
-      >
-        Zapisane
-      </a>
-      <a
-        href="/my-profile"
+<!--      <router-link-->
+<!--        to="/saved"-->
+<!--        class="btn btn-ghost btn-sm rounded-btn"-->
+<!--      >-->
+<!--        Zapisane-->
+<!--      </router-link>-->
+      <router-link
+        to="/my-profile"
         class="btn btn-ghost btn-sm rounded-btn"
       >
         Mój profil
-      </a>
-      <a
-        href="/logout"
-        class="btn btn-ghost btn-sm rounded-btn"
+      </router-link>
+      <router-link
+          to="/logout"
+          class="btn btn-ghost btn-sm rounded-btn"
       >
         <LogoutIcon class="h-6 w-6"/>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
