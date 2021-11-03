@@ -2,7 +2,6 @@
   <div class="flex flex-col my-0 py-0" style="height: 100vh; max-height: 100vh">
     <div style="max-height: 20%">
       <Navbar
-      
         ><router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
           Mój profil
         </router-link>

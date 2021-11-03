@@ -1,6 +1,10 @@
 <template>
   <div class="flex flex-col" style="height: 100vh">
-    <Navbar />
+    <Navbar
+      ><router-link to="/" class="btn btn-ghost btn-sm rounded-btn">
+        Home
+      </router-link></Navbar
+    >
     <div class="flex flex-row flex-1">
       <img
         class="object-cover flex w-1/2 bg-black items-center justify-center"
