@@ -7,7 +7,7 @@ import Register from "../pages/register.vue";
 
 const routes = [
     {
-        path: "/",
+        path: "/dashboard",
         name: "Dashboard",
         component: Dashboard,
     },
@@ -30,6 +30,11 @@ const routes = [
         path: "/logout",
         name: "Wylogowano",
         component: Logout,
+    },
+    {
+        path: "/",
+        name: "Współlokator - witamy!",
+        component: import('../pages/landing-page.vue'),
     },
 ];
 
