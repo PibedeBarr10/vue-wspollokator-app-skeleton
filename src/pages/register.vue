@@ -1,7 +1,24 @@
 <template>
-  <p>Rejestracja</p>
+  <AuthTemplate>
+    <RegisterForm />
+  </AuthTemplate>
 </template>
+<script>
+import AuthTemplate from "../components/auth/AuthTemplate.vue";
+import RegisterForm from "../components/auth/RegisterForm.vue";
 
-<style scoped>
+export default {
+  components: {
+    AuthTemplate,
+    RegisterForm,
+  },
+  data() {
+    return {};
+  },
+  mounted() {},
+  methods: {},
+  created() {},
+};
+</script>
 
-</style>
+<style scoped></style>
