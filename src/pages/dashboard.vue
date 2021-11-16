@@ -1,14 +1,13 @@
 <template>
   <div class="flex flex-col my-0 py-0" style="height: 100vh; max-height: 100vh">
     <div style="max-height: 20%">
-      <Navbar
-      
-        ><router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
+      <Navbar>
+        <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
           Mój profil
         </router-link>
-        <router-link to="/logout" class="btn btn-ghost btn-sm rounded-btn">
-          <LogoutIcon class="h-6 w-6" /> </router-link
-      ></Navbar>
+        <router-link to="/" class="btn btn-ghost btn-sm rounded-btn">
+          <LogoutIcon class="h-6 w-6" /> </router-link>
+      </Navbar>
 
       <Filters />
     </div>
@@ -88,7 +87,7 @@ export default {
         },
         {
           id: 15,
-          localization: [53.05, 17.05],
+          localization: [52.05, 16.05],
           members: [
             {
               name: "Jan",
@@ -100,7 +99,7 @@ export default {
         },
         {
           id: 15,
-          localization: [53.05, 17.05],
+          localization: [51.05, 17.65],
           members: [
             {
               name: "Jan",
@@ -112,7 +111,7 @@ export default {
         },
         {
           id: 15,
-          localization: [53.05, 17.05],
+          localization: [52.57, 16.25],
           members: [
             {
               name: "Jan",

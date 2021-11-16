@@ -8,7 +8,7 @@
       <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
         Mój profil
       </router-link>
-      <router-link to="/logout" class="btn btn-ghost btn-sm rounded-btn">
+      <router-link to="/" class="btn btn-ghost btn-sm rounded-btn">
         <LogoutIcon class="h-6 w-6" /> </router-link
       >
     </Navbar>
@@ -16,7 +16,7 @@
       <div class="lg:w-3/5 lg:h-2/5 mx-auto flex flex-wrap">
         <div class="lg:w-2/5 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
           <div class="flex mb-4">
-            <a class="flex-grow  border-b-2 border-gray-500 py-2 text-lg px-1">Mój opis</a>
+            <a class="flex-grow border-b-2 border-gray-500 py-2 text-lg px-1">Mój opis</a>
           </div>
           <p class="leading-relaxed mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsam pariatur ex? Sunt dolorum dolores provident rem numquam, eius placeat officia, veritatis accusantium quod blanditiis excepturi, voluptate incidunt odit quis! </p>
         </div>
@@ -51,16 +51,16 @@
           </div>
         </div>
         <div class="lg:w-1/5 lg:h-1/2">
-          <h1 class="text-gray-900 text-3xl title-font font-medium mb-2" >Jan Kowalski</h1>
+          <h1 class="text-gray-900 text-3xl title-font font-medium mb-2">Jan Kowalski</h1>
           <h2 class="text-sm title-font text-gray-500 tracking-widest mb-2">jankowalski@gmail.com</h2>
-          <img alt="avatar" class=" w-full h-full object-cover object-center rounded" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png">
-          <button class="flex m-2 text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded">Zmień zdjęcie</button>
-          <button class="flex m-2 text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded">Edytuj hasło</button>
+          <img alt="avatar" class="w-full h-full object-cover object-center rounded" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png">
+          <button class="my-2 text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded text-center w-full">Zmień zdjęcie</button>
+          <button class="my-2 text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded text-center w-full">Edytuj hasło</button>
         </div>
       </div>
     </div>
     <div class="flex-none map border-base-100 text-black py-4 px-6 my-6">
-      <div class="flex-none px-4">
+      <div class="flex-none pr-4">
         <span class="text-lg font-extrabold">
           Mój punkt
         </span>
@@ -96,7 +96,7 @@ export default {
   },
   methods: {
     createMap() {
-      this.map = L.map("mapContainer").setView([52, 19.05], 6);
+      this.map = L.map("mapContainer").setView([52.162, 21.046], 20);
       L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(this.map);

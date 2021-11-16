@@ -12,12 +12,6 @@
       <div class="items-stretch hidden lg:flex"></div>
     </div>
     <div class="flex-none">
-      <!--      <router-link-->
-      <!--        to="/saved"-->
-      <!--        class="btn btn-ghost btn-sm rounded-btn"-->
-      <!--      >-->
-      <!--        Zapisane-->
-      <!--      </router-link>-->
       <slot />
     </div>
   </div>
