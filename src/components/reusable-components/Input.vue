@@ -13,19 +13,20 @@
       focus:outline-none focus:ring-1 focus:ring-indigo-600
       rounded-md
     "
-    :class="class"
+    :class="additionalClasses"
   />
 </template>
 <script>
 export default {
   inheritAttrs: false,
   props: {
+    value: String,
     type: {
       type: String,
       default: "text",
     },
     placeholder: String,
-    class: String,
+    additionalClasses: String,
   },
 };
 </script>

@@ -11,13 +11,7 @@ export default {
   components: {
     AuthTemplate,
     LoginForm,
-  },
-  data() {
-    return {};
-  },
-  mounted() {},
-  methods: {},
-  created() {},
+  }
 };
 </script>
 

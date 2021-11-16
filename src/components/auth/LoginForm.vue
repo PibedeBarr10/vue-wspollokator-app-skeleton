@@ -1,9 +1,24 @@
 <template>
   <div class="flex flex-col w-3/4 lg:w-1/2 items-center justify-center">
     <span class="text-2xl font-bold mb-10">Zaloguj się do konta</span>
-    <Input placeholder="E-mail" />
-    <Input type="password" placeholder="Hasło" class="mt-5" />
-    <BaseButton round key="login" size="lg" class="mt-10" @click="$router.push('dashboard')">
+    <input
+      v-model="loginData.email"
+      placeholder="E-mail"
+      class="mt-5"
+    />
+    <input
+      v-model="loginData.password"
+      type="password"
+      placeholder="Hasło"
+      class="mt-5"
+    />
+    <BaseButton
+      @click="login"
+      round
+      key="login"
+      size="lg"
+      class="mt-10"
+    >
       <span class="normal-case">Zaloguj się</span>
     </BaseButton>
     <BaseButton
@@ -25,12 +40,24 @@ import BaseButton from "../reusable-components/BaseButton.vue";
 import Input from "../reusable-components/Input.vue";
 
 export default {
-  components: { BaseButton, Input },
-  data() {
-    return {};
+  components: {
+    BaseButton,
+    Input
   },
-  mounted() {},
-  methods: {},
+  data() {
+    return {
+      loginData: {
+        email: '',
+        password: ''
+      }
+    }
+  },
+  methods: {
+    login() {
+      console.log('clicked')
+      this.$store.dispatch('auth/login', this.loginData)
+    }
+  }
 };
 </script>
 

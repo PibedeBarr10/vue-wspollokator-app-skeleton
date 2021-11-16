@@ -3,3 +3,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    input {
+        @apply w-full border font-medium px-3 py-4 focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md;
+    }
+    input:hover {
+        @apply outline-none
+    }
+}

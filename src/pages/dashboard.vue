@@ -152,9 +152,9 @@ export default {
     };
   },
   mounted() {
-    this.createMap();
-    this.getAllMarkers();
-    this.setAllMarkersOnMap();
+    // this.createMap();
+    // this.getAllMarkers();
+    // this.setAllMarkersOnMap();
   },
   methods: {
     createMap() {
