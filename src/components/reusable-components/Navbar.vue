@@ -14,6 +14,17 @@
     <div class="flex-none">
       <slot />
     </div>
+    <div
+      v-if="currentUser"
+      class="flex-none"
+    >
+      <div
+        class="btn btn-ghost btn-sm rounded-btn"
+        @click="logout"
+      >
+        <LogoutIcon class="h-6 w-6" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -25,6 +36,20 @@ export default {
   components: {
     LogoutIcon,
   },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
+  methods: {
+    logout() {
+      if (this.currentUser) {
+        this.$store.dispatch('auth/logout').then(() => {
+          this.$router.push('/')
+        })
+      }
+    }
+  }
 };
 </script>
 

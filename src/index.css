@@ -5,10 +5,10 @@
 @tailwind utilities;
 
 @layer components {
-    input {
+    input[type=text], input[type=password] {
         @apply w-full border font-medium px-3 py-4 focus:outline-none focus:ring-1 focus:ring-indigo-600 rounded-md;
     }
-    input:hover {
+    input[type=text]:hover, input[type=password]:hover {
         @apply outline-none
     }
 }

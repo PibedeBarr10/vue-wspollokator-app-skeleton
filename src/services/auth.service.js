@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'localhost:8000';
+const API_URL = 'http://localhost:8000';
 // const API_URL = `${import.meta.env.API_URL}`;
 
 console.log(API_URL)
@@ -26,8 +26,9 @@ class AuthService {
     }
 
     register(user) {
-        return axios.post(API_URL + '/auth/register', {
-            username: user.username,
+        return axios.post(API_URL + '/auth/register/', {
+            first_name: user.firstName,
+            last_name: user.lastName,
             email: user.email,
             password: user.password
         });

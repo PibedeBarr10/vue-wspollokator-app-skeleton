@@ -11,6 +11,16 @@ export default {
   components: {
     AuthTemplate,
     LoginForm,
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
+  mounted() {
+    if (this.currentUser) {
+      this.$router.push('/dashboard');
+    }
   }
 };
 </script>

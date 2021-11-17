@@ -18,6 +18,16 @@ export default {
   components: {
     Navbar,
     Hero
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
+  mounted() {
+    if (this.currentUser) {
+      this.$router.push('/dashboard');
+    }
   }
 }
 </script>

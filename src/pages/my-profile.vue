@@ -8,9 +8,6 @@
       <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
         Mój profil
       </router-link>
-      <router-link to="/" class="btn btn-ghost btn-sm rounded-btn">
-        <LogoutIcon class="h-6 w-6" /> </router-link
-      >
     </Navbar>
     <div>
       <div class="lg:w-3/5 lg:h-2/5 mx-auto flex flex-wrap">
@@ -90,7 +87,16 @@ export default {
       marker: null
     }
   },
+
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
   mounted () {
+    if (!this.currentUser) {
+      this.$router.push('/login');
+    }
     this.createMap()
     this.setMarkerOnMap()
   },
