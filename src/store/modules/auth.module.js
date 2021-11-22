@@ -1,8 +1,9 @@
 import AuthService from '../../services/auth.service';
 
 const user = JSON.parse(localStorage.getItem('user'));
+//const newpassword = JSON.parse(localStorage.getItem('newpassword'));
 const initialState = user
-    ? { status: { loggedIn: true }, user }
+    ? { status: { loggedIn: true }, user}
     : { status: { loggedIn: false }, user: null };
 
 export const auth = {
@@ -36,6 +37,18 @@ export const auth = {
                     return Promise.reject(error);
                 }
             );
+        },
+        changePassword({ commit }, newpassword) {
+            return AuthService.changePassword(newpassword).then(
+                response => {
+                    commit('passwordChangeSuccess');
+                    return Promise.resolve(response.data);
+                },
+                error => {
+                commit('passwordChangeFailture');
+                return Promise.reject(error);
+                }
+            )
         }
     },
     mutations: {
@@ -56,6 +69,14 @@ export const auth = {
         },
         registerFailure(state) {
             state.status.loggedIn = false;
+        },
+        passwordChangeSuccess(state) {
+            state.status.loggedIn = true;
+            
+        },
+        passwordChangeFailture(state) {
+            state.status.loggedIn = true;
+            
         }
     }
 };

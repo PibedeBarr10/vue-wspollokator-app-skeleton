@@ -33,6 +33,14 @@ class AuthService {
             password: user.password
         });
     }
+    changePassword(newpassword)
+    {
+        return axios
+        .post(API_URL + '/auth/password/change/', {
+            new_password1: newpassword.password,
+            new_password2: newpassword.repeatedPassword
+        });
+    }
 }
 
 export default new AuthService();

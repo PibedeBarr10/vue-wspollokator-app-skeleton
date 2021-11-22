@@ -15,7 +15,12 @@
           <div class="flex mb-4">
             <a class="flex-grow border-b-2 border-gray-500 py-2 text-lg px-1">Mój opis</a>
           </div>
-          <p class="leading-relaxed mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsam pariatur ex? Sunt dolorum dolores provident rem numquam, eius placeat officia, veritatis accusantium quod blanditiis excepturi, voluptate incidunt odit quis! </p>
+          <!-- <p class="leading-relaxed mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsam pariatur ex? Sunt dolorum dolores provident rem numquam, eius placeat officia, veritatis accusantium quod blanditiis excepturi, voluptate incidunt odit quis! </p>
+           -->
+          <!-- dopasowanie h do poziomu przycisków? -->
+          <textarea placeholder="Bio" class="textarea resize-none textarea-bordered " style="height: 80%; width: 100%;"></textarea>
+         
+
         </div>
         <div class="lg:w-2/5 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
           <div class="flex mb-4">
@@ -48,11 +53,55 @@
           </div>
         </div>
         <div class="lg:w-1/5 lg:h-1/2">
-          <h1 class="text-gray-900 text-3xl title-font font-medium mb-2">Jan Kowalski</h1>
-          <h2 class="text-sm title-font text-gray-500 tracking-widest mb-2">jankowalski@gmail.com</h2>
-          <img alt="avatar" class="w-full h-full object-cover object-center rounded" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png">
-          <button class="my-2 text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded text-center w-full">Zmień zdjęcie</button>
-          <button class="my-2 text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded text-center w-full">Edytuj hasło</button>
+          <h1 class="text-gray-900 text-3xl title-font font-medium mb-2">{{currentUser.user.first_name}} {{currentUser.user.last_name}}</h1>
+          <h2 class="text-sm title-font text-gray-500 tracking-widest mb-2">{{currentUser.user.email}}</h2>
+          <img alt="avatar" class="w-full h-full object-cover object-center rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png">
+
+          <label for="modal-change-picture" class="my-2 btn btn-primary modal-button w-full">Zmień zdjęcie</label>
+          <input type="checkbox" id="modal-change-picture" class="modal-toggle"> 
+          <div class="modal">
+             <div class="modal-box">
+                <input style="display:none" type="file" @change=onFileSelected ref="fileInput">
+                <button class="btn btn-primary" @click="$refs.fileInput.click()">Wybierz zdjęcie</button>
+                <span class="mx-4">{{avatar.name}}</span>
+
+           <div class="modal-action">
+             <button class="btn btn-primary" @click="uploadAvatar">Zatwierdź</button>
+             <!-- <label for="modal-change-picture" class="btn btn-primary">Zatwierdź</label>  -->
+           <label for="modal-change-picture" class="btn">Anuluj</label>
+             </div>
+          </div>
+            </div>
+
+
+
+         <label for="modal-change-password" class="btn btn-primary modal-button w-full">Zmień hasło</label>
+          <input type="checkbox" id="modal-change-password" class="modal-toggle"> 
+          <div class="modal">
+             <div class="modal-box">
+              <input
+                v-model="newpassword.password"
+                type="password"
+                placeholder="Nowe hasło"
+                class="mt-5"
+              />
+
+                <input
+                v-model="newpassword.repeatedPassword"
+                type="password"
+                placeholder="Powtórz nowe hasło"
+                class="mt-5"
+              />
+
+            <div class="modal-action">
+              <!-- <label for="modal-change-password" class="btn btn-primary" @click="changePassword">Zatwierdź</label>  -->
+              <button class="btn btn-primary" @click="changePassword">Zatwierdź</button>
+            <label for="modal-change-password" class="btn">Anuluj</label>
+              </div>
+            </div>
+          </div>
+
+
         </div>
       </div>
     </div>
@@ -61,7 +110,20 @@
         <span class="text-lg font-extrabold">
           Mój punkt
         </span>
-        <button class=" text-xs m-2 text-white bg-indigo-500 border-0 py-2 px-4 focus:outline-none hover:bg-indigo-600 rounded">Edytuj</button>
+        
+          <label for="modal-change-mypoint" class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary modal-button ">Edytuj</label>
+          <input type="checkbox" id="modal-change-mypoint" class="modal-toggle"> 
+          <div class="modal">
+             <div class="modal-box">
+            <p>Zmiana punktu</p>
+           <div class="modal-action">
+             <label for="modal-change-mypoint" class="btn btn-primary">Zatwierdź</label> 
+           <label for="modal-change-mypoint" class="btn">Anuluj</label>
+             </div>
+          </div>
+            </div>
+
+        
       </div>
     </div>
     <div
@@ -75,16 +137,26 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 import Navbar from '../components/reusable-components/Navbar.vue'
 import { LogoutIcon } from '@heroicons/vue/outline'
+import BaseButton from "../components/reusable-components/BaseButton.vue";
 
 export default {
   components: {
     Navbar,
-    LogoutIcon
+    LogoutIcon,
+    BaseButton,
+
   },
   data () {
     return {
       map: null,
-      marker: null
+      marker: null,
+      newpassword:{
+        password:'',
+        repeatedPassword:''
+      },
+      avatar:{
+        name: ''
+      }
     }
   },
 
@@ -113,7 +185,27 @@ export default {
     setMarkerOnMap() {
       this.marker = L.marker([52.162, 21.046])
       this.map.addLayer(this.marker)
+    },
+    changePassword() {
+     // localStorage.setItem('newpassword', JSON.stringify(this.newpassword));
+      //console.log('Click change password'),
+      //console.log(this.newpassword.password)
+       this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
+        this.$router.push('/dashboard')
+      })
+    }, 
+    onFileSelected(event) {
+      this.avatar= event.target.files[0]
+    },
+    uploadAvatar(){ 
+      // const fd = new FormData();
+      // fd.append('image', this.avatar, this.avatar.name)
+      // axios.post('url',fd,{
+      //   onUploadProgress: uploadEvent => {console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%')}
+      //   })
+      //     .then(res => {console.log(res)})
     }
+
   }
 }
 
