@@ -1,4 +1,5 @@
 import axios from 'axios';
+import authHeader from "./auth-header";
 
 const API_URL = 'http://localhost:8000';
 // const API_URL = `${import.meta.env.API_URL}`;
@@ -7,16 +8,16 @@ console.log(API_URL)
 
 class AuthService {
     login(user) {
-        return axios
-            .post(API_URL + '/auth/login/', {
+        return axios.post(
+            API_URL + '/auth/login/',
+            {
                 email: user.email,
                 password: user.password
-            })
-            .then(response => {
+            },
+            { withCredentials: true, }).then(response => {
                 if (response.data.access_token) {
                     localStorage.setItem('user', JSON.stringify(response.data));
                 }
-
                 return response.data;
             });
     }
@@ -35,11 +36,15 @@ class AuthService {
     }
     changePassword(newpassword)
     {
-        return axios
-        .post(API_URL + '/auth/password/change/', {
-            new_password1: newpassword.password,
-            new_password2: newpassword.repeatedPassword
-        });
+        return axios.post(
+            API_URL + '/auth/password/change/',
+            {
+                new_password1: newpassword.password,
+                new_password2: newpassword.repeatedPassword
+            },
+            // config
+            { withCredentials: true }
+        );
     }
 }
 

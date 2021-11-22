@@ -45,8 +45,8 @@ export const auth = {
                     return Promise.resolve(response.data);
                 },
                 error => {
-                commit('passwordChangeFailture');
-                return Promise.reject(error);
+                    commit('passwordChangeFailture');
+                    return Promise.reject(error);
                 }
             )
         }
@@ -72,11 +72,9 @@ export const auth = {
         },
         passwordChangeSuccess(state) {
             state.status.loggedIn = true;
-            
         },
         passwordChangeFailture(state) {
             state.status.loggedIn = true;
-            
         }
     }
 };
