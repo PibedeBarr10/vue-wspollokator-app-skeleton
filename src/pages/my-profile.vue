@@ -1,5 +1,5 @@
 <template>
-  
+
   <div
     class="flex flex-col my-0 py-0 "
     style="height: 100vh; max-height: 100vh; overflow:scroll; display:block"
@@ -47,7 +47,7 @@
           <div class="mb-4">
             <label class="cursor-pointer flex flex-row content-center items-center pr-4">
               <span class="label-text pr-2">Odl. od mojego punktu (km)</span>
-              <input type="range" value="0" min="1" max="10" oninput="this.nextElementSibling.value = this.value" class="range">
+              <input v-model="radius" type="range" min="1" max="10" oninput="this.nextElementSibling.value = this.value" class="range">
               <output> 1</output>
             </label>
           </div>
@@ -94,36 +94,24 @@
               />
 
             <div class="modal-action">
-              <!-- <label for="modal-change-password" class="btn btn-primary" @click="changePassword">Zatwierdź</label>  -->
               <button class="btn btn-primary" @click="changePassword">Zatwierdź</button>
             <label for="modal-change-password" class="btn">Anuluj</label>
               </div>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
+
     <div class="flex-none map border-base-100 text-black py-4 px-6 my-6">
       <div class="flex-none pr-4">
         <span class="text-lg font-extrabold">
           Mój punkt
         </span>
-        
-          <label for="modal-change-mypoint" class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary modal-button ">Edytuj</label>
-          <input type="checkbox" id="modal-change-mypoint" class="modal-toggle"> 
-          <div class="modal">
-             <div class="modal-box">
-            <p>Zmiana punktu</p>
-           <div class="modal-action">
-             <label for="modal-change-mypoint" class="btn btn-primary">Zatwierdź</label> 
-           <label for="modal-change-mypoint" class="btn">Anuluj</label>
-             </div>
-          </div>
-            </div>
-
-        
+          <button id="myPointEdit" class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary" @click="changeMyPoint">Edytuj</button>
+          <button id="myPointAccept" class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary " @click="updateMyPoint" style="display: none">Zatwierdź</button>
+          <button id="myPointClose" class=" text-xs m-2 border-0 py-2 px-4 btn" @click="cancelUpdateMyPoint" style="display: none">Anuluj</button>
+         <!-- <MyPointModal /> -->
       </div>
     </div>
     <div
@@ -138,18 +126,22 @@ import L from 'leaflet'
 import Navbar from '../components/reusable-components/Navbar.vue'
 import { LogoutIcon } from '@heroicons/vue/outline'
 import BaseButton from "../components/reusable-components/BaseButton.vue";
+import MyPointModal from "../components/myprofile/MyPointModal.vue";
+import { BaseTransition } from '@vue/runtime-core'
 
 export default {
   components: {
     Navbar,
     LogoutIcon,
     BaseButton,
-
+    MyPointModal
   },
   data () {
     return {
       map: null,
       marker: null,
+      radius:1,
+      circle:null,
       newpassword:{
         password:'',
         repeatedPassword:''
@@ -170,11 +162,11 @@ export default {
       this.$router.push('/login');
     }
     this.createMap()
-    this.setMarkerOnMap()
+    this.setCircleOnMap()
   },
   methods: {
     createMap() {
-      this.map = L.map("mapContainer").setView([52.162, 21.046], 20);
+      this.map = L.map("mapContainer").setView([52.162, 21.046], 15);
       L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(this.map);
@@ -182,18 +174,65 @@ export default {
       let customPane = this.map.createPane("customPane");
       customPane.style.zIndex = 399;
     },
-    setMarkerOnMap() {
-      this.marker = L.marker([52.162, 21.046])
-      this.map.addLayer(this.marker)
+    setCircleOnMap() {
+     this.circle = L.circle([52.162, 21.046], this.radius*1000);
+     this.map.addLayer(this.circle);
+    },
+    changeMyPoint()
+    {
+      var btnEdit = document.getElementById("myPointEdit");
+      var btnAccept = document.getElementById("myPointAccept");
+      var btnCancel1 = document.getElementById("myPointClose");
+
+      btnEdit.style.display = "none";
+     btnAccept.style.display = "initial";
+
+      btnCancel1.style.display = "initial";
+
+      this.map.removeLayer(this.circle);
+
+      this.marker = L.marker([52.162, 21.046],
+          {
+            draggable:true
+          })
+      this.map.addLayer(this.marker);
     },
     changePassword() {
-     // localStorage.setItem('newpassword', JSON.stringify(this.newpassword));
-      //console.log('Click change password'),
-      //console.log(this.newpassword.password)
        this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
-        this.$router.push('/dashboard')
+        this.$router.go()
       })
     }, 
+    updateMyPoint()
+    {
+      //aktualizacja mojego punktu, todo: rq, rysowanie punktu w nowej lokalizacji; 
+       this.map.removeLayer(this.marker);
+       this.map.addLayer(this.circle);
+
+       var btnEdit = document.getElementById("myPointEdit");
+      var btnAccept = document.getElementById("myPointAccept");
+      var btnCancel1 = document.getElementById("myPointClose");
+
+      btnEdit.style.display = "initial";
+      btnAccept.style.display = "none";
+      btnCancel1.style.display = "none";
+
+
+    },
+    cancelUpdateMyPoint()
+    {
+      //powrót do danych wcześniejszych 
+       this.map.removeLayer(this.marker);
+       this.map.addLayer(this.circle);
+
+       var btnEdit = document.getElementById("myPointEdit");
+      var btnAccept = document.getElementById("myPointAccept");
+      var btnCancel1 = document.getElementById("myPointClose");
+
+      btnEdit.style.display = "initial";
+      btnAccept.style.display = "none";
+      btnCancel1.style.display = "none";
+
+    },
     onFileSelected(event) {
       this.avatar= event.target.files[0]
     },
