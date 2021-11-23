@@ -1,19 +1,19 @@
 <template>    
-   <label for="modal-change-mypoint" class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary modal-button ">Edytuj</label>
-     <input type="checkbox" id="modal-change-mypoint" class="modal-toggle"> 
-     <div class="modal">
-        <div class="modal-box">
-            <div
+  <label for="modal-change-mypoint" class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary modal-button ">Edytuj</label>
+  <input type="checkbox" id="modal-change-mypoint" class="modal-toggle">
+  <div class="modal">
+    <div class="modal-box">
+      <div
         id="mapContainer"
         class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4 "
-        />
-    
-        <div class="modal-action">
-        <label for="modal-change-mypoint" class="btn btn-primary">Zatwierdź</label> 
+      />
+
+      <div class="modal-action">
+        <label for="modal-change-mypoint" class="btn btn-primary">Zatwierdź</label>
         <label for="modal-change-mypoint" class="btn">Anuluj</label>
-        </div>
-        </div>
-        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -21,11 +21,11 @@ import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
 
 export default {
-  data () { 
+  data () {
     return {
-        map:null,
-        marker:null
-     }
+      map:null,
+      marker:null
+    }
   },
   methods: {
     createMap() {
@@ -37,20 +37,13 @@ export default {
       let customPane = this.map.createPane("customPane");
       customPane.style.zIndex = 399;
     },
-        setMarkerOnMap() {
-         // this.marker = L.circleMarker([52.162, 21.046],this.radius*1000)
-        //  this.marker = L.circleMarker([52.162, 21.046],
-        //  {
-        //    radius:100,
-        //    draggable:true
-
-        //  })
-         this.marker = L.marker([52.162, 21.046],
-         {
-           draggable:true
-         })
-          this.map.addLayer(this.marker)
-        },
+    setMarkerOnMap() {
+      this.marker = L.marker(
+         [52.162, 21.046],
+         { draggable: true }
+      )
+      this.map.addLayer(this.marker)
+    },
   }
 };
 

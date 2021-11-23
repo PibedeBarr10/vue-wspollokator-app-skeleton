@@ -47,8 +47,8 @@
           <div class="mb-4">
             <label class="cursor-pointer flex flex-row content-center items-center pr-4">
               <span class="label-text pr-2">Odl. od mojego punktu (km)</span>
-              <input v-model="radius" type="range" min="1" max="10" oninput="this.nextElementSibling.value = this.value" class="range">
-              <output> 1</output>
+              <input v-model="radius" :disabled="!pointEditing" type="range" min="1" max="10" oninput="this.nextElementSibling.value = this.value" class="range">
+              <output>{{ radius }}</output>
             </label>
           </div>
         </div>
@@ -65,20 +65,19 @@
                 <button class="btn btn-primary" @click="$refs.fileInput.click()">Wybierz zdjęcie</button>
                 <span class="mx-4">{{avatar.name}}</span>
 
-           <div class="modal-action">
-             <button class="btn btn-primary" @click="uploadAvatar">Zatwierdź</button>
-             <!-- <label for="modal-change-picture" class="btn btn-primary">Zatwierdź</label>  -->
-           <label for="modal-change-picture" class="btn">Anuluj</label>
+                <div class="modal-action">
+                  <button class="btn btn-primary" @click="uploadAvatar">Zatwierdź</button>
+                   <!-- <label for="modal-change-picture" class="btn btn-primary">Zatwierdź</label>  -->
+                  <label for="modal-change-picture" class="btn">Anuluj</label>
+                </div>
              </div>
           </div>
-            </div>
 
 
-
-         <label for="modal-change-password" class="btn btn-primary modal-button w-full">Zmień hasło</label>
+          <label for="modal-change-password" class="btn btn-primary modal-button w-full">Zmień hasło</label>
           <input type="checkbox" id="modal-change-password" class="modal-toggle"> 
           <div class="modal">
-             <div class="modal-box">
+            <div class="modal-box">
               <input
                 v-model="newpassword.password"
                 type="password"
@@ -86,35 +85,55 @@
                 class="mt-5"
               />
 
-                <input
+              <input
                 v-model="newpassword.repeatedPassword"
                 type="password"
                 placeholder="Powtórz nowe hasło"
                 class="mt-5"
               />
 
-            <div class="modal-action">
-              <button class="btn btn-primary" @click="changePassword">Zatwierdź</button>
-            <label for="modal-change-password" class="btn">Anuluj</label>
+              <div class="modal-action">
+                <button class="btn btn-primary" @click="changePassword">Zatwierdź</button>
+                <label for="modal-change-password" class="btn">Anuluj</label>
               </div>
             </div>
           </div>
         </div>
+
+        <div v-if="coordinates !== []" class="flex items-center justify-between pr-4">
+          <span class="text-lg font-extrabold">Mój punkt</span>
+          <button
+              v-if="!pointEditing"
+              id="myPointEdit"
+              class="text-xs m-2 border-0 py-2 px-4 btn btn-primary"
+              @click="changeMyPoint"
+          >
+            Edytuj
+          </button>
+
+          <div v-else>
+            <button
+                id="myPointAccept"
+                class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary"
+                @click="updateMyPoint"
+            >
+              Zatwierdź
+            </button>
+            <button
+                id="myPointClose"
+                class="text-xs m-2 border-0 py-2 px-4 btn"
+                @click="cancelUpdateMyPoint"
+            >
+              Anuluj
+            </button>
+          </div>
+          <!-- <MyPointModal /> -->
+        </div>
       </div>
     </div>
 
-    <div class="flex-none map border-base-100 text-black py-4 px-6 my-6">
-      <div class="flex-none pr-4">
-        <span class="text-lg font-extrabold">
-          Mój punkt
-        </span>
-          <button id="myPointEdit" class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary" @click="changeMyPoint">Edytuj</button>
-          <button id="myPointAccept" class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary " @click="updateMyPoint" style="display: none">Zatwierdź</button>
-          <button id="myPointClose" class=" text-xs m-2 border-0 py-2 px-4 btn" @click="cancelUpdateMyPoint" style="display: none">Anuluj</button>
-         <!-- <MyPointModal /> -->
-      </div>
-    </div>
     <div
+      v-if="coordinates !== []"
       id="mapContainer"
       class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4 "
     />
@@ -127,7 +146,6 @@ import Navbar from '../components/reusable-components/Navbar.vue'
 import { LogoutIcon } from '@heroicons/vue/outline'
 import BaseButton from "../components/reusable-components/BaseButton.vue";
 import MyPointModal from "../components/myprofile/MyPointModal.vue";
-import { BaseTransition } from '@vue/runtime-core'
 
 export default {
   components: {
@@ -140,15 +158,17 @@ export default {
     return {
       map: null,
       marker: null,
-      radius:1,
-      circle:null,
-      newpassword:{
+      circle: null,
+      newpassword: {
         password:'',
         repeatedPassword:''
       },
-      avatar:{
+      avatar: {
         name: ''
-      }
+      },
+      pointEditing: false,
+      coordinates: [],
+      radius: 1,
     }
   },
 
@@ -161,12 +181,22 @@ export default {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
-    this.createMap()
-    this.setCircleOnMap()
+    this.drawMap()
   },
   methods: {
+    drawMap() {
+      this.$store.dispatch('getUserPoint').then(() => {
+        this.coordinates = this.$store.getters.point
+        this.radius = this.$store.getters.radius
+
+        this.createMap()
+        this.setCircleOnMap()
+      })
+    },
     createMap() {
-      this.map = L.map("mapContainer").setView([52.162, 21.046], 15);
+      // console.log(this.coordinates)
+
+      this.map = L.map("mapContainer").setView(this.coordinates, 13);
       L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(this.map);
@@ -175,26 +205,17 @@ export default {
       customPane.style.zIndex = 399;
     },
     setCircleOnMap() {
-     this.circle = L.circle([52.162, 21.046], this.radius*1000);
+     this.circle = L.circle(this.coordinates, this.radius * 1000);
      this.map.addLayer(this.circle);
     },
-    changeMyPoint()
-    {
-      var btnEdit = document.getElementById("myPointEdit");
-      var btnAccept = document.getElementById("myPointAccept");
-      var btnCancel1 = document.getElementById("myPointClose");
-
-      btnEdit.style.display = "none";
-     btnAccept.style.display = "initial";
-
-      btnCancel1.style.display = "initial";
+    changeMyPoint() {
+      this.pointEditing = true
 
       this.map.removeLayer(this.circle);
 
-      this.marker = L.marker([52.162, 21.046],
-          {
-            draggable:true
-          })
+      this.marker = L.marker(this.coordinates, {
+        draggable: true
+      })
       this.map.addLayer(this.marker);
     },
     changePassword() {
@@ -204,39 +225,35 @@ export default {
     }, 
     updateMyPoint()
     {
-      //aktualizacja mojego punktu, todo: rq, rysowanie punktu w nowej lokalizacji; 
-       this.map.removeLayer(this.marker);
-       this.map.addLayer(this.circle);
+      // aktualizacja mojego punktu
+      this.coordinates = [
+        this.marker.getLatLng().lat,
+        this.marker.getLatLng().lng
+      ]
 
-       var btnEdit = document.getElementById("myPointEdit");
-      var btnAccept = document.getElementById("myPointAccept");
-      var btnCancel1 = document.getElementById("myPointClose");
+      this.$store.dispatch('changeUserPoint', {
+        location: this.coordinates,
+        radius: this.radius
+      }).then(() => {
+        this.map.removeLayer(this.marker);
+        this.circle = L.circle(this.coordinates, this.radius * 1000);
+        this.map.addLayer(this.circle);
 
-      btnEdit.style.display = "initial";
-      btnAccept.style.display = "none";
-      btnCancel1.style.display = "none";
-
-
+        this.pointEditing = false
+      })
     },
     cancelUpdateMyPoint()
     {
-      //powrót do danych wcześniejszych 
-       this.map.removeLayer(this.marker);
-       this.map.addLayer(this.circle);
+      // powrót do danych wcześniejszych
+      this.map.removeLayer(this.marker);
+      this.map.addLayer(this.circle);
 
-       var btnEdit = document.getElementById("myPointEdit");
-      var btnAccept = document.getElementById("myPointAccept");
-      var btnCancel1 = document.getElementById("myPointClose");
-
-      btnEdit.style.display = "initial";
-      btnAccept.style.display = "none";
-      btnCancel1.style.display = "none";
-
+      this.pointEditing = false
     },
     onFileSelected(event) {
       this.avatar= event.target.files[0]
     },
-    uploadAvatar(){ 
+    uploadAvatar() {
       // const fd = new FormData();
       // fd.append('image', this.avatar, this.avatar.name)
       // axios.post('url',fd,{
@@ -244,7 +261,6 @@ export default {
       //   })
       //     .then(res => {console.log(res)})
     }
-
   }
 }
 

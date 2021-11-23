@@ -3,7 +3,7 @@ import AuthService from '../../services/auth.service';
 const user = JSON.parse(localStorage.getItem('user'));
 //const newpassword = JSON.parse(localStorage.getItem('newpassword'));
 const initialState = user
-    ? { status: { loggedIn: true }, user}
+    ? { status: { loggedIn: true }, user }
     : { status: { loggedIn: false }, user: null };
 
 export const auth = {
@@ -14,6 +14,7 @@ export const auth = {
             return AuthService.login(user).then(
                 user => {
                     commit('loginSuccess', user);
+                    localStorage.setItem('tokenExpiryTime', JSON.stringify(599))
                     return Promise.resolve(user);
                 },
                 error => {

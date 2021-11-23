@@ -4,8 +4,6 @@ import authHeader from "./auth-header";
 const API_URL = 'http://localhost:8000';
 // const API_URL = `${import.meta.env.API_URL}`;
 
-console.log(API_URL)
-
 class AuthService {
     login(user) {
         return axios.post(
@@ -14,7 +12,8 @@ class AuthService {
                 email: user.email,
                 password: user.password
             },
-            { withCredentials: true, }).then(response => {
+            { withCredentials: true, }
+            ).then(response => {
                 if (response.data.access_token) {
                     localStorage.setItem('user', JSON.stringify(response.data));
                 }
