@@ -1,7 +1,7 @@
 import axios from 'axios';
 import authHeader from "./auth-header";
 
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://wspolokator.livs.pl:8000';
 // const API_URL = `${import.meta.env.API_URL}`;
 
 class AuthService {

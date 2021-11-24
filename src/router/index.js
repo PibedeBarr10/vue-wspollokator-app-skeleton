@@ -4,6 +4,7 @@ import MyProfile from "../pages/my-profile.vue";
 import Login from "../pages/login.vue";
 import Logout from "../pages/logout.vue";
 import Register from "../pages/register.vue";
+import LandingPage from "../pages/landing-page.vue";
 
 const routes = [
     {
@@ -34,7 +35,7 @@ const routes = [
     {
         path: "/",
         name: "Współlokator - witamy!",
-        component: import('../pages/landing-page.vue'),
+        component: LandingPage,
     },
 ];
 
