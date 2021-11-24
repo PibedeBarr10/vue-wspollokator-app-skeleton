@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'http://localhost:8000';
+const API_URL = 'http://wspolokator.livs.pl:8000';
 
 export default {
     getUserPoint() {

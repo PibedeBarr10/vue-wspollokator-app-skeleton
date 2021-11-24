@@ -4,7 +4,7 @@
     <div class="flex flex-row flex-1">
       <img
         class="object-cover flex w-1/2 bg-black items-center justify-center"
-        :src="selectedImage"
+        :src="`${selectedImage}`"
       />
       <div class="flex w-1/2 items-center justify-center">
         <slot />
@@ -18,6 +18,10 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 
 import Navbar from "../reusable-components/Navbar.vue";
+import img1 from "/src/assets/authImages/authImages1.jpeg"
+import img2 from "/src/assets/authImages/authImages2.jpeg"
+import img3 from "/src/assets/authImages/authImages3.jpeg"
+import img4 from "/src/assets/authImages/authImages4.jpeg"
 
 export default {
   components: {
@@ -26,10 +30,10 @@ export default {
   data() {
     return {
       images: [
-        "/src/assets/authImages/authImages1.jpeg",
-        "/src/assets/authImages/authImages2.jpeg",
-        "/src/assets/authImages/authImages3.jpeg",
-        "/src/assets/authImages/authImages4.jpeg",
+        img1,
+        img2,
+	img3,
+	img4
       ],
       selectedImage: null,
     };
