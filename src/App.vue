@@ -18,7 +18,7 @@ export default {
         this.time = JSON.parse(localStorage.getItem('tokenExpiryTime'))
 
         if (this.$store.state.auth.status.loggedIn) {
-          if (this.time === 0) {
+          if (this.time === 1) {
             localStorage.setItem('tokenExpiryTime', JSON.stringify(-1))
             this.$store.dispatch('auth/logout')
             window.location.reload(true)

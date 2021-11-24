@@ -4,7 +4,7 @@ import pointService from "../../services/pointService";
 export default {
     state: {
         id: '',
-        point: [],
+        point: [0, 0],
         radius: 0
     },
     mutations: {
@@ -20,7 +20,7 @@ export default {
     },
     actions: {
         getUserPoint({ commit }) {
-            return pointService.getUserPoint().then(response => {
+            pointService.getUserPoint().then(response => {
                 if (response.length > 0) {
                     commit('SET_ID', response[0].id)
                     commit('SET_POINT', response[0].location.coordinates)
