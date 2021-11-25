@@ -20,7 +20,7 @@ export default {
     },
     actions: {
         getUserPoint({ commit }) {
-            pointService.getUserPoint().then(response => {
+            return pointService.getUserPoint().then(response => {
                 if (response.length > 0) {
                     commit('SET_ID', response[0].id)
                     commit('SET_POINT', response[0].location.coordinates)
