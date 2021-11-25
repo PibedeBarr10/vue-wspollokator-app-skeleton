@@ -111,7 +111,7 @@
           </div>
 
           <button
-            class="btn btn-primary w-full my-1 border-0 py-2 px-4"
+            :class="[profileDataChanged ? 'btn btn-primary w-full my-1 border-0 py-2 px-4 btn-disabled' : 'btn btn-primary w-full my-1 border-0 py-2 px-4']"
             @click="updateProfileData"
             :disabled="profileDataChanged"
           >
@@ -202,13 +202,15 @@ export default {
       radius: 1,
       profile: {
         id: '',
-        sex: '',
+        updated_at: '',
+        sex: 'F',
         age: 0,
         accepts_animals: 'I',
         smoking: 'I',
-        preferable_price: '',
-        description: '',
-        is_searchable: false
+        preferable_price: '0',
+        description: 'Opis',
+        is_searchable: false,
+        avatar: null
       },
       selectOptions: [
         { text: 'Akceptuję', value: 'A' },
@@ -223,20 +225,6 @@ export default {
     currentUser() {
       return this.$store.state.auth.user;
     },
-    // profile() {
-    //   const keys = Object.keys(this.profile);
-    //   const storeProfile = this.$store.getters.profile
-    //
-    //   console.log(this.profile)
-    //   console.log(storeProfile)
-    //
-    //   for (let key of keys) {
-    //     if (this.profile.key !== storeProfile.key) {
-    //       this.save = false;
-    //     }
-    //   }
-    //   this.save = true;
-    // }
   },
   watch: {
     profile: {
@@ -254,26 +242,22 @@ export default {
     this.drawMap()
   },
   methods: {
-    // getProfileData() {
-    //   this.$store.dispatch('getProfile').then(() => {
-    //     this.profile = this.$store.getters.profile
-    //
-    //     console.log(this.profile)
-    //     // console.log({...this.profile})
-    //   })
-    // },
     compareProfilesData() {
-      // console.log(value, 'changed')
       const storeProfile = this.$store.getters.profile
-      const keys = Object.keys(storeProfile);
+      const keys1 = Object.keys(this.profile);
+      const keys2 = Object.keys(storeProfile);
 
-      console.log({...this.profile})
-      // console.log(this.profile.id, storeProfile.id)
-      //
-      console.log({...storeProfile}, 'storeProfile')
+      const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b)
 
-      for (let key of keys) {
-        // console.log(this.profile[key], storeProfile[key])
+      if (!isEqual(keys1, keys2)) {
+        console.error('Different keys', keys1, keys2)
+        return
+      }
+
+      // console.log({...this.profile})
+      // console.log({...storeProfile}, 'storeProfile')
+
+      for (let key of keys1) {
         if (this.profile[key] !== storeProfile[key]) {
           this.profileDataChanged = false;
           console.log(this.profile[key], storeProfile[key], key, 'diff')
@@ -292,9 +276,6 @@ export default {
       })
     },
     updateProfileData() {
-      // console.log(this.currentUser)
-      // console.log(JSON.parse(JSON.stringify(this.profile)))
-
       this.$store.dispatch('setProfile', {
         profile: JSON.parse(JSON.stringify(this.profile)),
         user: this.currentUser.user
@@ -312,8 +293,6 @@ export default {
       })
     },
     createMap() {
-      // console.log(this.coordinates)
-
       this.map = L.map("mapContainer").setView(this.coordinates, 13);
       L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API_URL = 'http://wspolokator.livs.pl:8000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 export default {
     getUserPoint() {
@@ -9,17 +9,22 @@ export default {
                 `${API_URL}/point/`,
                 { withCredentials: true })
             .then(response => {
-                // console.log(response.data)
                 return response.data
             })
     },
     changeUserPoint(id, data) {
-        // console.log(data)
         return axios.put(`${API_URL}/point/${id}/`, {
             'location': data.location,
             'radius': data.radius
-        }, { withCredentials: true }).then(res => {
-            console.log(res.data)
-        })
+        }, { withCredentials: true })
+    },
+    addUserPoint(data) {
+        return axios.post(`${API_URL}/point/`, {
+            'location': data.location,
+            'radius': data.radius
+        }, { withCredentials: true })
+            .then(res => {
+                return res.data.id
+            })
     },
 }

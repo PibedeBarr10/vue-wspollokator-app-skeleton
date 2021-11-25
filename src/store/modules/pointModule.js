@@ -4,8 +4,8 @@ import pointService from "../../services/pointService";
 export default {
     state: {
         id: '',
-        point: [0, 0],
-        radius: 0
+        point: [52, 20],
+        radius: 1
     },
     mutations: {
         SET_ID(state, id) {
@@ -34,7 +34,13 @@ export default {
 
             data.location = `POINT(${data.location[0]} ${data.location[1]})`
 
-            pointService.changeUserPoint(state.id, data)
+            if (state.id) {
+                pointService.changeUserPoint(state.id, data)
+            } else {
+                pointService.addUserPoint(data).then(id => {
+                    commit('SET_ID', id)
+                })
+            }
         }
     },
     getters: {

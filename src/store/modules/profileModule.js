@@ -4,16 +4,17 @@ export default {
     state: {
         profile: {
             id: '',
-            sex: '',
+            updated_at: '',
+            sex: 'F',
             age: 0,
-            accepts_animals: '',
-            smoking: '',
-            preferable_price: '',
-            description: '',
+            accepts_animals: 'I',
+            smoking: 'I',
+            preferable_price: '0',
+            description: 'Opis',
             is_searchable: false,
-            avatar: null,
-            updated_at: ''
-        }
+            avatar: null
+        },
+        profileCreated: false
     },
     mutations: {
         SET_PROFILE(state, data) {
@@ -29,12 +30,16 @@ export default {
             state.profile.avatar = data.avatar
             state.profile.updated_at = data.updated_at
         },
+        CONFIRM_PROFILE_CREATED(state) {
+            state.profileCreated = true
+        }
     },
     actions: {
         getProfile({ commit }) {
             profileService.getProfile().then(data => {
                 if (data.length > 0) {
                     commit('SET_PROFILE', data[0])
+                    commit('CONFIRM_PROFILE_CREATED')
                 }
             })
         },
@@ -42,9 +47,8 @@ export default {
             commit('SET_PROFILE', data.profile)
 
             data.profile.user = data.user.pk
-            // data.profile.avatar = new FormData()
+
             const bodyFormData = new FormData()
-            bodyFormData.append('id', data.profile.id)
             bodyFormData.append('sex', data.profile.sex)
             bodyFormData.append('age', data.profile.age)
             bodyFormData.append('accepts_animals', data.profile.accepts_animals)
@@ -52,20 +56,21 @@ export default {
             bodyFormData.append('preferable_price', data.profile.preferable_price)
             bodyFormData.append('description', data.profile.description)
             bodyFormData.append('is_searchable', data.profile.is_searchable)
-            bodyFormData.append('avatar', new Blob([JSON.stringify({ obj: 'abc' }, null, 2)], {type : 'application/json'}))
-            bodyFormData.append('updated_at', data.profile.updated_at)
+            // bodyFormData.append('updated_at', data.profile.updated_at)
 
-            profileService.changeProfile(data.user.pk, bodyFormData)
+            if (this.getters.profileCreated) {
+                bodyFormData.append('id', data.profile.id)
+                bodyFormData.append('avatar', new Blob([JSON.stringify({ obj: 'abc' }, null, 2)], {type : 'application/json'}))
+                profileService.changeProfile(data.user.pk, bodyFormData)
+            } else {
+                profileService.addProfileData(bodyFormData)
+                console.log(bodyFormData)
+                commit('CONFIRM_PROFILE_CREATED')
+            }
         }
     },
     getters: {
-        // sex: state => state.profile.sex,
-        // age: state => state.profile.age,
-        // accepts_animals: state => state.profile.accepts_animals,
-        // smoking: state => state.profile.smoking,
-        // preferable_price: state => state.profile.preferable_price,
-        // description: state => state.profile.description,
-        // is_searchable: state => state.profile.is_searchable,
-        profile: state => state.profile
+        profile: state => state.profile,
+        profileCreated: state => state.profileCreated
     }
 }
