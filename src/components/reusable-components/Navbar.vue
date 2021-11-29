@@ -25,21 +25,30 @@
         <LogoutIcon class="h-6 w-6" />
       </div>
     </div>
+
+    <NotificationBar
+      class="fixed bottom-3 right-4"
+    />
   </div>
 </template>
 
 <script>
 import { LogoutIcon } from "@heroicons/vue/outline";
+import NotificationBar from "../NotificationBar.vue";
 
 export default {
   name: "Navbar",
   components: {
+    NotificationBar,
     LogoutIcon,
   },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
     }
+  },
+  mounted () {
+    this.$store.dispatch('notificationModule/show', { msg: 'Wiadomość', color: 'bg-red-500' })
   },
   methods: {
     logout() {

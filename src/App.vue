@@ -3,6 +3,7 @@
 </template>
 
 <script>
+
 export default {
   mounted () {
     this.autoLogout()
@@ -22,7 +23,7 @@ export default {
         if (this.$store.state.auth.status.loggedIn) {
           const parsedToken = this.parseJwt(this.$store.state.auth.user.access_token)
 
-          console.log(parsedToken.exp * 1000, new Date().getTime(), parsedToken.exp * 1000 - new Date().getTime())
+          // console.log(parsedToken.exp * 1000, new Date().getTime(), parsedToken.exp * 1000 - new Date().getTime())
 
           if (parsedToken.exp * 1000 - 5000 < new Date().getTime()) {
             this.$store.dispatch('auth/logout')

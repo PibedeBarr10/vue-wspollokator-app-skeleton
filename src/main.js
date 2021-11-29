@@ -3,6 +3,7 @@ import App from "./App.vue";
 import "./index.css";
 import store from "./store"
 import router from "./router";
+import validation from './plugins/validation';
 
 import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png'
 import iconUrl from 'leaflet/dist/images/marker-icon.png'
@@ -19,4 +20,5 @@ L.Icon.Default.mergeOptions({
 createApp(App)
     .use(store)
     .use(router)
+    // .use(validation)
     .mount("#app");
