@@ -17,8 +17,10 @@ L.Icon.Default.mergeOptions({
     shadowUrl: shadowUrl,
 });
 
-createApp(App)
+const app = createApp(App)
     .use(store)
-    .use(router)
-    // .use(validation)
-    .mount("#app");
+    .use(router);
+
+app.config.globalProperties.$rules = validation
+
+app.mount("#app")
