@@ -47,9 +47,7 @@ export default {
       return this.$store.state.auth.user;
     }
   },
-  mounted () {
-    this.$store.dispatch('notificationModule/show', { msg: 'Wiadomość', color: 'bg-red-500' })
-  },
+  mounted () {},
   methods: {
     logout() {
       if (this.currentUser) {

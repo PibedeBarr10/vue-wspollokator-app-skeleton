@@ -7,6 +7,8 @@
           type="text"
           placeholder="E-mail"
           class="mt-5"
+          ref="email"
+          :rules="[emailValidation, emailRequired]"
       />
       <input
           v-model="loginData.password"
@@ -17,7 +19,6 @@
       <BaseButton
           @click="login"
           round
-          key="login"
           size="lg"
           class="mt-10"
       >
@@ -29,7 +30,6 @@
       round
       outline
       color="gray"
-      key="red"
       size="lg"
       class="mt-5"
     >
@@ -55,13 +55,48 @@ export default {
       }
     }
   },
+  mounted () {
+    this.$refs.email.focus()
+  },
   methods: {
     login(e) {
       e.preventDefault()
 
+      const errorsArray = [
+        this.emailRequired(this.loginData.email),
+        this.emailRegex(this.loginData.email),
+        this.passwordRequired(this.loginData.password),
+        this.passwordRegex(this.loginData.password)
+      ]
+
+      const firstError = errorsArray.find(element => element !== true)
+
+      if (firstError) {
+        this.$store.dispatch('notificationModule/show', { msg: firstError, color: 'bg-red-500' })
+        return
+      }
+
       this.$store.dispatch('auth/login', this.loginData).then(() => {
         this.$router.push('dashboard')
       })
+    },
+    emailRequired(email) {
+      return !!email || 'E-mail jest wymagany'
+    },
+    emailRegex(email) {
+      return /.+@.+\..+/.test(email) || 'Nieprawidłowy e-mail'
+    },
+    passwordRequired(password) {
+      return !!password || 'Hasło jest wymagane'
+    },
+    passwordRegex(password) {
+      return [
+        password.length >= 8 || 'Hasło powinno zawierać co najmniej 8 znaków',
+        password.length <= 255 || 'Maksymalnie 255 znaków',
+        /[0-9]+/.test(password) || 'Hasło powinno zawierać co najmniej jedną cyfrę',
+        /[A-Z]+/.test(password) || 'Hasło powinno zawierać co najmiej jedną wielką literę',
+        /[$@#&!]+/.test(password) || 'Hasło powinno zawierać co najmniej jeden znak specjalny'
+      ].find(element => element !== true)
     }
   }
 };

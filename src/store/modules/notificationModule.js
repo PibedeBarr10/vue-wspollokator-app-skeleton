@@ -30,10 +30,10 @@ const mutations = {
 }
 
 const state = () => ({
-    msg: 'Abc',
+    msg: '',
     color: 'bg-red-500',
     // icon: '',
-    show: true
+    show: false
 })
 
 export default {
