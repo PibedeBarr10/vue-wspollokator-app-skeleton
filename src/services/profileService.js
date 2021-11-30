@@ -3,9 +3,10 @@ import axios from "axios";
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default {
-    getProfile() {
+    getProfile(pk) {
+        // console.log(pk, 'service')
         return axios
-            .get(`${API_URL}/profile/`, {
+            .get(`${API_URL}/profile/${pk}/`, {
                 withCredentials: true
             })
             .then(response => {

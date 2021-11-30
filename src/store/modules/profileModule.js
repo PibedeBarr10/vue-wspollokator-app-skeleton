@@ -35,12 +35,10 @@ export default {
         }
     },
     actions: {
-        getProfile({ commit }) {
-            profileService.getProfile().then(data => {
-                if (data.length > 0) {
-                    commit('SET_PROFILE', data[0])
-                    commit('CONFIRM_PROFILE_CREATED')
-                }
+        getProfile({ commit }, data) {
+            return profileService.getProfile(data.pk).then(data => {
+                commit('SET_PROFILE', data)
+                commit('CONFIRM_PROFILE_CREATED')
             })
         },
         setProfile({ commit }, data) {
@@ -60,11 +58,14 @@ export default {
 
             if (this.getters.profileCreated) {
                 bodyFormData.append('id', data.profile.id)
+
+                // bodyFormData.append('avatar', new Blob([data.profile.avatar], {type : 'image/jpeg'}))
+                // bodyFormData.append('avatar', data.profile.avatar, 'fileName.jpg')
+
                 bodyFormData.append('avatar', new Blob([JSON.stringify({ obj: 'abc' }, null, 2)], {type : 'application/json'}))
                 profileService.changeProfile(data.user.pk, bodyFormData)
             } else {
                 profileService.addProfileData(bodyFormData)
-                console.log(bodyFormData)
                 commit('CONFIRM_PROFILE_CREATED')
             }
         }

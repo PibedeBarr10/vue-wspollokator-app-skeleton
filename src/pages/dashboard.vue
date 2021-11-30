@@ -36,6 +36,7 @@ import { LogoutIcon } from "@heroicons/vue/outline";
 import DashboardList from "../components/dashboard/DashboardList.vue";
 import Navbar from "../components/reusable-components/Navbar.vue";
 import Filters from "../components/reusable-components/Filters.vue";
+import usersService from "../services/usersService";
 
 export default {
   components: {
@@ -147,6 +148,7 @@ export default {
       map: null,
       markers: [],
       groupMarker: null,
+      users: []
     };
   },
   computed: {
@@ -163,6 +165,17 @@ export default {
     this.setAllMarkersOnMap();
   },
   methods: {
+    getUsers() {
+      usersService.getProfiles().then((data) => {
+        data.forEach((data) => {
+          this.users.append({
+            id: data.id,
+            localization: [],
+
+          })
+        })
+      })
+    },
     createMap() {
       this.map = L.map("mapContainer").setView([52, 19.05], 6);
 

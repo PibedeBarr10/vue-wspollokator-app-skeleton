@@ -65,7 +65,7 @@
           </div>
         </div>
         <div class="lg:w-1/5 lg:h-1/2 lg:py-6 mb-6 lg:mb-0">
-          <img alt="avatar" class="w-full h-full object-cover object-center rounded-full pt-2" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png">
+          <img alt="avatar" class="w-full h-full object-cover object-center rounded-full pt-2 border-solid border-2 border-black" :src="profile.avatar">
           <h2 class="text-gray-900 text-xl font-medium mt-4">{{ currentUser.user.first_name }} {{ currentUser.user.last_name }}</h2>
           <h6 class="text-gray-500 text-2xs mb-2">{{ currentUser.user.email }}</h6>
 
@@ -225,6 +225,7 @@ export default {
     currentUser() {
       return this.$store.state.auth.user;
     },
+
   },
   watch: {
     profile: {
@@ -264,15 +265,15 @@ export default {
           return
         }
       }
-      // a
+
       this.profileDataChanged = true;
     },
     getProfileData() {
-      this.$store.dispatch('getProfile').then(() => {
-        profileService.getProfile().then(data => {
-          if (data.length > 0) {
-            this.profile = JSON.parse(JSON.stringify(data[0]))
-          }
+      this.$store.dispatch('getProfile', {
+        pk: this.currentUser.user.pk
+      }).then(() => {
+        profileService.getProfile(this.currentUser.user.pk).then(data => {
+            this.profile = JSON.parse(JSON.stringify(data))
         })
       })
     },
@@ -349,9 +350,16 @@ export default {
       this.pointEditing = false
     },
     onFileSelected(event) {
-      this.avatar= event.target.files[0]
+      this.profile.avatar = event.target.files[0]
     },
     uploadAvatar() {
+      this.$store.dispatch('setProfile', {
+        profile: JSON.parse(JSON.stringify(this.profile)),
+        user: this.currentUser.user
+      }).then(() => {
+        this.profileDataChanged = true
+      })
+
       // const fd = new FormData();
       // fd.append('image', this.avatar, this.avatar.name)
       // axios.post('url',fd,{
