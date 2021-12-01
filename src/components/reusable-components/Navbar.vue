@@ -14,17 +14,56 @@
     <div class="flex-none">
       <slot />
     </div>
+    <div
+      v-if="currentUser"
+      class="flex-none"
+    >
+    <div>
+       <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
+        Mój profil
+      </router-link>
+      </div>
+      <div>
+       <router-link to="/chat" class="btn btn-ghost btn-sm rounded-btn">
+         <ChatIcon class="h-6 w-6" />
+        </router-link>
+        </div>
+      <div
+        class="btn btn-ghost btn-sm rounded-btn"
+        @click="logout"
+      >
+        <LogoutIcon class="h-6 w-6" />
+      </div>
+      
+      
+    </div>
   </div>
 </template>
 
 <script>
 import { LogoutIcon } from "@heroicons/vue/outline";
+import {ChatIcon} from "@heroicons/vue/outline";
 
 export default {
   name: "Navbar",
   components: {
     LogoutIcon,
+    ChatIcon,
   },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
+  methods: {
+    logout() {
+      if (this.currentUser) {
+        this.$store.dispatch('auth/logout').then(() => {
+          this.$router.push('/')
+        })
+      }
+    }
+  }
 };
 </script>
 

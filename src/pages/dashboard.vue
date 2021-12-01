@@ -1,14 +1,7 @@
 <template>
   <div class="flex flex-col my-0 py-0" style="height: 100vh; max-height: 100vh">
     <div style="max-height: 20%">
-      <Navbar>
-        <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
-          Mój profil
-        </router-link>
-        <router-link to="/" class="btn btn-ghost btn-sm rounded-btn">
-          <LogoutIcon class="h-6 w-6" /> </router-link>
-      </Navbar>
-
+      <Navbar/>
       <Filters />
     </div>
 
@@ -151,10 +144,18 @@ export default {
       groupMarker: null,
     };
   },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user;
+    }
+  },
   mounted() {
-    // this.createMap();
-    // this.getAllMarkers();
-    // this.setAllMarkersOnMap();
+    if (!this.currentUser) {
+      this.$router.push('/login');
+    }
+    this.createMap();
+    this.getAllMarkers();
+    this.setAllMarkersOnMap();
   },
   methods: {
     createMap() {

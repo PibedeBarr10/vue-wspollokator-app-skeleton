@@ -4,6 +4,8 @@ import MyProfile from "../pages/my-profile.vue";
 import Login from "../pages/login.vue";
 import Logout from "../pages/logout.vue";
 import Register from "../pages/register.vue";
+import LandingPage from "../pages/landing-page.vue";
+import Chat from "../pages/chat.vue";
 
 const routes = [
     {
@@ -34,13 +36,32 @@ const routes = [
     {
         path: "/",
         name: "Współlokator - witamy!",
-        component: import('../pages/landing-page.vue'),
+        component: LandingPage,
+    },
+    {
+        path: "/chat",
+        name: "Wiadomości",
+        component: Chat,
     },
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes,
+});
+
+router.beforeEach((to, from, next) => {
+    const publicPages = ['/login', '/register', '/'];
+    const authRequired = !publicPages.includes(to.path);
+    const loggedIn = localStorage.getItem('user');
+
+    // trying to access a restricted page + not logged in
+    // redirect to login page
+    if (authRequired && !loggedIn) {
+        next('/login');
+    } else {
+        next();
+    }
 });
 
 export default router;

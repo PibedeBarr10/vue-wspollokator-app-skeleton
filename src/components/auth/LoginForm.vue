@@ -3,6 +3,7 @@
     <span class="text-2xl font-bold mb-10">Zaloguj się do konta</span>
     <input
       v-model="loginData.email"
+      type="text"
       placeholder="E-mail"
       class="mt-5"
     />
@@ -55,7 +56,9 @@ export default {
   methods: {
     login() {
       console.log('clicked')
-      this.$store.dispatch('auth/login', this.loginData)
+      this.$store.dispatch('auth/login', this.loginData).then(() => {
+        this.$router.push('dashboard')
+      })
     }
   }
 };
