@@ -170,11 +170,13 @@ export default {
         data.forEach((data) => {
           this.users.append({
             id: data.id,
-            localization: [],
+            localization: data.point[0].location.coordinates,
+            radius: data.point.radius
 
           })
         })
       })
+      console.log(this.users)
     },
     createMap() {
       this.map = L.map("mapContainer").setView([52, 19.05], 6);
