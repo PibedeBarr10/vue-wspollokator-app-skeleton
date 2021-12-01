@@ -18,12 +18,24 @@
       v-if="currentUser"
       class="flex-none"
     >
+    <div>
+       <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
+        Mój profil
+      </router-link>
+      </div>
+      <div>
+       <router-link to="/chat" class="btn btn-ghost btn-sm rounded-btn">
+         <ChatIcon class="h-6 w-6" />
+        </router-link>
+        </div>
       <div
         class="btn btn-ghost btn-sm rounded-btn"
         @click="logout"
       >
         <LogoutIcon class="h-6 w-6" />
       </div>
+      
+      
     </div>
 
     <NotificationBar
@@ -35,12 +47,14 @@
 <script>
 import { LogoutIcon } from "@heroicons/vue/outline";
 import NotificationBar from "../NotificationBar.vue";
+import {ChatIcon} from "@heroicons/vue/outline";
 
 export default {
   name: "Navbar",
   components: {
     NotificationBar,
     LogoutIcon,
+    ChatIcon,
   },
   computed: {
     currentUser() {

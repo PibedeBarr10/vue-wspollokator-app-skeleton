@@ -29,11 +29,7 @@
     class="flex flex-col my-0 py-0 "
     style="height: 100vh; max-height: 100vh; overflow:scroll; display:block"
   >
-    <Navbar>
-      <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
-        Mój profil
-      </router-link>
-    </Navbar>
+    <Navbar/>
     <div>
       <div class="lg:w-3/5 lg:h-2/5 mx-auto flex flex-wrap">
         <div class="lg:w-2/5 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
@@ -188,7 +184,7 @@
               </button>
             </div>
           </div>
-          <!-- <MyPointModal /> -->
+          
         </div>
 
         <label class="cursor-pointer flex flex-row content-center items-center pr-4">
@@ -213,7 +209,6 @@ import L from 'leaflet'
 import Navbar from '../components/reusable-components/Navbar.vue'
 import { LogoutIcon } from '@heroicons/vue/outline'
 import BaseButton from "../components/reusable-components/BaseButton.vue";
-import MyPointModal from "../components/myprofile/MyPointModal.vue";
 import profileService from "../services/profileService";
 
 export default {
@@ -221,7 +216,6 @@ export default {
     Navbar,
     LogoutIcon,
     BaseButton,
-    MyPointModal
   },
   data () {
     return {
