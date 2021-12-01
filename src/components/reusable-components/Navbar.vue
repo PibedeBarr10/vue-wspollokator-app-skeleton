@@ -37,16 +37,22 @@
       
       
     </div>
+
+    <NotificationBar
+      class="fixed bottom-3 right-4"
+    />
   </div>
 </template>
 
 <script>
 import { LogoutIcon } from "@heroicons/vue/outline";
+import NotificationBar from "../NotificationBar.vue";
 import {ChatIcon} from "@heroicons/vue/outline";
 
 export default {
   name: "Navbar",
   components: {
+    NotificationBar,
     LogoutIcon,
     ChatIcon,
   },
@@ -55,10 +61,13 @@ export default {
       return this.$store.state.auth.user;
     }
   },
+  mounted () {},
   methods: {
     logout() {
       if (this.currentUser) {
         this.$store.dispatch('auth/logout').then(() => {
+          this.$store.dispatch('clearPointState')
+          this.$store.dispatch('clearProfileState')
           this.$router.push('/')
         })
       }

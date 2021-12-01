@@ -6,12 +6,12 @@ export default {
             id: '',
             updated_at: '',
             sex: 'F',
-            age: 0,
+            age: 18,
             accepts_animals: 'I',
             smoking: 'I',
-            preferable_price: '0',
-            description: 'Opis',
-            is_searchable: false,
+            preferable_price: 1000,
+            description: 'Domyślny opis',
+            is_searchable: true,
             avatar: null
         },
         profileCreated: false
@@ -32,15 +32,29 @@ export default {
         },
         CONFIRM_PROFILE_CREATED(state) {
             state.profileCreated = true
+        },
+        CLEAR_STATE(state) {
+            state.profile = {
+                id: '',
+                updated_at: '',
+                sex: 'F',
+                age: 0,
+                accepts_animals: 'I',
+                smoking: 'I',
+                preferable_price: '0',
+                description: 'Opis',
+                is_searchable: false,
+                avatar: null
+            }
+
+            state.profileCreated = false
         }
     },
     actions: {
-        getProfile({ commit }) {
-            profileService.getProfile().then(data => {
-                if (data.length > 0) {
-                    commit('SET_PROFILE', data[0])
-                    commit('CONFIRM_PROFILE_CREATED')
-                }
+        getProfile({ commit }, data) {
+            return profileService.getProfile(data.pk).then(data => {
+                commit('SET_PROFILE', data)
+                commit('CONFIRM_PROFILE_CREATED')
             })
         },
         setProfile({ commit }, data) {
@@ -56,17 +70,21 @@ export default {
             bodyFormData.append('preferable_price', data.profile.preferable_price)
             bodyFormData.append('description', data.profile.description)
             bodyFormData.append('is_searchable', data.profile.is_searchable)
-            // bodyFormData.append('updated_at', data.profile.updated_at)
 
             if (this.getters.profileCreated) {
                 bodyFormData.append('id', data.profile.id)
-                bodyFormData.append('avatar', new Blob([JSON.stringify({ obj: 'abc' }, null, 2)], {type : 'application/json'}))
+                bodyFormData.append('avatar', data.profile.avatar)
+
                 profileService.changeProfile(data.user.pk, bodyFormData)
             } else {
                 profileService.addProfileData(bodyFormData)
-                console.log(bodyFormData)
                 commit('CONFIRM_PROFILE_CREATED')
             }
+
+            // return Promise.reject()
+        },
+        clearProfileState({ commit }) {
+            commit('CLEAR_STATE')
         }
     },
     getters: {

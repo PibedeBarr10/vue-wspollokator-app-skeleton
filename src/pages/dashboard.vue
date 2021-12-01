@@ -1,19 +1,24 @@
 <template>
   <div class="flex flex-col my-0 py-0" style="height: 100vh; max-height: 100vh">
-    <div style="max-height: 20%">
-      <Navbar/>
-      <Filters />
+    <div>
+      <Navbar>
+        <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
+          Mój profil
+        </router-link>
+      </Navbar>
+
+      <Filters @searchUsers="searchUsers"/>
     </div>
 
     <div
       class="flex flex-row w-full space-x-2 py-4 pr-6 list"
-      style="height: 80%"
+      style="height: 100%"
     >
       <div
         class="w-1/2 h-full flex-50"
         style="overflow: hidden; overflow-y: scroll"
       >
-        <DashboardList :groups="groups" @setMarkersOnMap="setMarkersOnMap" />
+        <DashboardList :users="users" @setMarkersOnMap="setMarkersOnMap" />
       </div>
       <div
         id="mapContainer"
@@ -31,6 +36,7 @@ import { LogoutIcon } from "@heroicons/vue/outline";
 import DashboardList from "../components/dashboard/DashboardList.vue";
 import Navbar from "../components/reusable-components/Navbar.vue";
 import Filters from "../components/reusable-components/Filters.vue";
+import usersService from "../services/usersService";
 
 export default {
   components: {
@@ -41,107 +47,10 @@ export default {
   },
   data() {
     return {
-      groups: [
-        {
-          id: 21,
-          localization: [52.05, 22.05],
-          members: [
-            {
-              name: "Adam",
-              surname: "Jabłoński",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-2@94w.png",
-            },
-            {
-              name: "Edyta",
-              surname: "Radomiak",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-1@94w.png",
-            },
-            {
-              name: "Michał",
-              surname: "Kucyk",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-4@94w.png",
-            },
-          ],
-        },
-        {
-          id: 15,
-          localization: [53.05, 17.05],
-          members: [
-            {
-              name: "Jan",
-              surname: "Kowalski",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-5@94w.png",
-            },
-          ],
-        },
-        {
-          id: 15,
-          localization: [52.05, 16.05],
-          members: [
-            {
-              name: "Jan",
-              surname: "Kowalski",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-5@94w.png",
-            },
-          ],
-        },
-        {
-          id: 15,
-          localization: [51.05, 17.65],
-          members: [
-            {
-              name: "Jan",
-              surname: "Kowalski",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-5@94w.png",
-            },
-          ],
-        },
-        {
-          id: 15,
-          localization: [52.57, 16.25],
-          members: [
-            {
-              name: "Jan",
-              surname: "Kowalski",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-5@94w.png",
-            },
-          ],
-        },
-        {
-          id: 15,
-          localization: [53.05, 17.05],
-          members: [
-            {
-              name: "Jan",
-              surname: "Kowalski",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-5@94w.png",
-            },
-          ],
-        },
-        {
-          id: 15,
-          localization: [53.05, 17.05],
-          members: [
-            {
-              name: "Jan",
-              surname: "Kowalski",
-              imgUrl:
-                "http://daisyui.com/tailwind-css-component-profile-5@94w.png",
-            },
-          ],
-        },
-      ],
       map: null,
       markers: [],
       groupMarker: null,
+      users: []
     };
   },
   computed: {
@@ -153,11 +62,57 @@ export default {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
-    this.createMap();
-    this.getAllMarkers();
-    this.setAllMarkersOnMap();
+    this.getUsers()
   },
   methods: {
+    getUsers() {
+      usersService.getProfiles().then((data) => {
+        this.users = []
+        data.forEach((data) => {
+          this.users.push({
+            id: data.user.profile,
+            localization: data.point[0].location.coordinates,
+            radius: data.point[0].radius,
+            first_name: data.user.first_name,
+            last_name: data.user.last_name,
+            avatar: data.avatar,
+            filters: {
+              accepts_animals: data.accepts_animals,
+              age: data.age,
+              preferable_price: data.preferable_price,
+              sex: data.sex,
+              smoking: data.smoking,
+            }
+          })
+        })
+      }).then(() => {
+        this.createMap()
+        this.getAllMarkers()
+        this.setAllMarkersOnMap()
+      })
+    },
+    searchUsers(filters) {
+      usersService.getFilteredProfiles(filters).then((data) => {
+        this.users = []
+        data.forEach((data) => {
+          this.users.push({
+            id: data.user.profile,
+            localization: data.point[0].location.coordinates,
+            radius: data.point[0].radius,
+            first_name: data.user.first_name,
+            last_name: data.user.last_name,
+            avatar: data.avatar,
+            filters: {
+              accepts_animals: data.accepts_animals,
+              age: data.age,
+              preferable_price: data.preferable_price,
+              sex: data.sex,
+              smoking: data.smoking,
+            }
+          })
+        })
+      })
+    },
     createMap() {
       this.map = L.map("mapContainer").setView([52, 19.05], 6);
 
@@ -171,8 +126,8 @@ export default {
     },
     getAllMarkers() {
       this.markers = L.layerGroup();
-      this.groups.forEach((group) => {
-        this.markers.addLayer(L.marker(group.localization));
+      this.users.forEach((user) => {
+        this.markers.addLayer(L.marker(user.localization));
       });
     },
     setAllMarkersOnMap() {
@@ -187,7 +142,7 @@ export default {
         return;
       }
 
-      this.groupMarker = L.marker(this.groups[groupIndex].localization);
+      this.groupMarker = L.marker(this.users[groupIndex].localization);
       this.map.addLayer(this.groupMarker);
     },
   },

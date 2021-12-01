@@ -4,7 +4,7 @@ import pointService from "../../services/pointService";
 export default {
     state: {
         id: '',
-        point: [52, 20],
+        point: null,
         radius: 1
     },
     mutations: {
@@ -16,6 +16,11 @@ export default {
         },
         SET_RADIUS(state, radius) {
             state.radius = radius
+        },
+        CLEAR_STATE(state) {
+            state.id = ''
+            state.point = [52, 20]
+            state.radius = 1
         }
     },
     actions: {
@@ -41,6 +46,9 @@ export default {
                     commit('SET_ID', id)
                 })
             }
+        },
+        clearPointState({ commit }) {
+            commit('CLEAR_STATE')
         }
     },
     getters: {
