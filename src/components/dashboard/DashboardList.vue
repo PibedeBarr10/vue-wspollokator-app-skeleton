@@ -8,7 +8,7 @@
   >
     <div class="flex-shrink self-center m-4">
       <div class="-space-x-6 avatar-group justify-center min-w-120">
-        <div
+        <!-- <div
           v-for="member in group.members"
           :key="member"
           class="avatar"
@@ -24,14 +24,15 @@
           <div class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
             <span>+{{ groups[filteredGroup.indexOf(group)].members.length - 2 }}</span>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
     <div class="flex justify-between flex-grow pl-0 pr-4 py-4">
       <div>
         <p class="card-title">
-          <a href="/group-chat">{{ group.membersNames }}</a>
+          <!-- <a href="/group-chat">{{ group.membersNames }}</a> -->
+          <a href="/group-chat">{{ group.firstName }}</a>
         </p>
         <div class="space-x-4">
           <div class="badge badge-primary">Warszawa</div>
@@ -76,17 +77,17 @@ export default {
       // deep copy
       this.filteredGroup = JSON.parse(JSON.stringify(this.groups))
 
-      this.filteredGroup.forEach((group) => {
-        const names = group.members.map((member) => {
-          return member.name
-        })
+      // this.filteredGroup.forEach((group) => {
+      //   const names = group.members.map((member) => {
+      //     return member.name
+      //   })
 
-        group.membersNames = names.join(', ')
+      //   group.membersNames = names.join(', ')
 
-        group.members = group.members.filter((member) => {
-          return group.members.indexOf(member) < 2
-        })
-      })
+      //   group.members = group.members.filter((member) => {
+      //     return group.members.indexOf(member) < 2
+      //   })
+      // })
     },
     getGroupOnHover(group = null) {
       const oldActiveGroupIndex = this.activeGroup
