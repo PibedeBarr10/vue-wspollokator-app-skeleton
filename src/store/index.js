@@ -3,6 +3,7 @@ import { createStore } from "vuex"
 import { auth } from './modules/auth.module'
 import pointModule from './modules/pointModule'
 import profileModule from './modules/profileModule'
+import chatModule from './modules/chatModule'
 
 const store = createStore({
     state: {},
@@ -11,7 +12,8 @@ const store = createStore({
     modules: {
         auth,
         pointModule,
-        profileModule
+        profileModule,
+        chatModule,
     }
 })
 

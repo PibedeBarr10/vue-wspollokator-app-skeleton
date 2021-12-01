@@ -1,5 +1,5 @@
 <template>
-      <div class="flex items-end w-1/2 m-4 ">
+      <div class="flex items-end w-1/2 m-2 ">
         <img class="w-8 rounded-full m-3 mb-0" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
         <div class="p-3  bg-gray-100 rounded-t-lg rounded-br-lg">
           <div class="text-sm text-gray-500 ">
