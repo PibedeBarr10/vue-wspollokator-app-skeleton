@@ -1,13 +1,16 @@
 <template>
   <div
-    v-for="group in filteredGroup"
-    :key="group"
+    v-for="user in users"
+    :key="user"
     class="flex mb-4 rounded-box shadow-md mx-2 group"
-    @mouseover.native="getGroupOnHover(group)"
-    @mouseleave.native="getGroupOnHover"
+    @mouseover.native="getUserOnHover(user)"
+    @mouseleave.native="getUserOnHover"
   >
     <div class="flex-shrink self-center m-4">
       <div class="-space-x-6 avatar-group justify-center min-w-120">
+        <div class="avatar w-12 h-12">
+          <img :src="user.avatar" :alt="user.first_name + ' image'">
+        </div>
         <!-- <div
           v-for="member in group.members"
           :key="member"
@@ -18,11 +21,11 @@
           </div>
         </div>
         <div
-          v-if="groups[filteredGroup.indexOf(group)].members.length > 2"
+          v-if="users[filteredGroup.indexOf(group)].members.length > 2"
           class="avatar placeholder"
         >
           <div class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
-            <span>+{{ groups[filteredGroup.indexOf(group)].members.length - 2 }}</span>
+            <span>+{{ users[filteredGroup.indexOf(group)].members.length - 2 }}</span>
           </div>
         </div> -->
       </div>
@@ -32,12 +35,12 @@
       <div>
         <p class="card-title">
           <!-- <a href="/group-chat">{{ group.membersNames }}</a> -->
-          <a href="/group-chat">{{ group.firstName }}</a>
+          <a href="/group-chat">{{ `${user.first_name} ${user.last_name}` }}</a>
         </p>
-        <div class="space-x-4">
-          <div class="badge badge-primary">Warszawa</div>
-          <div class="badge badge-primary">Docelowa liczba osób: 4</div>
-        </div>
+<!--        <div class="space-x-4">-->
+<!--          <div class="badge badge-primary">Warszawa</div>-->
+<!--          <div class="badge badge-primary">Docelowa liczba osób: 4</div>-->
+<!--        </div>-->
       </div>
 
       <div class="self-center space-x-4">
@@ -58,43 +61,31 @@ export default {
     HeartIcon
   },
   props: {
-    groups: {
+    users: {
       type: Array,
       required: true
     }
   },
   data () {
     return {
-      filteredGroup: [],
-      activeGroup: -1
+      // filteredUsers: [],
+      activeUser: -1
     }
   },
   mounted () {
-    this.filterMembers()
+    console.log(this.users)
   },
   methods: {
-    filterMembers () {
-      // deep copy
-      this.filteredGroup = JSON.parse(JSON.stringify(this.groups))
+    // filterMembers () {
+    //   // deep copy
+    //   this.filteredUsers = JSON.parse(JSON.stringify(this.users))
+    // },
+    getUserOnHover(user = null) {
+      const oldActiveUserIndex = this.activeUser
+      user ? this.activeUser = this.users.indexOf(user) : this.activeUser = -1
 
-      // this.filteredGroup.forEach((group) => {
-      //   const names = group.members.map((member) => {
-      //     return member.name
-      //   })
-
-      //   group.membersNames = names.join(', ')
-
-      //   group.members = group.members.filter((member) => {
-      //     return group.members.indexOf(member) < 2
-      //   })
-      // })
-    },
-    getGroupOnHover(group = null) {
-      const oldActiveGroupIndex = this.activeGroup
-      group ? this.activeGroup = this.filteredGroup.indexOf(group) : this.activeGroup = -1
-
-      if (this.activeGroup !== oldActiveGroupIndex) {
-        this.$emit('setMarkersOnMap', this.activeGroup)
+      if (this.activeUser !== oldActiveUserIndex) {
+        this.$emit('setMarkersOnMap', this.activeUser)
       }
     },
     sendToFavourite() {

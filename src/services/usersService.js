@@ -11,5 +11,14 @@ export default {
             .then(response => {
                 return response.data
             })
+    },
+    getFilteredProfiles() {
+        return axios
+            .get(`${API_URL}/profile/`, {
+                withCredentials: true
+            })
+            .then(response => {
+                return response.data
+            })
     }
 }
