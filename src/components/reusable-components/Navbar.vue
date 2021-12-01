@@ -52,6 +52,8 @@ export default {
     logout() {
       if (this.currentUser) {
         this.$store.dispatch('auth/logout').then(() => {
+          this.$store.dispatch('clearPointState')
+          this.$store.dispatch('clearProfileState')
           this.$router.push('/')
         })
       }

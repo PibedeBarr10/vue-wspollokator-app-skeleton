@@ -32,6 +32,22 @@ export default {
         },
         CONFIRM_PROFILE_CREATED(state) {
             state.profileCreated = true
+        },
+        CLEAR_STATE(state) {
+            state.profile = {
+                id: '',
+                updated_at: '',
+                sex: 'F',
+                age: 0,
+                accepts_animals: 'I',
+                smoking: 'I',
+                preferable_price: '0',
+                description: 'Opis',
+                is_searchable: false,
+                avatar: null
+            }
+
+            state.profileCreated = false
         }
     },
     actions: {
@@ -68,6 +84,9 @@ export default {
                 profileService.addProfileData(bodyFormData)
                 commit('CONFIRM_PROFILE_CREATED')
             }
+        },
+        clearProfileState({ commit }) {
+            commit('CLEAR_STATE')
         }
     },
     getters: {

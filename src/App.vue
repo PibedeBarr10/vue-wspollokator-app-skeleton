@@ -26,7 +26,10 @@ export default {
           // console.log(parsedToken.exp * 1000, new Date().getTime(), parsedToken.exp * 1000 - new Date().getTime())
 
           if (parsedToken.exp * 1000 - 5000 < new Date().getTime()) {
-            this.$store.dispatch('auth/logout')
+            this.$store.dispatch('auth/logout').then(() => {
+              this.$store.dispatch('clearPointState')
+              this.$store.dispatch('clearProfileState')
+            })
             window.location.reload(true)
           }
         }

@@ -1,5 +1,12 @@
 <template>
   <div
+    v-if="users.length === 0"
+    class="flex justify-center"
+  >
+    <p>Brak wyników</p>
+  </div>
+  <div
+    v-else
     v-for="user in users"
     :key="user"
     class="flex mb-4 rounded-box shadow-md mx-2 group"

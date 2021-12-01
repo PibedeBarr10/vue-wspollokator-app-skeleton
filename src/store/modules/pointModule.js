@@ -16,6 +16,11 @@ export default {
         },
         SET_RADIUS(state, radius) {
             state.radius = radius
+        },
+        CLEAR_STATE(state) {
+            state.id = ''
+            state.point = [52, 20]
+            state.radius = 1
         }
     },
     actions: {
@@ -41,6 +46,9 @@ export default {
                     commit('SET_ID', id)
                 })
             }
+        },
+        clearPointState({ commit }) {
+            commit('CLEAR_STATE')
         }
     },
     getters: {
