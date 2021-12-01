@@ -16,7 +16,7 @@
     <div class="flex-shrink self-center m-4">
       <div class="-space-x-6 avatar-group justify-center min-w-120">
         <div class="avatar w-12 h-12">
-          <img :src="user.avatar" :alt="user.first_name + ' image'">
+          <img :src="`${user.avatar}`" :alt="user.first_name + ' image'">
         </div>
         <!-- <div
           v-for="member in group.members"

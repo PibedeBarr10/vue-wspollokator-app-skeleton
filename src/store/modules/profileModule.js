@@ -70,15 +70,11 @@ export default {
             bodyFormData.append('preferable_price', data.profile.preferable_price)
             bodyFormData.append('description', data.profile.description)
             bodyFormData.append('is_searchable', data.profile.is_searchable)
-            // bodyFormData.append('updated_at', data.profile.updated_at)
 
             if (this.getters.profileCreated) {
                 bodyFormData.append('id', data.profile.id)
+                bodyFormData.append('avatar', data.profile.avatar)
 
-                // bodyFormData.append('avatar', new Blob([data.profile.avatar], {type : 'image/jpeg'}))
-                // bodyFormData.append('avatar', data.profile.avatar, 'fileName.jpg')
-
-                bodyFormData.append('avatar', new Blob([JSON.stringify({ obj: 'abc' }, null, 2)], {type : 'application/json'}))
                 profileService.changeProfile(data.user.pk, bodyFormData)
             } else {
                 profileService.addProfileData(bodyFormData)

@@ -7,7 +7,7 @@
         </router-link>
       </Navbar>
 
-      <Filters />
+      <Filters @searchUsers="searchUsers"/>
     </div>
 
     <div
@@ -67,6 +67,7 @@ export default {
   methods: {
     getUsers() {
       usersService.getProfiles().then((data) => {
+        this.users = []
         data.forEach((data) => {
           this.users.push({
             id: data.user.profile,
@@ -92,6 +93,7 @@ export default {
     },
     searchUsers(filters) {
       usersService.getFilteredProfiles(filters).then((data) => {
+        this.users = []
         data.forEach((data) => {
           this.users.push({
             id: data.user.profile,

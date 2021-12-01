@@ -18,7 +18,15 @@
           <!-- <p class="leading-relaxed mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsam pariatur ex? Sunt dolorum dolores provident rem numquam, eius placeat officia, veritatis accusantium quod blanditiis excepturi, voluptate incidunt odit quis! </p>
            -->
           <!-- dopasowanie h do poziomu przycisków? -->
-          <textarea v-model="profile.description" placeholder="Opis" class="textarea resize-none textarea-bordered" style="height: 80%; width: 100%;"></textarea>
+          <textarea v-model="profile.description" placeholder="Opis" class="textarea resize-none textarea-bordered w-full" style="height: 49%"></textarea>
+          <div class="mb-4">
+            <div class="form-control w-full">
+              <label class="label">
+                <span class="label-text">Wiek</span>
+              </label>
+              <input v-model="profile.age" type="text" autocomplete="off" placeholder="Wiek" class="input input-sm input-bordered">
+            </div>
+          </div>
         </div>
 
         <div class="lg:w-2/5 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
@@ -32,7 +40,7 @@
             </label>
           </div>
           <div class="mb-4">
-            <div class="form-control w-full max-w-xs">
+            <div class="form-control w-full">
               <label class="label">
                 <span class="label-text">Zwierzęta domowe</span>
               </label>
@@ -44,7 +52,7 @@
             </div>
           </div>
           <div class="mb-4">
-            <div class="form-control w-full max-w-xs">
+            <div class="form-control w-full">
               <label class="label">
                 <span class="label-text">Osoby palące</span>
               </label>
@@ -56,7 +64,7 @@
             </div>
           </div>
           <div class="mb-4">
-            <div class="form-control">
+            <div class="form-control w-full">
               <label class="label">
                 <span class="label-text">Preferowana kwota</span>
               </label>
@@ -64,23 +72,30 @@
             </div>
           </div>
         </div>
-        <div class="lg:w-1/5 lg:h-1/2 lg:py-6 mb-6 lg:mb-0">
-          <img alt="avatar" class="w-full h-full object-cover object-center rounded-full pt-2 border-solid border-2 border-black" :src="profile.avatar">
-          <h2 class="text-gray-900 text-xl font-medium mt-4">{{ currentUser.user.first_name }} {{ currentUser.user.last_name }}</h2>
-          <h6 class="text-gray-500 text-2xs mb-2">{{ currentUser.user.email }}</h6>
+        <div class="flex flex-col w-full items-center lg:w-1/5 lg:h-1/2 lg:py-9 mb-6 lg:mb-0">
+          <img
+            alt="avatar"
+            class="w-full h-full object-cover object-center rounded-full border-solid border-2 border-black"
+            style="max-height: 150px; max-width: 150px;"
+            :src="profile.avatar"
+          >
+          <div>
+            <h2 class="text-gray-900 text-xl font-medium mt-4">{{ currentUser.user.first_name }} {{ currentUser.user.last_name }}</h2>
+            <h6 class="text-gray-500 text-2xs mb-2">{{ currentUser.user.email }}</h6>
 
-          <label for="modal-change-picture" class="my-1 btn btn-primary modal-button w-full">Zmień zdjęcie</label>
-          <input type="checkbox" id="modal-change-picture" class="modal-toggle">
-          <div class="modal">
-            <div class="modal-box">
-              <input style="display:none" type="file" @change=onFileSelected ref="fileInput">
-              <button class="btn btn-primary" @click="$refs.fileInput.click()">Wybierz zdjęcie</button>
-              <span class="mx-4">{{ avatar.name }}</span>
+            <label for="modal-change-picture" class="my-1 btn btn-primary modal-button w-full">Zmień zdjęcie</label>
+            <input type="checkbox" id="modal-change-picture" class="modal-toggle">
+            <div ref="fileModal" class="modal">
+              <div class="modal-box">
+                <input style="display:none" type="file" @change=onFileSelected ref="fileInput">
+                <button class="btn btn-primary" @click="$refs.fileInput.click()">Wybierz zdjęcie</button>
+                <span class="mx-4">{{ avatar.name }}</span>
 
-              <div class="modal-action">
-                <button class="btn btn-primary" @click="uploadAvatar">Zatwierdź</button>
-                <!-- <label for="modal-change-picture" class="btn btn-primary">Zatwierdź</label>  -->
-                <label for="modal-change-picture" class="btn">Anuluj</label>
+                <div class="modal-action">
+                  <button class="btn btn-primary" @click="uploadAvatar">Zatwierdź</button>
+                  <!-- <label for="modal-change-picture" class="btn btn-primary">Zatwierdź</label>  -->
+                  <label for="modal-change-picture" class="btn">Anuluj</label>
+                </div>
               </div>
             </div>
           </div>
@@ -318,7 +333,7 @@ export default {
       this.map.addLayer(this.marker);
     },
     changePassword() {
-       this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
+        this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
         this.$router.go()
       })
     }, 
@@ -353,11 +368,14 @@ export default {
       this.profile.avatar = event.target.files[0]
     },
     uploadAvatar() {
+      let data = JSON.parse(JSON.stringify(this.profile))
+      data.avatar = this.profile.avatar
       this.$store.dispatch('setProfile', {
-        profile: JSON.parse(JSON.stringify(this.profile)),
+        profile: data,
         user: this.currentUser.user
       }).then(() => {
         this.profileDataChanged = true
+        this.getProfileData()
       })
 
       // const fd = new FormData();

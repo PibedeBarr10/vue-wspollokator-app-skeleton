@@ -6,7 +6,7 @@
         <div class="form-control flex flex-row justify-between w-full">
           <div>
             <div class="flex flex-row flex-wrap">
-              <label class="label pl-0">
+              <label class="label px-0 mr-2">
                 <span class="label-text mr-2">Zwierzęta domowe</span>
                 <select v-model="accepts_animals" class="select select-sm select-bordered">
                   <option v-for="option in selectOptions" :value="option.value">
@@ -15,7 +15,7 @@
                 </select>
               </label>
 
-              <label class="label">
+              <label class="label px-0 mr-2">
                 <span class="label-text mr-2">Osoby palące</span>
                 <select v-model="smoking" class="select select-sm select-bordered">
                   <option v-for="option in selectOptions" :value="option.value">
@@ -24,23 +24,49 @@
                 </select>
               </label>
 
-              <label class="label">
+              <label class="label px-0 mr-2">
                 <span class="label-text mr-2">Minimalna kwota</span>
                 <input
                     v-model="min_preferable_price"
-                    type="text" autocomplete="off"
+                    type="text"
+                    autocomplete="off"
                     placeholder="Kwota"
                     class="input input-sm input-bordered"
                     style="max-width: 100px"
                 >
               </label>
 
-              <label class="label">
+              <label class="label px-0 mr-2">
                 <span class="label-text mr-2">Maksymalna kwota</span>
                 <input
                     v-model="max_preferable_price"
-                    type="text" autocomplete="off"
+                    type="text"
+                    autocomplete="off"
                     placeholder="Kwota"
+                    class="input input-sm input-bordered"
+                    style="max-width: 100px"
+                >
+              </label>
+
+              <label class="label px-0 mr-2">
+                <span class="label-text mr-2">Minimalny wiek</span>
+                <input
+                    v-model="min_age"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Wiek"
+                    class="input input-sm input-bordered"
+                    style="max-width: 100px"
+                >
+              </label>
+
+              <label class="label px-0 mr-2">
+                <span class="label-text mr-2">Maksymalny wiek</span>
+                <input
+                    v-model="max_age"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Wiek"
                     class="input input-sm input-bordered"
                     style="max-width: 100px"
                 >
@@ -95,16 +121,14 @@ export default {
       ],
     }
   },
-  watch: {
-    max_preferable_price: function () {
-      console.log(this.max_preferable_price)
-    }
-  },
   methods: {
     searchUsers() {
+      const animalsSearch = this.accepts_animals === 'I' ? null : this.accepts_animals
+      const smokingSearch = this.smoking === 'I' ? null : this.smoking
+
       this.$emit('searchUsers', {
-        accepts_animals: this.accepts_animals,
-        smoking: this.smoking,
+        accepts_animals: animalsSearch,
+        smoking: smokingSearch,
         min_preferable_price: this.min_preferable_price,
         max_preferable_price: this.max_preferable_price,
         min_age: this.min_age,

@@ -12,10 +12,11 @@ export default {
                 return response.data
             })
     },
-    getFilteredProfiles() {
+    getFilteredProfiles(filters) {
         return axios
             .get(`${API_URL}/profile/`, {
-                withCredentials: true
+                withCredentials: true,
+                params: filters
             })
             .then(response => {
                 return response.data
