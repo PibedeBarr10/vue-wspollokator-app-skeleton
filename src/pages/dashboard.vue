@@ -169,10 +169,9 @@ export default {
       usersService.getProfiles().then((data) => {
         data.forEach((data) => {
           this.users.append({
-            id: data.id,
+            id: data.profile.id,
             localization: data.point[0].location.coordinates,
             radius: data.point.radius
-
           })
         })
       })
