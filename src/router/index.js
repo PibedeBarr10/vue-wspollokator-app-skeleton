@@ -5,6 +5,7 @@ import Login from "../pages/login.vue";
 import Logout from "../pages/logout.vue";
 import Register from "../pages/register.vue";
 import LandingPage from "../pages/landing-page.vue";
+import Chat from "../pages/chat.vue";
 
 const routes = [
     {
@@ -36,6 +37,11 @@ const routes = [
         path: "/",
         name: "Współlokator - witamy!",
         component: LandingPage,
+    },
+    {
+        path: "/chat",
+        name: "Wiadomości",
+        component: Chat,
     },
 ];
 
