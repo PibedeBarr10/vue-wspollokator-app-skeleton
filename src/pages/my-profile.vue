@@ -1,5 +1,30 @@
 <template>
-
+  <div
+    v-if="newProfileModalVisibility"
+    class="flex flex-col justify-center items-center fixed w-full"
+    style="height: 100vh; z-index: 600; background-color: rgba(0,0,0,0.3)"
+  >
+    <div
+      class="flex flex-col justify-center items-center p-6 border-black border-4"
+      style="background-color: rgb(240, 240, 240); border-radius: 10px"
+    >
+      <h1 class="text-2xl font-extrabold pb-3">
+        Witamy w systemie Współlokator!
+      </h1>
+      <p>
+        Aby swobodnie poruszać się w systemie musisz skonfigurować swój profil
+      </p>
+      <div class="w-full">
+        <p class="font-bold mt-3">Rzeczy do wykonania:</p>
+        <p v-for="value in toDoForUser">
+          - {{ value }}
+        </p>
+      </div>
+      <button class="btn btn-primary mt-4" @click="newProfileModalVisibility = false">
+        Przejdź do Profilu
+      </button>
+    </div>
+  </div>
   <div
     class="flex flex-col my-0 py-0 "
     style="height: 100vh; max-height: 100vh; overflow:scroll; display:block"
@@ -45,7 +70,7 @@
                 <span class="label-text">Zwierzęta domowe</span>
               </label>
               <select v-model="profile.accepts_animals" class="select select-sm select-bordered w-full">
-                <option v-for="option in selectOptions" v-bind:value="option.value">
+                <option v-for="option in selectOptions" :value="option.value">
                   {{ option.text }}
                 </option>
               </select>
@@ -57,7 +82,7 @@
                 <span class="label-text">Osoby palące</span>
               </label>
               <select v-model="profile.smoking" class="select select-sm select-bordered w-full">
-                <option v-for="option in selectOptions" v-bind:value="option.value">
+                <option v-for="option in selectOptions" :value="option.value">
                   {{ option.text }}
                 </option>
               </select>
@@ -79,23 +104,21 @@
             style="max-height: 150px; max-width: 150px;"
             :src="profile.avatar"
           >
-          <div>
-            <h2 class="text-gray-900 text-xl font-medium mt-4">{{ currentUser.user.first_name }} {{ currentUser.user.last_name }}</h2>
-            <h6 class="text-gray-500 text-2xs mb-2">{{ currentUser.user.email }}</h6>
+          <h2 class="text-gray-900 text-xl font-medium mt-4">{{ currentUser.user.first_name }} {{ currentUser.user.last_name }}</h2>
+          <h6 class="text-gray-500 text-2xs mb-2">{{ currentUser.user.email }}</h6>
 
-            <label for="modal-change-picture" class="my-1 btn btn-primary modal-button w-full">Zmień zdjęcie</label>
-            <input type="checkbox" id="modal-change-picture" class="modal-toggle">
-            <div ref="fileModal" class="modal">
-              <div class="modal-box">
-                <input style="display:none" type="file" @change=onFileSelected ref="fileInput">
-                <button class="btn btn-primary" @click="$refs.fileInput.click()">Wybierz zdjęcie</button>
-                <span class="mx-4">{{ avatar.name }}</span>
+          <label for="modal-change-picture" class="my-1 btn btn-primary modal-button w-full">Zmień zdjęcie</label>
+          <input type="checkbox" id="modal-change-picture" class="modal-toggle">
+          <div ref="fileModal" class="modal">
+            <div class="modal-box">
+              <input style="display:none" type="file" @change=onFileSelected ref="fileInput">
+              <button class="btn btn-primary" @click="$refs.fileInput.click()">Wybierz zdjęcie</button>
+              <span class="mx-4">{{ avatar.name }}</span>
 
-                <div class="modal-action">
-                  <button class="btn btn-primary" @click="uploadAvatar">Zatwierdź</button>
-                  <!-- <label for="modal-change-picture" class="btn btn-primary">Zatwierdź</label>  -->
-                  <label for="modal-change-picture" class="btn">Anuluj</label>
-                </div>
+              <div class="modal-action">
+                <label for="modal-change-picture" class="btn btn-primary" @click="uploadAvatar">Zatwierdź</label>
+                <!-- <label for="modal-change-picture" class="btn btn-primary">Zatwierdź</label>  -->
+                <label for="modal-change-picture" class="btn">Anuluj</label>
               </div>
             </div>
           </div>
@@ -119,7 +142,7 @@
               />
 
               <div class="modal-action">
-                <button class="btn btn-primary" @click="changePassword">Zatwierdź</button>
+                <label for="modal-change-password" class="btn btn-primary" @click="changePassword">Zatwierdź</label>
                 <label for="modal-change-password" class="btn">Anuluj</label>
               </div>
             </div>
@@ -219,12 +242,12 @@ export default {
         id: '',
         updated_at: '',
         sex: 'F',
-        age: 0,
+        age: 18,
         accepts_animals: 'I',
         smoking: 'I',
-        preferable_price: '0',
-        description: 'Opis',
-        is_searchable: false,
+        preferable_price: 1000,
+        description: 'Domyślny opis',
+        is_searchable: true,
         avatar: null
       },
       selectOptions: [
@@ -232,15 +255,17 @@ export default {
         { text: 'Nie akceptuję', value: 'N' },
         { text: 'Nieistotne', value: 'I' }
       ],
-      profileDataChanged: false
+      profileDataChanged: false,
+      oldAvatar: null,
+      newProfileModalVisibility: false,
+      toDoForUser: []
     }
   },
 
   computed: {
     currentUser() {
-      return this.$store.state.auth.user;
+      return this.$store.state.auth.user
     },
-
   },
   watch: {
     profile: {
@@ -248,12 +273,29 @@ export default {
       handler(value) {
         this.compareProfilesData()
       }
+    },
+    toDoForUser: {
+      deep: true,
+      handler() {
+        if (this.toDoForUser.length > 0) {
+          this.newProfileModalVisibility = true
+        }
+      }
     }
+    // toDoForUser: function () {
+    //   if (this.toDoForUser.length > 0) {
+    //     this.newProfileModalVisibility = true
+    //   }
+    // }
   },
   mounted () {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
+
+    this.newProfileModalVisibility = false
+    this.toDoForUser = []
+
     this.getProfileData()
     this.drawMap()
   },
@@ -284,12 +326,18 @@ export default {
       this.profileDataChanged = true;
     },
     getProfileData() {
-      this.$store.dispatch('getProfile', {
-        pk: this.currentUser.user.pk
-      }).then(() => {
-        profileService.getProfile(this.currentUser.user.pk).then(data => {
-            this.profile = JSON.parse(JSON.stringify(data))
+      profileService.getProfile(this.currentUser.user.pk).then(data => {
+        this.$store.dispatch('getProfile', {
+          pk: this.currentUser.user.pk
+        }).then(() => {
+          this.profile = JSON.parse(JSON.stringify(data))
         })
+      }).catch(error => {
+        console.log(error.response.data.detail)
+        if (error.response.data.detail === 'Not found.') {
+          this.toDoForUser.push('Uzupełnij dane profilu (zapisz zmiany klikając w przycisk "Zapisz zmiany w profilu")')
+          // this.$store.dispatch('notificationModule/show', { msg: 'Uzupełnij dane profilu', color: 'bg-red-500' })
+        }
       })
     },
     updateProfileData() {
@@ -297,13 +345,21 @@ export default {
         profile: JSON.parse(JSON.stringify(this.profile)),
         user: this.currentUser.user
       }).then(() => {
+        this.$store.dispatch('notificationModule/show', { msg: 'Pomyślnie zaktualizowano dane profilu', color: 'bg-green-500' })
         this.profileDataChanged = true
       })
     },
     drawMap() {
       this.$store.dispatch('getUserPoint').then(() => {
-        this.coordinates = this.$store.getters.point
         this.radius = this.$store.getters.radius
+        if (this.$store.getters.point !== null) {
+          this.coordinates = this.$store.getters.point
+        } else {
+          this.coordinates = [52, 20]
+          this.toDoForUser.push('Ustaw swój punkt na mapie')
+          console.log(this.toDoForUser)
+          // this.$store.dispatch('notificationModule/show', { msg: 'Ustaw swój punkt na mapie', color: 'bg-red-500' })
+        }
 
         this.createMap()
         this.setCircleOnMap()
@@ -333,8 +389,8 @@ export default {
       this.map.addLayer(this.marker);
     },
     changePassword() {
-        this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
-        this.$router.go()
+      this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
+        this.$store.dispatch('notificationModule/show', { msg: 'Pomyślnie zmieniono hasło', color: 'bg-green-500' })
       })
     }, 
     updateMyPoint()
@@ -354,6 +410,7 @@ export default {
         this.map.addLayer(this.circle);
 
         this.pointEditing = false
+        this.$store.dispatch('notificationModule/show', { msg: 'Zmieniono punkt', color: 'bg-green-500' })
       })
     },
     cancelUpdateMyPoint()
@@ -365,25 +422,22 @@ export default {
       this.pointEditing = false
     },
     onFileSelected(event) {
-      this.profile.avatar = event.target.files[0]
+      this.oldAvatar = event.target.files[0]
     },
     uploadAvatar() {
       let data = JSON.parse(JSON.stringify(this.profile))
-      data.avatar = this.profile.avatar
+      data.avatar = this.oldAvatar
       this.$store.dispatch('setProfile', {
         profile: data,
         user: this.currentUser.user
       }).then(() => {
         this.profileDataChanged = true
         this.getProfileData()
+      }).then(() => {
+        this.$store.dispatch('notificationModule/show', { msg: 'Pomyślnie zaktualizowano zdjęcie', color: 'bg-green-500' })
+      }).catch(error => {
+        this.$store.dispatch('notificationModule/show', { msg: 'Błąd w trakcie aktualizacji zdjęcia', color: 'bg-red-500' })
       })
-
-      // const fd = new FormData();
-      // fd.append('image', this.avatar, this.avatar.name)
-      // axios.post('url',fd,{
-      //   onUploadProgress: uploadEvent => {console.log('Upload Progress: ' + Math.round(uploadEvent.loaded / uploadEvent.total * 100) + '%')}
-      //   })
-      //     .then(res => {console.log(res)})
     }
   }
 }

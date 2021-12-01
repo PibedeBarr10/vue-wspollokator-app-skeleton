@@ -4,7 +4,6 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default {
     getProfile(pk) {
-        // console.log(pk, 'service')
         return axios
             .get(`${API_URL}/profile/${pk}/`, {
                 withCredentials: true

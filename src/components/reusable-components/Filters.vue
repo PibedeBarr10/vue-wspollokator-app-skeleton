@@ -72,24 +72,15 @@
                 >
               </label>
             </div>
-            <div>
-
-<!--              <label-->
-<!--                  class="label cursor-pointer flex flex-row content-center items-center pr-4"-->
-<!--              >-->
-<!--                <span class="label-text pr-2">Osoby niepalące</span>-->
-<!--                <input type="checkbox" class="toggle" />-->
-<!--              </label>-->
-            </div>
           </div>
 
           <div class="flex flex-row items-center">
-            <label
-              class="cursor-pointer flex flex-row content-center items-center mr-3"
-            >
-              <span class="label-text pr-2">Zapisane</span>
-              <input type="checkbox" class="toggle" />
-            </label>
+<!--            <label-->
+<!--              class="cursor-pointer flex flex-row content-center items-center mr-3"-->
+<!--            >-->
+<!--              <span class="label-text pr-2">Zapisane</span>-->
+<!--              <input type="checkbox" class="toggle" />-->
+<!--            </label>-->
             <button
               class="btn btn-primary btn-sm"
               @click="searchUsers"

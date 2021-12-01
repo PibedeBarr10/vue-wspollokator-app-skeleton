@@ -1,4 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
+import profileService from "../services/profileService";
+
 import Dashboard from "../pages/dashboard.vue";
 import MyProfile from "../pages/my-profile.vue";
 import Login from "../pages/login.vue";
@@ -52,9 +54,16 @@ router.beforeEach((to, from, next) => {
     // trying to access a restricted page + not logged in
     // redirect to login page
     if (authRequired && !loggedIn) {
-        next('/login');
+        next('/login')
     } else {
-        next();
+        if (loggedIn) {
+            profileService.getProfile(JSON.parse(loggedIn).user.pk).catch(error => {
+                if (error.response.data.detail === 'Not found.') {
+                    router.push('/my-profile')
+                }
+            })
+        }
+        next()
     }
 });
 

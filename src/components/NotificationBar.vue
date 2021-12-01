@@ -4,6 +4,7 @@
       v-if="show"
       class="notification text-gray-50"
       :class="color"
+      style="z-index: 500;"
     >
       {{ msg }}
     </div>

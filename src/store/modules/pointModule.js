@@ -4,7 +4,7 @@ import pointService from "../../services/pointService";
 export default {
     state: {
         id: '',
-        point: [52, 20],
+        point: null,
         radius: 1
     },
     mutations: {

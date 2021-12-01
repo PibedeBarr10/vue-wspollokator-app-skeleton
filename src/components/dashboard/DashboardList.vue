@@ -13,29 +13,13 @@
     @mouseover.native="getUserOnHover(user)"
     @mouseleave.native="getUserOnHover"
   >
-    <div class="flex-shrink self-center m-4">
-      <div class="-space-x-6 avatar-group justify-center min-w-120">
-        <div class="avatar w-12 h-12">
-          <img :src="`${user.avatar}`" :alt="user.first_name + ' image'">
-        </div>
-        <!-- <div
-          v-for="member in group.members"
-          :key="member"
-          class="avatar"
-        >
-          <div class="w-12 h-12">
-            <img :src="member.imgUrl" :alt="member.name + ' image'">
-          </div>
-        </div>
-        <div
-          v-if="users[filteredGroup.indexOf(group)].members.length > 2"
-          class="avatar placeholder"
-        >
-          <div class="w-12 h-12 rounded-full bg-neutral-focus text-neutral-content">
-            <span>+{{ users[filteredGroup.indexOf(group)].members.length - 2 }}</span>
-          </div>
-        </div> -->
-      </div>
+    <div class="m-4 px-4">
+      <img
+        class="w-full rounded-full object-cover object-center border-solid border-2 border-black"
+        style="object-fit: cover; height: 48px; width: 48px;"
+        :src="user.avatar"
+        :alt="user.first_name + ' image'"
+      >
     </div>
 
     <div class="flex justify-between flex-grow pl-0 pr-4 py-4">
