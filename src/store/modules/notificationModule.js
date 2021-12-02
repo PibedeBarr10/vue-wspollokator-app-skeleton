@@ -31,7 +31,6 @@ const mutations = {
 const state = () => ({
     text: '',
     type: 'success',
-    // icon: '',
     show: false
 })
 

@@ -18,7 +18,6 @@ export default {
     },
     mutations: {
         SET_PROFILE(state, data) {
-            // state.profile = data
             state.profile.id = data.id
             state.profile.sex = data.sex
             state.profile.age = data.age

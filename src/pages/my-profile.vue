@@ -153,8 +153,6 @@
           </button>
         </div>
 
-<!--        <div class="w-full divider"></div>-->
-
         <div class="flex w-full items-center justify-between">
           <span class="text-lg font-bold">Mój punkt</span>
           <button
@@ -276,11 +274,6 @@ export default {
         }
       }
     }
-    // toDoForUser: function () {
-    //   if (this.toDoForUser.length > 0) {
-    //     this.newProfileModalVisibility = true
-    //   }
-    // }
   },
   mounted () {
     if (!this.currentUser) {
