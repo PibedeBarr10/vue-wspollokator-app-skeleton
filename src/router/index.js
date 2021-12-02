@@ -1,5 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
 import profileService from "../services/profileService";
+import pointService from "../services/pointService";
 
 import Dashboard from "../pages/dashboard.vue";
 import MyProfile from "../pages/my-profile.vue";
@@ -8,6 +9,7 @@ import Logout from "../pages/logout.vue";
 import Register from "../pages/register.vue";
 import LandingPage from "../pages/landing-page.vue";
 import Chat from "../pages/chat.vue";
+
 
 const routes = [
     {
@@ -63,7 +65,13 @@ router.beforeEach((to, from, next) => {
         next('/login')
     } else {
         if (loggedIn) {
-            profileService.getProfile(JSON.parse(loggedIn).user.pk).catch(error => {
+            profileService.getProfile(JSON.parse(loggedIn).user.pk).then(() => {
+                pointService.getUserPoint().then(data => {
+                    if (data.length === 0) {
+                        router.push('/my-profile')
+                    }
+                })
+            }).catch(error => {
                 if (error.response.data.detail === 'Not found.') {
                     router.push('/my-profile')
                 }

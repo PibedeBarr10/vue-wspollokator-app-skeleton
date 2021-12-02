@@ -1,11 +1,7 @@
 <template>
   <div class="flex flex-col my-0 py-0" style="height: 100vh; max-height: 100vh">
     <div>
-      <Navbar>
-        <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
-          Mój profil
-        </router-link>
-      </Navbar>
+      <Navbar />
 
       <Filters @searchUsers="searchUsers"/>
     </div>

@@ -38,12 +38,12 @@ export default {
                 id: '',
                 updated_at: '',
                 sex: 'F',
-                age: 0,
+                age: 18,
                 accepts_animals: 'I',
                 smoking: 'I',
-                preferable_price: '0',
-                description: 'Opis',
-                is_searchable: false,
+                preferable_price: 1000,
+                description: 'Domyślny opis',
+                is_searchable: true,
                 avatar: null
             }
 

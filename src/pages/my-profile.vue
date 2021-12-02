@@ -197,9 +197,8 @@
 
 
     <div
-      v-if="coordinates !== []"
       id="mapContainer"
-      class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4 "
+      class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"
     />
   </div>
 </template>
@@ -230,7 +229,7 @@ export default {
         name: ''
       },
       pointEditing: false,
-      coordinates: [],
+      coordinates: [52, 20],
       radius: 1,
       profile: {
         id: '',
@@ -287,6 +286,8 @@ export default {
       this.$router.push('/login');
     }
 
+    document.getElementById('mapContainer').innerHTML = '<div id="mapContainer" class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"/>';
+
     this.newProfileModalVisibility = false
     this.toDoForUser = []
 
@@ -306,9 +307,6 @@ export default {
         return
       }
 
-      // console.log({...this.profile})
-      // console.log({...storeProfile}, 'storeProfile')
-
       for (let key of keys1) {
         if (this.profile[key] !== storeProfile[key]) {
           this.profileDataChanged = false;
@@ -327,10 +325,8 @@ export default {
           this.profile = JSON.parse(JSON.stringify(data))
         })
       }).catch(error => {
-        console.log(error.response.data.detail)
         if (error.response.data.detail === 'Not found.') {
           this.toDoForUser.push('Uzupełnij dane profilu (zapisz zmiany klikając w przycisk "Zapisz zmiany w profilu")')
-          // this.$store.dispatch('notificationModule/show', { msg: 'Uzupełnij dane profilu', color: 'bg-red-500' })
         }
       })
     },
@@ -346,13 +342,12 @@ export default {
     drawMap() {
       this.$store.dispatch('getUserPoint').then(() => {
         this.radius = this.$store.getters.radius
+
         if (this.$store.getters.point !== null) {
           this.coordinates = this.$store.getters.point
         } else {
           this.coordinates = [52, 20]
           this.toDoForUser.push('Ustaw swój punkt na mapie')
-          console.log(this.toDoForUser)
-          // this.$store.dispatch('notificationModule/show', { msg: 'Ustaw swój punkt na mapie', color: 'bg-red-500' })
         }
 
         this.createMap()
@@ -360,7 +355,7 @@ export default {
       })
     },
     createMap() {
-      this.map = L.map("mapContainer").setView(this.coordinates, 13);
+      this.map = L.map('mapContainer').setView(this.coordinates, 13);
       L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(this.map);

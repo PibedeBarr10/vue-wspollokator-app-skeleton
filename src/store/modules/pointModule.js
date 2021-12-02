@@ -19,7 +19,7 @@ export default {
         },
         CLEAR_STATE(state) {
             state.id = ''
-            state.point = [52, 20]
+            state.point = null
             state.radius = 1
         }
     },
