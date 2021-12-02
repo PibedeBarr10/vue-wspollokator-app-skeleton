@@ -12,7 +12,7 @@ export default {
             preferable_price: 1000,
             description: 'Domyślny opis',
             is_searchable: true,
-            avatar: null
+            avatar: 'http://wspolokator.livs.pl:8000/media/default_avatar.png'
         },
         profileCreated: false
     },
@@ -44,7 +44,7 @@ export default {
                 preferable_price: 1000,
                 description: 'Domyślny opis',
                 is_searchable: true,
-                avatar: null
+                avatar: 'http://wspolokator.livs.pl:8000/media/default_avatar.png'
             }
 
             state.profileCreated = false

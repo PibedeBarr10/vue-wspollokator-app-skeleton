@@ -8,6 +8,7 @@ import validation from './plugins/validation';
 import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png'
 import iconUrl from 'leaflet/dist/images/marker-icon.png'
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png'
+import apiService from "./services/api";
 
 delete L.Icon.Default.prototype._getIconUrl;
 
@@ -16,6 +17,8 @@ L.Icon.Default.mergeOptions({
     iconUrl: iconUrl,
     shadowUrl: shadowUrl,
 });
+
+window.$request = apiService(store, router)
 
 const app = createApp(App)
     .use(store)

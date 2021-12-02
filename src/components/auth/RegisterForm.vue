@@ -97,7 +97,7 @@ export default {
       const firstError = errorsArray.find(element => element !== true)
 
       if (firstError) {
-        this.$store.dispatch('notificationModule/show', { msg: firstError, color: 'bg-red-500' })
+        this.$store.dispatch('notificationModule/show', { text: firstError, type: 'error' })
         return
       }
 
