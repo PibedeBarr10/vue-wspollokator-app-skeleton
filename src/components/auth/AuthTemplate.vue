@@ -32,8 +32,8 @@ export default {
       images: [
         img1,
         img2,
-	img3,
-	img4
+        img3,
+        img4
       ],
       selectedImage: null,
     };

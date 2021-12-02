@@ -197,6 +197,7 @@
 
 
     <div
+      v-if="coordinates !== []"
       id="mapContainer"
       class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"
     />
@@ -209,6 +210,8 @@ import Navbar from '../components/reusable-components/Navbar.vue'
 import { LogoutIcon } from '@heroicons/vue/outline'
 import BaseButton from "../components/reusable-components/BaseButton.vue";
 import profileService from "../services/profileService";
+
+import avatarImage from "/src/assets/avatar.png"
 
 export default {
   components: {
@@ -286,7 +289,7 @@ export default {
       this.$router.push('/login');
     }
 
-    document.getElementById('mapContainer').innerHTML = '<div id="mapContainer" class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"/>';
+    document.getElementById('mapContainer').innerHTML = '<div v-if="coordinates !== []" id="mapContainer" class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"/>';
 
     this.newProfileModalVisibility = false
     this.toDoForUser = []
@@ -319,14 +322,18 @@ export default {
     },
     getProfileData() {
       profileService.getProfile(this.currentUser.user.pk).then(data => {
+        console.log(data)
         this.$store.dispatch('getProfile', {
           pk: this.currentUser.user.pk
         }).then(() => {
           this.profile = JSON.parse(JSON.stringify(data))
         })
       }).catch(error => {
+        console.log(error.response.data)
         if (error.response.data.detail === 'Not found.') {
           this.toDoForUser.push('Uzupełnij dane profilu (zapisz zmiany klikając w przycisk "Zapisz zmiany w profilu")')
+        } else {
+          this.$store.dispatch('notificationModule/show', { msg: error.response.data.detail, color: 'bg-red-500' })
         }
       })
     },
@@ -334,9 +341,12 @@ export default {
       this.$store.dispatch('setProfile', {
         profile: JSON.parse(JSON.stringify(this.profile)),
         user: this.currentUser.user
-      }).then(() => {
+      }).then(response => {
         this.$store.dispatch('notificationModule/show', { msg: 'Pomyślnie zaktualizowano dane profilu', color: 'bg-green-500' })
         this.profileDataChanged = true
+      }).catch(error => {
+        console.log(error)
+        this.$store.dispatch('notificationModule/show', { msg: error.response.data[Object.keys(error.response.data)[0]], color: 'bg-green-500' })
       })
     },
     drawMap() {
@@ -355,6 +365,10 @@ export default {
       })
     },
     createMap() {
+      const container = L.DomUtil.get('mapContainer');
+      if (container !== null) {
+        container._leaflet_id = null;
+      }
       this.map = L.map('mapContainer').setView(this.coordinates, 13);
       L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',

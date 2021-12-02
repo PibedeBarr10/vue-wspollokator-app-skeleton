@@ -18,6 +18,12 @@ export default {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
+        }).then(response => {
+            // console.log(response.data.status)
+            return response.data
+        }).catch(error => {
+            // console.log(error.response.data)
+            return error
         })
     },
     addProfileData(data) {
@@ -27,6 +33,10 @@ export default {
                 'accept': 'application/json',
                 'Content-Type': 'multipart/form-data'
             }
+        }).then(response => {
+            return response.data
+        }).catch(error => {
+            return error
         })
     },
 }
