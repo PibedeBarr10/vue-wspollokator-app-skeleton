@@ -3,7 +3,9 @@ import App from "./App.vue";
 import "./index.css";
 import store from "./store"
 import router from "./router";
-import validation from './plugins/validation';
+import { VueMaskDirective } from 'v-mask'
+// import validation from './plugins/validation';
+
 
 import iconRetinaUrl from 'leaflet/dist/images/marker-icon-2x.png'
 import iconUrl from 'leaflet/dist/images/marker-icon.png'
@@ -20,10 +22,18 @@ L.Icon.Default.mergeOptions({
 
 window.$request = apiService(store, router)
 
+const vMaskV2 = VueMaskDirective;
+const vMaskV3 = {
+    beforeMount: vMaskV2.bind,
+    updated: vMaskV2.componentUpdated,
+    unmounted: vMaskV2.unbind
+}
+
 const app = createApp(App)
+    .directive('mask', vMaskV3)
     .use(store)
     .use(router);
 
-app.config.globalProperties.$rules = validation
+// app.config.globalProperties.$rules = validation
 
 app.mount("#app")

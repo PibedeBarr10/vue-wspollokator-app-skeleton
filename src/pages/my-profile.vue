@@ -39,13 +39,25 @@
           <!-- <p class="leading-relaxed mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsam pariatur ex? Sunt dolorum dolores provident rem numquam, eius placeat officia, veritatis accusantium quod blanditiis excepturi, voluptate incidunt odit quis! </p>
            -->
           <!-- dopasowanie h do poziomu przycisków? -->
-          <textarea v-model="profile.description" placeholder="Opis" class="textarea resize-none textarea-bordered w-full" style="height: 49%"></textarea>
+          <textarea
+            v-model="profile.description"
+            placeholder="Opis"
+            class="textarea resize-none textarea-bordered w-full"
+            style="height: 49%"
+          />
           <div class="mb-4">
             <div class="form-control w-full">
               <label class="label">
                 <span class="label-text">Wiek</span>
               </label>
-              <input v-model="profile.age" type="text" autocomplete="off" placeholder="Wiek" class="input input-sm input-bordered">
+              <input
+                v-model="profile.age"
+                v-mask="'##'"
+                type="text"
+                autocomplete="off"
+                placeholder="Wiek"
+                class="input input-sm input-bordered"
+              >
             </div>
           </div>
         </div>
@@ -89,7 +101,14 @@
               <label class="label">
                 <span class="label-text">Preferowana kwota</span>
               </label>
-              <input v-model="profile.preferable_price" type="text" autocomplete="off" placeholder="Kwota" class="input input-sm input-bordered">
+              <input
+                v-model="profile.preferable_price"
+                v-mask="'#####'"
+                type="text"
+                autocomplete="off"
+                placeholder="Kwota"
+                class="input input-sm input-bordered"
+              >
             </div>
           </div>
         </div>

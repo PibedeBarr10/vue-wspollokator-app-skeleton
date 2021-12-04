@@ -28,6 +28,7 @@
                 <span class="label-text mr-2">Minimalna kwota</span>
                 <input
                     v-model="min_preferable_price"
+                    v-mask="'#####'"
                     type="text"
                     autocomplete="off"
                     placeholder="Kwota"
@@ -40,6 +41,7 @@
                 <span class="label-text mr-2">Maksymalna kwota</span>
                 <input
                     v-model="max_preferable_price"
+                    v-mask="'#####'"
                     type="text"
                     autocomplete="off"
                     placeholder="Kwota"
@@ -52,6 +54,7 @@
                 <span class="label-text mr-2">Minimalny wiek</span>
                 <input
                     v-model="min_age"
+                    v-mask="'##'"
                     type="text"
                     autocomplete="off"
                     placeholder="Wiek"
@@ -64,6 +67,7 @@
                 <span class="label-text mr-2">Maksymalny wiek</span>
                 <input
                     v-model="max_age"
+                    v-mask="'##'"
                     type="text"
                     autocomplete="off"
                     placeholder="Wiek"
