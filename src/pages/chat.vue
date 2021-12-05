@@ -5,8 +5,9 @@
   </div>
   <div class="flex flex-col" style=" flex:1;" >
       <div class="flex flex-grow" >
-      <ChatList/>    
-      <Conversation/>  
+      <ChatList :conversationsList="conversationsList" :currentUserId="this.currentUser.user.pk" @clicked="onClickChildChild"/>    
+      <Conversation :messageList="this.messageList" :oponentUser="this.oponentUser" v-if="this.chooseConversationId !==''" @send="sendMessageChild" /> 
+      <div v-else >Wybierz konwersacje z listy</div>
       </div>
   </div>
  </div>
@@ -25,16 +26,40 @@ export default {
   },
   data(){
     return {
+      chooseConversationId: '',
       conversationsList: {
-        user: '',
+        id: '',
+        users:
+        {
+          id: '',
+          first_name: '',
+          last_name: '',
+          profile: '',
+          avatar: '',
+        },
         last_message:{
           user: '',
+          user_name: '',
           text: '',
           is_read: false,
           created_at: ''
         },
 
-        }
+         },
+      messageList:{ 
+        user:'',
+        user_name:'',
+        text:'',
+        is_read:false,
+        created_at:''
+      },
+      oponentUser:{
+         id: '',
+         first_name: '',
+         last_name: '',
+         profile: '',
+         avatar: '',
+      },
       }
   },
   computed: {
@@ -52,19 +77,34 @@ export default {
   methods: {
     getConversations()
     {
-       this.$store.dispatch('getConversations').then(() => {
         chatService.getConversations().then(data => {
           if (data.length > 0) {
-            this.conversationsList = JSON.parse(JSON.stringify(data[0]))
+            this.conversationsList = JSON.parse(JSON.stringify(data))
           }
-          console.log("pobrano konwersacje");
-        })
+        
       })
     },
     createConversation()
     {
       this.$store.dispatch('createConversation').then(console.log("dodano konwersacje"))
-    }
+    },
+    onClickChildChild(chooseConversationId,oponentUser)
+    {
+      this.chooseConversationId=chooseConversationId;
+      this.oponentUser=oponentUser;
+      this.getConversation();
+    },
+    getConversation()
+    {
+      chatService.getConversation(this.chooseConversationId).then(data => {
+            this.messageList = JSON.parse(JSON.stringify(data))
+          console.log("pobrano konwersacje id");
+     })
+    },
+    sendMessageChild(message)
+    {
+      chatService.sendMessage(this.chooseConversationId, message).then(console.log("wysłano wiadomość"))
+    },
   }
 };
 </script>

@@ -1,16 +1,14 @@
 <template>
       <div class="flex items-end w-1/2 m-2 ">
-        <img class="w-8 rounded-full m-3 mb-0" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
+        <img class="w-8 rounded-full m-3 mb-0" :src="avatar" alt="avatar" />
         <div class="p-3  bg-gray-100 rounded-t-lg rounded-br-lg">
           <div class="text-sm text-gray-500 ">
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-              Cumque, asperiores adipisci. Fuga quia repudiandae accusantium 
-              quos eum quibusdam praesentium asperiores reprehenderit explicabo
-              doloribus minima labore, amet ipsum voluptas delectus id.
+            {{text}}
           </div>
-          <div class="text-xs text-gray-400">
+          <!-- ile czasu temu, lub dać czesc tylko z godziną  -->
+          <!-- <div class="text-xs text-gray-400">
             8 min ago
-          </div>
+          </div> -->
         </div>
       </div>
 </template>
@@ -18,6 +16,12 @@
 <script>
 
 export default {
+  props:
+  {
+    text:String,
+    avatar:String,
+    created_at:String,
+  },
   components: {
   },
   data() {

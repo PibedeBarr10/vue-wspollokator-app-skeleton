@@ -12,10 +12,30 @@ export default {
                 return response.data
             })
     },
+    getConversation(id) {
+        return axios
+            .get(`${API_URL}/conversation/${id}/`, {
+                withCredentials: true
+            })
+            .then(response => {
+                return response.data
+            })
+    },
+    sendMessage(id,message)
+    {
+        return axios
+            .post(`${API_URL}/conversation/${id}/message/`,{
+                'text': message}, {
+                withCredentials: true
+            })
+            .then(response => {
+                return response.data
+            })
+    },
     createConversation()
      {
         return axios
-            .post(`${API_URL}/conversation/`, '50e19d71-8a9e-456a-91da-8a94cbd4ce4b', {
+            .post(`${API_URL}/conversation/`,{user_id: '79d87c89-8cce-4d48-b916-961749b94312'}, {
                 withCredentials: true
             })
             .then(response => {

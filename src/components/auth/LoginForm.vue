@@ -95,7 +95,7 @@ export default {
         password.length <= 255 || 'Maksymalnie 255 znaków',
         /[0-9]+/.test(password) || 'Hasło powinno zawierać co najmniej jedną cyfrę',
         /[A-Z]+/.test(password) || 'Hasło powinno zawierać co najmiej jedną wielką literę',
-        /[$@#&!]+/.test(password) || 'Hasło powinno zawierać co najmniej jeden znak specjalny'
+        /[$@#&!-_]+/.test(password) || 'Hasło powinno zawierać co najmniej jeden znak specjalny'
       ].find(element => element !== true)
     }
   }
