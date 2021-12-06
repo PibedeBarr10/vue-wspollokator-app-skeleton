@@ -26,7 +26,7 @@
         <MessageIn :text="index.text" :avatar="oponentUser.avatar" :created_at="index.created_at" v-if="index.user===oponentUser.id"/>
           <!-- wiadomość użytkownika -->
         <MessageOut :text="index.text" :created_at="index.created_at" v-else/>
-       </div>
+      </div>
      </div>
     <div class ="p-2" style="height:130px; " >
           <div class="relative">

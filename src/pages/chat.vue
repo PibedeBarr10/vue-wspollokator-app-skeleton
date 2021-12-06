@@ -97,8 +97,8 @@ export default {
     getConversation()
     {
       chatService.getConversation(this.chooseConversationId).then(data => {
-            this.messageList = JSON.parse(JSON.stringify(data))
-          console.log("pobrano konwersacje id");
+        this.messageList = JSON.parse(JSON.stringify(data))
+        console.log("pobrano konwersacje id");
      })
     },
     sendMessageChild(message)

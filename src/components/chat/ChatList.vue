@@ -43,7 +43,7 @@ export default {
         text: String,
         is_read: Boolean,
         created_at: String
-        },
+      },
     }
   },
   components: {
@@ -51,10 +51,6 @@ export default {
       AllConversations,
       SearchIcon,
   },
-  data() {
-    return {}
-  },
-
   methods: {
     onClickChild(chooseConversationId,oponentUser)
     {

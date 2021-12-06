@@ -92,7 +92,7 @@ export default {
         this.nameRequired(this.registerData.firstName),
         this.surnameRequired(this.registerData.lastName),
       ]
-      console.log(errorsArray)
+      // console.log(errorsArray)
 
       const firstError = errorsArray.find(element => element !== true)
 
