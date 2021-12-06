@@ -9,7 +9,7 @@ import Logout from "../pages/logout.vue";
 import Register from "../pages/register.vue";
 import LandingPage from "../pages/landing-page.vue";
 import Chat from "../pages/chat.vue";
-
+import Profile from "../pages/profile.vue";
 
 const routes = [
     {
@@ -46,6 +46,12 @@ const routes = [
         path: "/chat",
         name: "Wiadomości",
         component: Chat,
+    },
+    {
+        path: "/profile/:id",
+        name: "Profil użytkownika",
+        props: true,
+        component: Profile,
     },
 ];
 

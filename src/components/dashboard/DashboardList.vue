@@ -25,8 +25,11 @@
     <div class="flex justify-between flex-grow pl-0 pr-4 py-4">
       <div>
         <p class="card-title">
-          <!-- <a href="/group-chat">{{ group.membersNames }}</a> -->
-          <a href="/group-chat">{{ `${user.first_name} ${user.last_name}` }}</a>
+          <router-link
+            :to="{ name: 'Profil użytkownika', params: { id: user.id } }"
+          >
+            {{ `${user.first_name} ${user.last_name}` }}
+          </router-link>
         </p>
 <!--        <div class="space-x-4">-->
 <!--          <div class="badge badge-primary">Warszawa</div>-->
@@ -59,18 +62,10 @@ export default {
   },
   data () {
     return {
-      // filteredUsers: [],
       activeUser: -1
     }
   },
-  mounted () {
-    console.log(this.users)
-  },
   methods: {
-    // filterMembers () {
-    //   // deep copy
-    //   this.filteredUsers = JSON.parse(JSON.stringify(this.users))
-    // },
     getUserOnHover(user = null) {
       const oldActiveUserIndex = this.activeUser
       user ? this.activeUser = this.users.indexOf(user) : this.activeUser = -1

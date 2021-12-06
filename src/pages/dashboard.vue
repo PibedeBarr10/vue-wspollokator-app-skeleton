@@ -82,6 +82,7 @@ export default {
           })
         })
       }).then(() => {
+        // console.log(this.users)
         this.createMap()
         this.getAllMarkers()
         this.setAllMarkersOnMap()
