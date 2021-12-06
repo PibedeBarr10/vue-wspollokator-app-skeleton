@@ -1,6 +1,6 @@
 <template>
    <div class=" flex justify-end">
-          <div class="flex items-end m-4 ">
+          <div class="flex items-end m-4 max-w-1/2 ">
             <div class="p-3 bg-blue-600 rounded-t-lg rounded-bl-lg">
               <div class="text-sm text-gray-100 ">
                {{ text }}

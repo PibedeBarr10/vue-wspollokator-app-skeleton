@@ -66,7 +66,8 @@ export default {
         this.users = []
         data.forEach((data) => {
           this.users.push({
-            id: data.user.profile,
+            id: data.user.id,
+            profile_id:data.user.profile,
             localization: data.point[0].location.coordinates,
             radius: data.point[0].radius,
             first_name: data.user.first_name,
@@ -93,7 +94,8 @@ export default {
         this.users = []
         data.forEach((data) => {
           this.users.push({
-            id: data.user.profile,
+            id: data.user.id,
+            profile_id: data.user.profile,
             localization: data.point[0].location.coordinates,
             radius: data.point[0].radius,
             first_name: data.user.first_name,

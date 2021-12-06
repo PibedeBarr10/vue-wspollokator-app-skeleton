@@ -26,7 +26,7 @@
       <div>
         <p class="card-title">
           <router-link
-            :to="{ name: 'Profil użytkownika', params: { id: user.id } }"
+            :to="{ name: 'Profil użytkownika', params: { id: user.profile_id} }"
           >
             {{ `${user.first_name} ${user.last_name}` }}
           </router-link>
