@@ -85,7 +85,8 @@ export default {
          profile: '',
          avatar: '',
       },
-      loading: true
+      loading: true,
+      interval: null
     }
   },
   computed: {
@@ -97,7 +98,7 @@ export default {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
-    setInterval(() => {
+    this.interval = setInterval(() => {
       chatService.getConversations().then(data => {
         if (data.length > 0) {
           this.conversationsList = JSON.parse(JSON.stringify(data))
@@ -111,6 +112,9 @@ export default {
       this.loading = false
     },1500);
     this.getConversations()
+  },
+  beforeUnmount(){
+    clearInterval(this.interval);
   },
   methods: {
     getConversations()
