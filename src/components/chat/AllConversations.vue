@@ -4,7 +4,12 @@
     <div v-for="index in conversation.users" :key="index">
       <div v-if="index.id !== currentUserId" class="flex m-2 bg-white rounded-lg p-2 cursor-pointer btn-ghost" @click="chooseConversation(conversation.id,index)" >
         <div>
-          <img class="w-14 rounded-full" :src="index.avatar"  alt="avatar"/>
+          <img
+            class="w-14 rounded-full"
+            style="max-height: 3.5rem; max-width: 3.5rem;"
+            :src="index.avatar"
+            alt="avatar"
+          />
         </div>
         <div class="flex-grow p-3">
           <div class="flex justify-between text-xs">
