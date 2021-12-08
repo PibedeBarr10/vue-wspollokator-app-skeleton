@@ -3,7 +3,7 @@
     <div>
       <Navbar />
 
-      <Filters @searchUsers="searchUsers"/>
+      <Filters @searchUsers="searchUsers" />
     </div>
 
     <div
@@ -46,52 +46,56 @@ export default {
       map: null,
       markers: [],
       groupMarker: null,
-      users: []
+      users: [],
     };
   },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
-    }
+    },
   },
   mounted() {
     if (!this.currentUser) {
-      this.$router.push('/login');
+      this.$router.push("/login");
     }
-    this.getUsers()
+    this.getUsers();
   },
   methods: {
     getUsers() {
-      usersService.getProfiles().then((data) => {
-        this.users = []
-        data.forEach((data) => {
-          this.users.push({
-            id: data.user.id,
-            profile_id:data.user.profile,
-            localization: data.point[0].location.coordinates,
-            radius: data.point[0].radius,
-            first_name: data.user.first_name,
-            last_name: data.user.last_name,
-            avatar: data.avatar,
-            filters: {
-              accepts_animals: data.accepts_animals,
-              age: data.age,
-              preferable_price: data.preferable_price,
-              sex: data.sex,
-              smoking: data.smoking,
-            }
-          })
+      usersService
+        .getProfiles()
+        .then((data) => {
+          console.log(data);
+          this.users = [];
+          data.forEach((data) => {
+            this.users.push({
+              id: data.user.id,
+              profile_id: data.user.profile,
+              localization: data.point[0].location.coordinates,
+              radius: data.point[0].radius,
+              first_name: data.user.first_name,
+              last_name: data.user.last_name,
+              avatar: data.avatar,
+              filters: {
+                accepts_animals: data.accepts_animals,
+                age: data.age,
+                preferable_price: data.preferable_price,
+                sex: data.sex,
+                smoking: data.smoking,
+              },
+            });
+          });
         })
-      }).then(() => {
-        // console.log(this.users)
-        this.createMap()
-        this.getAllMarkers()
-        this.setAllMarkersOnMap()
-      })
+        .then(() => {
+          // console.log(this.users)
+          this.createMap();
+          this.getAllMarkers();
+          this.setAllMarkersOnMap();
+        });
     },
     searchUsers(filters) {
       usersService.getFilteredProfiles(filters).then((data) => {
-        this.users = []
+        this.users = [];
         data.forEach((data) => {
           this.users.push({
             id: data.user.id,
@@ -107,10 +111,10 @@ export default {
               preferable_price: data.preferable_price,
               sex: data.sex,
               smoking: data.smoking,
-            }
-          })
-        })
-      })
+            },
+          });
+        });
+      });
     },
     createMap() {
       this.map = L.map("mapContainer").setView([52, 19.05], 6);

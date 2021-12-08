@@ -1,10 +1,9 @@
 <template>
-  <div v-for="user in users" :key="user" class="flex w-full">
-    <div v-if="users.length === 0" class="flex w-full justify-center">
-      <p>Brak wyników</p>
-    </div>
+  <div v-if="users.length === 0" class="flex w-full justify-center">
+    <p>Brak wyników</p>
+  </div>
+  <div v-else v-for="user in users" :key="user" class="flex w-full">
     <div
-      v-else
       class="
         flex
         w-full
@@ -15,8 +14,6 @@
         btn-ghost
         cursor-pointer
       "
-      @mouseover.native="getUserOnHover(user)"
-      @mouseleave.native="getUserOnHover"
       @click="showUserProfile(user.profile_id)"
     >
       <div class="m-4 px-4">
@@ -45,23 +42,21 @@
         </div>
       </div>
     </div>
-    <div class="flex items-center justify-center w-10">
-      <HeartIcon
-        class="h-5 w-5 text-red-500 cursor-pointer"
-        @click="sendToFavourite(user.id)"
+    <div class="flex items-center justify-center w-20">
+      <TrashIcon
+        class="h-10 w-10 text-red-500 cursor-pointer"
+        @click="deleteFromFavourite(user.id)"
       />
     </div>
   </div>
-  <div class="self-center space-x-4"></div>
 </template>
 
 <script>
-import { HeartIcon } from "@heroicons/vue/outline";
+import { TrashIcon } from "@heroicons/vue/outline";
 import favouriteService from "../../services/favouriteService";
-
 export default {
   components: {
-    HeartIcon,
+    TrashIcon,
   },
   props: {
     users: {
@@ -75,28 +70,11 @@ export default {
     };
   },
   methods: {
-    getUserOnHover(user = null) {
-      const oldActiveUserIndex = this.activeUser;
-      user
-        ? (this.activeUser = this.users.indexOf(user))
-        : (this.activeUser = -1);
-
-      if (this.activeUser !== oldActiveUserIndex) {
-        this.$emit("setMarkersOnMap", this.activeUser);
-      }
-    },
-    sendToFavourite(id) {
+    deleteFromFavourite(id) {
+      console.log(this.users === 0);
       favouriteService
-        .addFavourite(id)
-        .then(() => {
-          this.$store.dispatch("notificationModule/show", {
-            text: "Dodano do ulubionych",
-            type: "success",
-          });
-        })
-        .catch((err) => {
-          console.log("chuj", err);
-        });
+        .removeFavourite(id)
+        .then(() => window.location.reload(true));
     },
     showUserProfile(id) {
       this.$router.push({ name: "Profil użytkownika", params: { id: id } });
