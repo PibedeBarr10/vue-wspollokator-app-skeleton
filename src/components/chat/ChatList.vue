@@ -15,7 +15,11 @@
       <UsersTopBar/> 
       -->
       <div class="flex flex-col mb-20" style="flex:1; overflow:hidden; overflow-y:auto;">
-      <AllConversations :conversationsList="conversationsList" :currentUserId="currentUserId" @clicked="onClickChild" />
+        <AllConversations
+          :conversationsList="conversationsList"
+          :currentUserId="currentUserId"
+          @clicked="onClickChild"
+        />
       </div>
       
  </div>
@@ -53,8 +57,7 @@ export default {
       SearchIcon,
   },
   methods: {
-    onClickChild(chooseConversationId,oponentUser)
-    {
+    onClickChild (chooseConversationId,oponentUser) {
       this.$emit('clicked', chooseConversationId,oponentUser)
     }
   },
