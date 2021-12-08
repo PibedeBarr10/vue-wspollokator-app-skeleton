@@ -17,9 +17,8 @@
       "
       @mouseover.native="getUserOnHover(user)"
       @mouseleave.native="getUserOnHover"
-      @click="showUserProfile(user.profile_id)"
     >
-      <div class="m-4 px-4">
+      <div class="m-4 px-4" @click="showUserProfile(user.profile_id)">
         <img
           class="
             w-full
@@ -33,7 +32,7 @@
         />
       </div>
 
-      <div class="flex justify-between flex-grow pl-0 pr-4 py-4">
+      <div class="flex justify-between flex-grow pl-0 pr-4 py-4" @click="showUserProfile(user.profile_id)">
         <div>
           <p class="card-title">
             {{ `${user.first_name} ${user.last_name}` }}
@@ -44,12 +43,12 @@
           <!--        </div>-->
         </div>
       </div>
-    </div>
-    <div class="flex items-center justify-center w-10">
-      <HeartIcon
-        class="h-5 w-5 text-red-500 cursor-pointer"
-        @click="sendToFavourite(user.id)"
-      />
+      <div class="flex items-center justify-center w-10">
+        <HeartIcon
+          class="h-5 w-5 text-red-500 cursor-pointer"
+          @click="sendToFavourite(user.id)"
+        />
+      </div>
     </div>
   </div>
   <div class="self-center space-x-4"></div>
