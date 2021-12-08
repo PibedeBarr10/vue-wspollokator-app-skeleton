@@ -10,82 +10,91 @@ import Register from "../pages/register.vue";
 import LandingPage from "../pages/landing-page.vue";
 import Chat from "../pages/chat.vue";
 import Profile from "../pages/profile.vue";
+import Favourite from "../pages/favourite.vue";
 
 const routes = [
-    {
-        path: "/dashboard",
-        name: "Dashboard",
-        component: Dashboard,
-    },
-    {
-        path: "/my-profile",
-        name: "Mój profil",
-        component: MyProfile,
-    },
-    {
-        path: "/login",
-        name: "Logowanie",
-        component: Login,
-    },
-    {
-        path: "/register",
-        name: "Rejestracja",
-        component: Register,
-    },
-    {
-        path: "/logout",
-        name: "Wylogowano",
-        component: Logout,
-    },
-    {
-        path: "/",
-        name: "Współlokator - witamy!",
-        component: LandingPage,
-    },
-    {
-        path: "/chat/:chooseConversationId",
-        name: "Wiadomości",
-        props: true,
-        component: Chat,
-    },
-    {
-        path: "/profile/:id",
-        name: "Profil użytkownika",
-        props: true,
-        component: Profile,
-    },
+  {
+    path: "/dashboard",
+    name: "Dashboard",
+    component: Dashboard,
+  },
+  {
+    path: "/my-profile",
+    name: "Mój profil",
+    component: MyProfile,
+  },
+  {
+    path: "/login",
+    name: "Logowanie",
+    component: Login,
+  },
+  {
+    path: "/register",
+    name: "Rejestracja",
+    component: Register,
+  },
+  {
+    path: "/logout",
+    name: "Wylogowano",
+    component: Logout,
+  },
+  {
+    path: "/",
+    name: "Współlokator - witamy!",
+    component: LandingPage,
+  },
+  {
+    path: "/chat/:chooseConversationId",
+    name: "Wiadomości",
+    props: true,
+    component: Chat,
+  },
+  {
+    path: "/profile/:id",
+    name: "Profil użytkownika",
+    props: true,
+    component: Profile,
+  },
+  {
+    path: "/favourite",
+    name: "Favourite",
+    component: Favourite,
+  },
 ];
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes,
+  history: createWebHistory(),
+  routes,
 });
 
 router.beforeEach((to, from, next) => {
-    const publicPages = ['/login', '/register', '/'];
-    const authRequired = !publicPages.includes(to.path);
-    const loggedIn = localStorage.getItem('user');
+  const publicPages = ["/login", "/register", "/"];
+  const authRequired = !publicPages.includes(to.path);
+  const loggedIn = localStorage.getItem("user");
 
-    // trying to access a restricted page + not logged in
-    // redirect to login page
-    if (authRequired && !loggedIn) {
-        next('/login')
-    } else {
-        if (loggedIn) {
-            profileService.getProfile(JSON.parse(loggedIn).user.pk).then(() => {
-                pointService.getUserPoint().then(data => {
-                    if (data.length === 0) {
-                        router.push('/my-profile')
-                    }
-                })
-            }).catch(error => {
-                if (error.response.data.detail === 'Not found.') {
-                    router.push('/my-profile')
-                }
-            })
-        }
-        next()
+  // trying to access a restricted page + not logged in
+  // redirect to login page
+  if (authRequired && !loggedIn) {
+    next("/login");
+  } else {
+    if (loggedIn) {
+      profileService
+        .getProfile(JSON.parse(loggedIn).user.pk)
+        .then(() => {
+          pointService.getUserPoint().then((data) => {
+            if (data.length === 0) {
+              router.push("/my-profile");
+            }
+          });
+        })
+        .catch((error) => {
+          if (error.response.data.detail === "Not found.") {
+            router.push("/my-profile");
+          }
+        });
     }
+    next();
+  }
 });
 
 export default router;

@@ -14,65 +14,60 @@
     <div class="flex-none">
       <slot />
     </div>
-    <div
-      v-if="currentUser"
-      class="flex-none"
-    >
-    <div>
-       <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
-        Mój profil
-      </router-link>
+    <div v-if="currentUser" class="flex-none">
+      <div>
+        <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
+          Mój profil
+        </router-link>
       </div>
       <div>
-       <router-link to="/chat/0" class="btn btn-ghost btn-sm rounded-btn">
-         <ChatIcon class="h-6 w-6" />
+        <router-link to="/chat/0" class="btn btn-ghost btn-sm rounded-btn">
+          <ChatIcon class="h-6 w-6" />
         </router-link>
-        </div>
-      <div
-        class="btn btn-ghost btn-sm rounded-btn"
-        @click="logout"
-      >
+      </div>
+      <div>
+        <router-link to="/favourite" class="btn btn-ghost btn-sm rounded-btn">
+          <HeartIcon class="h-6 w-6" />
+        </router-link>
+      </div>
+      <div class="btn btn-ghost btn-sm rounded-btn" @click="logout">
         <LogoutIcon class="h-6 w-6" />
       </div>
-      
-      
     </div>
 
-    <NotificationBar
-      class="fixed bottom-3 right-4"
-    />
+    <NotificationBar class="fixed bottom-3 right-4" />
   </div>
 </template>
 
 <script>
 import { LogoutIcon } from "@heroicons/vue/outline";
 import NotificationBar from "../NotificationBar.vue";
-import {ChatIcon} from "@heroicons/vue/outline";
-
+import { ChatIcon, HeartIcon } from "@heroicons/vue/outline";
 export default {
   name: "Navbar",
   components: {
     NotificationBar,
     LogoutIcon,
     ChatIcon,
+    HeartIcon,
   },
   computed: {
     currentUser() {
       return this.$store.state.auth.user;
-    }
+    },
   },
-  mounted () {},
+  mounted() {},
   methods: {
     logout() {
       if (this.currentUser) {
-        this.$store.dispatch('auth/logout').then(() => {
-          this.$store.dispatch('clearPointState')
-          this.$store.dispatch('clearProfileState')
-          this.$router.push('/')
-        })
+        this.$store.dispatch("auth/logout").then(() => {
+          this.$store.dispatch("clearPointState");
+          this.$store.dispatch("clearProfileState");
+          this.$router.push("/");
+        });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
