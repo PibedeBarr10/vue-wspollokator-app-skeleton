@@ -32,10 +32,10 @@ export default {
                 return response.data
             })
     },
-    createConversation()
+    createConversation(userId)
      {
         return axios
-            .post(`${API_URL}/conversation/`,{user_id: '79d87c89-8cce-4d48-b916-961749b94312'}, {
+            .post(`${API_URL}/conversation/`,{user_id: userId}, {
                 withCredentials: true
             })
             .then(response => {

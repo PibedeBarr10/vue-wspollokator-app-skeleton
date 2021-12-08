@@ -43,8 +43,9 @@ const routes = [
         component: LandingPage,
     },
     {
-        path: "/chat",
+        path: "/chat/:chooseConversationId",
         name: "Wiadomości",
+        props: true,
         component: Chat,
     },
     {

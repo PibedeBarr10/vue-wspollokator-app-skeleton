@@ -9,9 +9,10 @@
     v-else
     v-for="user in users"
     :key="user"
-    class="flex mb-4 rounded-box shadow-md mx-2 group"
+    class="flex mb-4 rounded-box shadow-md mx-2 btn-ghost cursor-pointer "
     @mouseover.native="getUserOnHover(user)"
     @mouseleave.native="getUserOnHover"
+    @click="showUserProfile(user.profile_id)"
   >
     <div class="m-4 px-4">
       <img
@@ -23,13 +24,10 @@
     </div>
 
     <div class="flex justify-between flex-grow pl-0 pr-4 py-4">
+      
       <div>
         <p class="card-title">
-          <router-link
-            :to="{ name: 'Profil użytkownika', params: { id: user.profile_id} }"
-          >
             {{ `${user.first_name} ${user.last_name}` }}
-          </router-link>
         </p>
 <!--        <div class="space-x-4">-->
 <!--          <div class="badge badge-primary">Warszawa</div>-->
@@ -76,6 +74,10 @@ export default {
     },
     sendToFavourite() {
       alert('Heart clicked!')
+    },
+    showUserProfile(id)
+    {
+      this.$router.push({name: 'Profil użytkownika', params:{id: id} })
     }
   }
 }

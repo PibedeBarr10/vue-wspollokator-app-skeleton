@@ -1,6 +1,10 @@
 <template>
-   <Navbar/>
-    <div>
+ <div
+    class="flex flex-col my-0 py-0 "
+    style="height: 100vh; max-height: 100vh; overflow:scroll; display:block"
+  >
+     <Navbar/>
+     <div>
       <div class="lg:w-3/5 lg:h-2/5 mx-auto flex flex-wrap">
          <div class="lg:w-2/5 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
           <div class="flex mb-4">
@@ -64,16 +68,34 @@
             :src="this.profile.avatar"
           >
           <h2 class="text-gray-900 text-xl font-medium mt-4">{{ this.profile.first_name }} {{ this.profile.last_name }}</h2>
-          <button class="my-1 btn btn-primary w-full">Napisz wiadomość</button>
+          <button @click="sendMessageToUser" class="my-1 btn btn-primary w-full">Napisz wiadomość</button>
         </div>
       </div> 
+      <!-- PUNKT  -->
+       <div class="flex w-full items-center justify-between">
+          <span class="text-lg font-bold">Punkt</span>
+
+        </div>
+
+       
+
+
     </div>
 
-
+    
+        <div
+        v-if="coordinates !== []"
+        id="mapContainer"
+        class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"
+      />
+  </div>
 </template>
 
 <script>
+import 'leaflet/dist/leaflet.css'
+import L from 'leaflet'
 import usersService from "../services/usersService";
+import chatService from "../services/chatService";
 import Navbar from '../components/reusable-components/Navbar.vue';
 
 export default {
@@ -86,6 +108,8 @@ export default {
   },
   data() {
     return {
+      coordinates: [52, 20],
+      radius: 2,
       profile:
       {
         id: '',
@@ -100,20 +124,102 @@ export default {
         avatar: 'http://wspolokator.livs.pl:8000/media/default_avatar.png',
         first_name: '',
         last_name: '',
+        conversation_id: '',
+        point:{
+          id: '',
+          location: {
+            coordinates: null,
+            type: '',
+          },
+          radius: '',
+          user: '',
+        },
+        user_id: '',
       },
     }
   },
   mounted() {
+     if (!this.currentUser) {
+      this.$router.push('/login');
+    }
+
+    document.getElementById('mapContainer').innerHTML = '<div v-if="coordinates !== []" id="mapContainer" class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"/>';
+
     this.getProfileData()
+  },
+  computed: {
+    currentUser() {
+      return this.$store.state.auth.user
+    },
   },
   methods: {
     getProfileData() {
       usersService.getProfile(this.id).then((data) => {
         this.profile = JSON.parse(JSON.stringify(data))
       }).then(() => {
-        console.log(this.profile)
+        console.log(this.profile);
+        this.coordinates= this.profile.point[0].location.coordinates;
+        this.radius= this.profile.point[0].radius;
+        this.drawMap();
       })
+    },
+  
+  drawMap() {
+        this.createMap()
+        this.setCircleOnMap()
+    },
+     createMap() {
+      const container = L.DomUtil.get('mapContainer');
+      if (container !== null) {
+        container._leaflet_id = null;
+      }
+      this.map = L.map('mapContainer').setView(this.coordinates, 13);
+      L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(this.map);
+
+      let customPane = this.map.createPane("customPane");
+      customPane.style.zIndex = 399;
+    },
+    setCircleOnMap() {
+     this.circle = L.circle(this.coordinates, this.radius * 1000);
+     this.map.addLayer(this.circle);
+    },
+
+    sendMessageToUser()
+  {
+    if(this.profile.conversation_id!=null)
+    {
+      this.$router.push({name: 'Wiadomości', params:{chooseConversationId: this.profile.conversation_id} })
     }
-  }
+    else{
+      chatService.createConversation(this.profile.user_id).then(data => {
+        this.profile.conversation_id= data.id;
+        console.log(data)
+        this.$router.push({name: 'Wiadomości', params:{chooseConversationId: this.profile.conversation_id} })
+    })
+    }
+  },
+  },
+  
 }
 </script>
+
+<style scoped>
+.map {
+  border-bottom: 2px solid #ddd;
+}
+.mapstyle{
+  position: relative;
+  height: 90%;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-thumb {
+  background: mediumpurple;
+  border-radius: 10px;
+}
+</style>
+

@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-    <div class ="w-full border-b-2 border-gray-50 flex flex-col " style=" overflow:hidden; overflow-y: auto; flex:1;"> <!-- v-if="messageList !=0 " -->
+    <div id="container" class ="w-full border-b-2 border-gray-50 flex flex-col " style=" overflow:hidden; overflow-y: auto; flex:1;"> <!-- v-if="messageList !=0 " -->
       <div v-for="index in messageList" :key="index">
           <!-- wiadomosc otrzymana -->
         <MessageIn :text="index.text" :avatar="oponentUser.avatar" :created_at="index.created_at" v-if="index.user===oponentUser.id"/>
@@ -30,7 +30,7 @@
      </div>
     <div class ="p-2" style="height:130px; " >
           <div class="relative">
-              <input v-model="message" type="text" placeholder="Napisz wiadomość ..." class=" w-full input" ref="messageInput" v-on:keyup.enter="sendMessage"> 
+              <input v-model="message" type="text" placeholder="Napisz wiadomość ..." class=" w-full input" v-on:keyup.enter="sendMessage"> 
               <button class="absolute top-0 right-0 rounded-l-none btn btn-ghost" @click="sendMessage"><ArrowRightIcon class="h-6 w-6" /></button>
           </div> 
         </div>
@@ -70,16 +70,12 @@ export default {
     }
   },
   mounted() {
-    // if(this.conversationId!=='')
-    // {
-    //  this.getConversation();
-   // }
   },
   methods: {
     sendMessage()
     {
       this.$emit('send', this.message);
-      this.$refs.messageInput.value="";
+      this.message='';
     },
   },
 };

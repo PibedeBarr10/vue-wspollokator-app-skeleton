@@ -3,12 +3,13 @@
      <div class="flex text-lg font-extrabold p-3" style="max-height:10%;">
          Wiadomości
      </div> 
-     <div class ="p-3 ">
+     <!-- poki co ukryta wyszukiwarka -->
+     <!-- <div class ="p-3 ">
          <div class="relative">
             <input type="text" placeholder="Wyszukaj" class=" w-full input"> 
             <button class="absolute top-0 right-0 rounded-l-none btn btn-ghost"><SearchIcon class="h-6 w-6"/></button>
          </div> 
-      </div>
+      </div> -->
       <!-- póki co ukryte
       
       <UsersTopBar/> 

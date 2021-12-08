@@ -24,7 +24,7 @@
       </router-link>
       </div>
       <div>
-       <router-link to="/chat" class="btn btn-ghost btn-sm rounded-btn">
+       <router-link to="/chat/0" class="btn btn-ghost btn-sm rounded-btn">
          <ChatIcon class="h-6 w-6" />
         </router-link>
         </div>

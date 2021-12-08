@@ -3,10 +3,10 @@
   <div style="max-height:10%;">
         <Navbar/>
   </div>
-  <div class="flex flex-col" style=" flex:1;" >
+  <div class="flex flex-col" style=" flex:1;">
       <div class="flex flex-grow" >
-      <ChatList :conversationsList="conversationsList" :currentUserId="this.currentUser.user.pk" @clicked="onClickChildChild"/>    
-      <Conversation :messageList="this.messageList" :oponentUser="this.oponentUser" v-if="this.chooseConversationId !==''" @send="sendMessageChild" /> 
+      <ChatList :conversationsList="conversationsList" :currentUserId="this.currentUser.user.pk" @clicked="onClickChildChild" />  <!--  :key="this.componentKey"-->  
+      <Conversation :messageList="this.messageList" :oponentUser="this.oponentUser" v-if="chooseConversationId !=='0'" @send="sendMessageChild" />  <!--:key="this.componentKey" -->
       <div v-else >Wybierz konwersacje z listy</div>
       </div>
   </div>
@@ -24,9 +24,14 @@ export default {
     ChatList,
     Conversation,
   },
+  props:{
+    chooseConversationId:{
+      type: String,
+      default: '0',
+    },
+  },
   data(){
     return {
-      chooseConversationId: '',
       conversationsList: {
         id: '',
         users:
@@ -45,7 +50,7 @@ export default {
           created_at: ''
         },
 
-         },
+      },
       messageList:{ 
         user:'',
         user_name:'',
@@ -71,8 +76,20 @@ export default {
     if (!this.currentUser) {
       this.$router.push('/login');
     }
-   this.getConversations()
-   //this.createConversation()
+    setInterval(()=> {
+        
+         chatService.getConversations().then(data => {
+            if (data.length > 0) {
+              this.conversationsList = JSON.parse(JSON.stringify(data))
+            }
+      }) 
+        if(this.chooseConversationId!=='0'){
+            chatService.getConversation(this.chooseConversationId).then(data => {
+              this.messageList = JSON.parse(JSON.stringify(data))
+             });
+        }
+    },3000);
+    this.getConversations()
   },
   methods: {
     getConversations()
@@ -81,30 +98,46 @@ export default {
           if (data.length > 0) {
             this.conversationsList = JSON.parse(JSON.stringify(data))
           }
-        
-      })
-    },
-    createConversation()
-    {
-      this.$store.dispatch('createConversation').then(console.log("dodano konwersacje"))
+      }).then(()=> {
+        this.getConversation()})
     },
     onClickChildChild(chooseConversationId,oponentUser)
     {
-      this.chooseConversationId=chooseConversationId;
       this.oponentUser=oponentUser;
-      this.getConversation();
-    },
-    getConversation()
-    {
-      chatService.getConversation(this.chooseConversationId).then(data => {
-        this.messageList = JSON.parse(JSON.stringify(data))
-        console.log("pobrano konwersacje id");
-     })
+      this.$router.push({name: 'Wiadomości', params:{chooseConversationId: chooseConversationId} })
+    
     },
     sendMessageChild(message)
     {
       chatService.sendMessage(this.chooseConversationId, message).then(console.log("wysłano wiadomość"))
     },
+    getConversation()
+    {
+       
+          if(this.chooseConversationId!=='0'){
+            console.log(this.conversationsList)
+              this.conversationsList.forEach(item => {
+                  if(item.id ===this.chooseConversationId) 
+                  {
+                    item.users.forEach(item2 =>
+                    {
+                      if(item2.id !== this.currentUser.id) 
+                      {
+                        this.oponentUser.id = item2.id;
+                        this.oponentUser.last_name = item2.last_name;
+                        this.oponentUser.first_name = item2.first_name;
+                        this.oponentUser.profile = item2.profile;
+                        this.oponentUser.avatar = item2.avatar;
+                      }
+                    })
+                  }
+              });
+              chatService.getConversation(this.chooseConversationId).then(data => {
+                this.messageList = JSON.parse(JSON.stringify(data))
+              });
+          }
+    
+    }
   }
 };
 </script>
