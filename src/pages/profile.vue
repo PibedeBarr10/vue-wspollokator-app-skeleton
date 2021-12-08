@@ -11,7 +11,7 @@
             <a class="flex-grow border-b-2 border-gray-500 py-2 text-lg px-1 font-bold">Opis</a>
           </div>
            <label class="label bg-gray-100 rounded-lg"  style="height: 49%; align-items: start;">
-                <span class="label-text">{{this.profile.description}}</span>
+                <span class="label-text my-1 mx-2">{{this.profile.description}}</span>
               </label>
           <div class="mb-4">
             <div class="w-full">
@@ -19,7 +19,7 @@
                 <span class="label-text">Wiek</span>
               </label>
                <label class="label bg-gray-100 rounded-lg ">
-                <span class="label-text">{{this.profile.age}}</span>
+                <span class="label-text my-1 mx-2">{{this.profile.age}}</span>
               </label>
             </div>
           </div>
@@ -35,7 +35,7 @@
                 <span class="label-text">Zwierzęta domowe</span>
               </label>
               <label class="label bg-gray-100 rounded-lg ">
-                <span class="label-text">{{this.profile.accepts_animals}}</span>
+                <span class="label-text my-1 mx-2">{{ getOption(this.profile.accepts_animals) }}</span>
               </label>
             </div>
           </div>
@@ -45,7 +45,7 @@
                 <span class="label-text">Osoby palące</span>
               </label>
                <label class="label bg-gray-100 rounded-lg ">
-                <span class="label-text">{{this.profile.smoking}}</span>
+                <span class="label-text my-1 mx-2">{{ getOption(this.profile.smoking) }}</span>
               </label>
             </div>
           </div>
@@ -55,7 +55,7 @@
                 <span class="label-text">Preferowana kwota</span>
               </label>
                <label class="label bg-gray-100 rounded-lg ">
-                <span class="label-text">{{this.profile.preferable_price}}</span>
+                <span class="label-text my-1 mx-2">{{ this.profile.preferable_price }}</span>
               </label>
             </div>
           </div>
@@ -68,22 +68,15 @@
             :src="this.profile.avatar"
           >
           <h2 class="text-gray-900 text-xl font-medium mt-4">{{ this.profile.first_name }} {{ this.profile.last_name }}</h2>
-          <button @click="sendMessageToUser" class="my-1 btn btn-primary w-full">Napisz wiadomość</button>
+          <button @click="sendMessageToUser" class="my-4 btn btn-primary w-full">Napisz wiadomość</button>
         </div>
-      </div> 
-      <!-- PUNKT  -->
-       <div class="flex w-full items-center justify-between">
+        <div class="flex w-full items-center justify-between">
           <span class="text-lg font-bold">Punkt</span>
 
         </div>
-
-       
-
-
+      </div>
     </div>
-
-    
-        <div
+      <div
         v-if="coordinates !== []"
         id="mapContainer"
         class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"
@@ -110,8 +103,7 @@ export default {
     return {
       coordinates: [52, 20],
       radius: 2,
-      profile:
-      {
+      profile: {
         id: '',
         updated_at: '',
         sex: 'F',
@@ -136,6 +128,11 @@ export default {
         },
         user_id: '',
       },
+      selectOptions: [
+        { text: 'Akceptuję', value: 'A' },
+        { text: 'Nie akceptuję', value: 'N' },
+        { text: 'Nieistotne', value: 'I' }
+      ],
     }
   },
   mounted() {
@@ -153,6 +150,14 @@ export default {
     },
   },
   methods: {
+    getOption (value) {
+      const option = this.selectOptions.filter((element) => {
+        if (value === element.value) {
+          return element
+        }
+      })
+      return option[0].text
+    },
     getProfileData() {
       usersService.getProfile(this.id).then((data) => {
         this.profile = JSON.parse(JSON.stringify(data))
