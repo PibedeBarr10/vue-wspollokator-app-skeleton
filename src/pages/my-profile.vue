@@ -126,7 +126,7 @@
           <input type="checkbox" id="modal-change-picture" class="modal-toggle">
           <div ref="fileModal" class="modal">
             <div class="modal-box">
-              <input style="display:none" type="file" @change=onFileSelected ref="fileInput">
+              <input style="display:none" type="file" accept="image/png, image/gif, image/jpeg" @change=onFileSelected ref="fileInput">
               <button class="btn btn-primary" @click="$refs.fileInput.click()">Wybierz zdjęcie</button>
               <span class="mx-4">{{ avatar.name }}</span>
 
@@ -404,11 +404,6 @@ export default {
       })
       this.map.addLayer(this.marker);
     },
-    changePassword() {
-      this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
-        this.$store.dispatch('notificationModule/show', { text: 'Pomyślnie zmieniono hasło', type: 'success' })
-      })
-    }, 
     updateMyPoint()
     {
       // aktualizacja mojego punktu
@@ -456,7 +451,43 @@ export default {
       }).catch(error => {
         this.$store.dispatch('notificationModule/show', { text: 'Błąd w trakcie aktualizacji zdjęcia', type: 'success' })
       })
-    }
+    },
+    changePassword(e) {
+      e.preventDefault()
+
+      const errorsArray = [
+        this.passwordRequired(this.newpassword.password),
+        this.passwordRegex(this.newpassword.password),
+        this.samePasswords(this.newpassword.password, this.newpassword.repeatedPassword),
+      ]
+      // console.log(errorsArray)
+
+      const firstError = errorsArray.find(element => element !== true)
+
+      if (firstError) {
+        this.$store.dispatch('notificationModule/show', { text: firstError, type: 'error' })
+        return
+      }
+
+      this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
+        this.$store.dispatch('notificationModule/show', { text: 'Pomyślnie zmieniono hasło', type: 'success' })
+      })
+    },
+    passwordRequired(password) {
+      return !!password || 'Hasło jest wymagane'
+    },
+    passwordRegex(password) {
+      return [
+        password.length >= 8 || 'Hasło powinno zawierać co najmniej 8 znaków',
+        password.length <= 255 || 'Maksymalnie 255 znaków',
+        /[0-9]+/.test(password) || 'Hasło powinno zawierać co najmniej jedną cyfrę',
+        /[A-Z]+/.test(password) || 'Hasło powinno zawierać co najmiej jedną wielką literę',
+        /[$@#&!_]+/.test(password) || 'Hasło powinno zawierać co najmniej jeden znak specjalny'
+      ].find(element => element !== true) || true
+    },
+    samePasswords(password1, password2) {
+      return password1 === password2 || 'Hasła nie są takie same'
+    },
   }
 }
 

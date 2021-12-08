@@ -1,8 +1,12 @@
 <template>
-  <div v-if="users.length === 0" class="flex w-full justify-center">
+  <div
+    v-if="users.length === 0"
+    class="flex justify-center items-center w-full justify-center"
+    style="height: 100%"
+  >
     <p>Brak wyników</p>
   </div>
-  <div v-else v-for="user in users" :key="user" class="flex w-full">
+  <div v-else v-for="user in users" :key="user" class="flex w-full mt-4">
     <div
       class="
         flex
@@ -14,9 +18,8 @@
         btn-ghost
         cursor-pointer
       "
-      @click="showUserProfile(user.profile_id)"
     >
-      <div class="m-4 px-4">
+      <div class="m-4 px-4" @click="showUserProfile(user.profile_id)">
         <img
           class="
             w-full
@@ -30,23 +33,20 @@
         />
       </div>
 
-      <div class="flex justify-between flex-grow pl-0 pr-4 py-4">
+      <div class="flex justify-between flex-grow pl-0 pr-4 py-4" @click="showUserProfile(user.profile_id)">
         <div>
           <p class="card-title">
             {{ `${user.first_name} ${user.last_name}` }}
           </p>
-          <!--        <div class="space-x-4">-->
-          <!--          <div class="badge badge-primary">Warszawa</div>-->
-          <!--          <div class="badge badge-primary">Docelowa liczba osób: 4</div>-->
-          <!--        </div>-->
         </div>
       </div>
-    </div>
-    <div class="flex items-center justify-center w-20">
-      <TrashIcon
-        class="h-10 w-10 text-red-500 cursor-pointer"
-        @click="deleteFromFavourite(user.id)"
-      />
+
+      <div class="flex items-center justify-center w-20">
+        <TrashIcon
+          class="h-8 w-8 text-red-500 cursor-pointer"
+          @click="deleteFromFavourite(user.id)"
+        />
+      </div>
     </div>
   </div>
 </template>

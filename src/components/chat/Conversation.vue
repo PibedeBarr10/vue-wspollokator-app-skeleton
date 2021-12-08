@@ -4,7 +4,7 @@
     <div class ="w-full" > 
         <div class="flex items-center border-b-2 border-gray-50">
           <div class="p-3">
-          <img class="w-10 rounded-full" :src="oponentUser.avatar" />
+          <img class="w-10 rounded-full" :src="oponentUser.avatar" style="max-width: 2.5rem; max-height: 2.5rem;"/>
           <!-- jeżeli użytkownik aktywny 
 
           <div class="flex justify-center items-center w-3 relative left-6 bottom-3 bg-white rounded-full" style="height: 0.75rem;">
@@ -20,7 +20,7 @@
           </div>
         </div>
       </div>
-    <div id="container" class ="w-full border-b-2 border-gray-50 flex flex-col " style=" overflow:hidden; overflow-y: auto; flex:1;"> <!-- v-if="messageList !=0 " -->
+    <div id="conversationData" class ="w-full border-b-2 border-gray-50 flex flex-col " style=" overflow:hidden; overflow-y: auto; flex:1;"> <!-- v-if="messageList !=0 " -->
       <div v-for="index in messageList" :key="index">
           <!-- wiadomosc otrzymana -->
         <MessageIn :text="index.text" :avatar="oponentUser.avatar" :created_at="index.created_at" v-if="index.user===oponentUser.id"/>
@@ -69,11 +69,21 @@ export default {
       message:'',
     }
   },
-  mounted() {
-  },
+  // watch: {
+  //    messageList: {
+  //      deep: true,
+  //      handler(value) {
+  //        this.scrollDown()
+  //      }
+  //    }
+  // },
   methods: {
-    sendMessage()
-    {
+    scrollDown() {
+      const elem = document.getElementById('conversationData');
+      elem.scrollIntoView({ behavior: "smooth" })
+      elem.scrollTop = elem.scrollHeight;
+    },
+    sendMessage() {
       this.$emit('send', this.message);
       this.message='';
     },
