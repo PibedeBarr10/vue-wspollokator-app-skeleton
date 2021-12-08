@@ -39,13 +39,25 @@
           <!-- <p class="leading-relaxed mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsam pariatur ex? Sunt dolorum dolores provident rem numquam, eius placeat officia, veritatis accusantium quod blanditiis excepturi, voluptate incidunt odit quis! </p>
            -->
           <!-- dopasowanie h do poziomu przycisków? -->
-          <textarea v-model="profile.description" placeholder="Opis" class="textarea resize-none textarea-bordered w-full" style="height: 49%"></textarea>
+          <textarea
+            v-model="profile.description"
+            placeholder="Opis"
+            class="textarea resize-none textarea-bordered w-full"
+            style="height: 49%"
+          />
           <div class="mb-4">
             <div class="form-control w-full">
               <label class="label">
                 <span class="label-text">Wiek</span>
               </label>
-              <input v-model="profile.age" type="text" autocomplete="off" placeholder="Wiek" class="input input-sm input-bordered">
+              <input
+                v-model="profile.age"
+                v-mask="'##'"
+                type="text"
+                autocomplete="off"
+                placeholder="Wiek"
+                class="input input-sm input-bordered"
+              >
             </div>
           </div>
         </div>
@@ -89,7 +101,14 @@
               <label class="label">
                 <span class="label-text">Preferowana kwota</span>
               </label>
-              <input v-model="profile.preferable_price" type="text" autocomplete="off" placeholder="Kwota" class="input input-sm input-bordered">
+              <input
+                v-model="profile.preferable_price"
+                v-mask="'#####'"
+                type="text"
+                autocomplete="off"
+                placeholder="Kwota"
+                class="input input-sm input-bordered"
+              >
             </div>
           </div>
         </div>
@@ -153,8 +172,6 @@
           </button>
         </div>
 
-<!--        <div class="w-full divider"></div>-->
-
         <div class="flex w-full items-center justify-between">
           <span class="text-lg font-bold">Mój punkt</span>
           <button
@@ -211,8 +228,6 @@ import { LogoutIcon } from '@heroicons/vue/outline'
 import BaseButton from "../components/reusable-components/BaseButton.vue";
 import profileService from "../services/profileService";
 
-import avatarImage from "/src/assets/avatar.png"
-
 export default {
   components: {
     Navbar,
@@ -244,7 +259,7 @@ export default {
         preferable_price: 1000,
         description: 'Domyślny opis',
         is_searchable: true,
-        avatar: null
+        avatar: 'http://wspolokator.livs.pl:8000/media/default_avatar.png'
       },
       selectOptions: [
         { text: 'Akceptuję', value: 'A' },
@@ -252,7 +267,7 @@ export default {
         { text: 'Nieistotne', value: 'I' }
       ],
       profileDataChanged: false,
-      oldAvatar: null,
+      newAvatar: null,
       newProfileModalVisibility: false,
       toDoForUser: []
     }
@@ -278,11 +293,6 @@ export default {
         }
       }
     }
-    // toDoForUser: function () {
-    //   if (this.toDoForUser.length > 0) {
-    //     this.newProfileModalVisibility = true
-    //   }
-    // }
   },
   mounted () {
     if (!this.currentUser) {
@@ -333,7 +343,7 @@ export default {
         if (error.response.data.detail === 'Not found.') {
           this.toDoForUser.push('Uzupełnij dane profilu (zapisz zmiany klikając w przycisk "Zapisz zmiany w profilu")')
         } else {
-          this.$store.dispatch('notificationModule/show', { msg: error.response.data.detail, color: 'bg-red-500' })
+          this.$store.dispatch('notificationModule/show', { text: error.response.data.detail, type: 'error' })
         }
       })
     },
@@ -342,11 +352,14 @@ export default {
         profile: JSON.parse(JSON.stringify(this.profile)),
         user: this.currentUser.user
       }).then(response => {
-        this.$store.dispatch('notificationModule/show', { msg: 'Pomyślnie zaktualizowano dane profilu', color: 'bg-green-500' })
+        this.$store.dispatch('notificationModule/show', { text: 'Pomyślnie zaktualizowano dane profilu', type: 'success' })
         this.profileDataChanged = true
       }).catch(error => {
-        console.log(error)
-        this.$store.dispatch('notificationModule/show', { msg: error.response.data[Object.keys(error.response.data)[0]], color: 'bg-green-500' })
+        // console.log(error)
+        this.$store.dispatch('notificationModule/show', {
+          text: error.response.data[Object.keys(error.response.data)[0]],
+          type: 'error'
+        })
       })
     },
     drawMap() {
@@ -393,7 +406,7 @@ export default {
     },
     changePassword() {
       this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
-        this.$store.dispatch('notificationModule/show', { msg: 'Pomyślnie zmieniono hasło', color: 'bg-green-500' })
+        this.$store.dispatch('notificationModule/show', { text: 'Pomyślnie zmieniono hasło', type: 'success' })
       })
     }, 
     updateMyPoint()
@@ -413,7 +426,7 @@ export default {
         this.map.addLayer(this.circle);
 
         this.pointEditing = false
-        this.$store.dispatch('notificationModule/show', { msg: 'Zmieniono punkt', color: 'bg-green-500' })
+        this.$store.dispatch('notificationModule/show', { text: 'Zmieniono punkt', type: 'success' })
       })
     },
     cancelUpdateMyPoint()
@@ -425,11 +438,13 @@ export default {
       this.pointEditing = false
     },
     onFileSelected(event) {
-      this.oldAvatar = event.target.files[0]
+      this.newAvatar = event.target.files[0]
+      this.avatar.name = event.target.files[0].name
     },
     uploadAvatar() {
+      this.avatar.name = ''
       let data = JSON.parse(JSON.stringify(this.profile))
-      data.avatar = this.oldAvatar
+      data.avatar = this.newAvatar
       this.$store.dispatch('setProfile', {
         profile: data,
         user: this.currentUser.user
@@ -437,9 +452,9 @@ export default {
         this.profileDataChanged = true
         this.getProfileData()
       }).then(() => {
-        this.$store.dispatch('notificationModule/show', { msg: 'Pomyślnie zaktualizowano zdjęcie', color: 'bg-green-500' })
+        this.$store.dispatch('notificationModule/show', { text: 'Pomyślnie zaktualizowano zdjęcie', type: 'success' })
       }).catch(error => {
-        this.$store.dispatch('notificationModule/show', { msg: 'Błąd w trakcie aktualizacji zdjęcia', color: 'bg-red-500' })
+        this.$store.dispatch('notificationModule/show', { text: 'Błąd w trakcie aktualizacji zdjęcia', type: 'success' })
       })
     }
   }

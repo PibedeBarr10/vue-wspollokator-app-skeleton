@@ -92,12 +92,12 @@ export default {
         this.nameRequired(this.registerData.firstName),
         this.surnameRequired(this.registerData.lastName),
       ]
-      console.log(errorsArray)
+      // console.log(errorsArray)
 
       const firstError = errorsArray.find(element => element !== true)
 
       if (firstError) {
-        this.$store.dispatch('notificationModule/show', { msg: firstError, color: 'bg-red-500' })
+        this.$store.dispatch('notificationModule/show', { text: firstError, type: 'error' })
         return
       }
 
@@ -120,7 +120,7 @@ export default {
         password.length <= 255 || 'Maksymalnie 255 znaków',
         /[0-9]+/.test(password) || 'Hasło powinno zawierać co najmniej jedną cyfrę',
         /[A-Z]+/.test(password) || 'Hasło powinno zawierać co najmiej jedną wielką literę',
-        /[$@#&!]+/.test(password) || 'Hasło powinno zawierać co najmniej jeden znak specjalny'
+        /[$@#&!-_]+/.test(password) || 'Hasło powinno zawierać co najmniej jeden znak specjalny'
       ].find(element => element !== true) || true
     },
     samePasswords(password1, password2) {

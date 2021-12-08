@@ -1,206 +1,56 @@
 <template>
 <div class="flex flex-col">
-
-        <div >
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Jan</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
+  <div v-for="conversation in conversationsList" :key="conversation" >
+    <div v-for="index in conversation.users" :key="index">
+      <div v-if="index.id !== currentUserId" class="flex m-2 bg-white rounded-lg p-2 cursor-pointer btn-ghost" @click="chooseConversation(conversation.id,index)" >
+        <div>
+          <img class="w-14 rounded-full" :src="index.avatar"  alt="avatar"/>
+        </div>
+        <div class="flex-grow p-3">
+          <div class="flex justify-between text-xs">
+            <div>{{ index.first_name}} {{index.last_name}}</div>
+            <div v-if="conversation.last_message.text !==''" class=" text-gray-400">{{ conversation.last_message.created_at.split('T')[1].split('.')[0].split(':').slice(0, -1).join(':') }}</div> <!-- v-if by wyświetlać tylko raz  -->  <!-- {{conversation.last_message_created_at}} -->
           </div>
-      </div>
-
-      <div >
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Jan</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
+          <div class="text-xs text-gray-500">
+            <span v-if="conversation.last_message.user === currentUserId">Ty:</span>
+            {{conversation.last_message.text}}
           </div>
+        </div>
       </div>
-
-      <div >
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Jan</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
-
-      <div >
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Jan</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
-
-      <div >
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Jan</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
-
-      <div >
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Jan</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
-
-        <div >
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Jan</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
-
-        <div >
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Jan</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
-
-       <div>
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Ania</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
-
-
-       <div>
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Paweł</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
-
-      <div>
-          <div class="flex m-2 bg-white rounded-lg p-2">
-            <div>
-              <img class="w-14 rounded-full" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" />
-            </div>
-            <div class="flex-grow p-3">
-              <div class="flex justify-between text-xs">
-                <div>Kasia</div>
-                <div class=" text-gray-400">12:00 AM</div>
-              </div>
-              <div class="text-xs text-gray-500"> 
-                Lorem ipsum dolor sit, amet consectetur adipisicing
-              </div>
-            </div>
-          </div>
-      </div>
- </div>
+    </div>
+  </div>
+</div>
 </template>
 
 <script>
 
 export default {
-  components: {
+  props:{
+    currentUserId: String,
+    conversationsList:
+    {
+      id: String,
+      users: {
+        id: String,
+        first_name: String,
+        last_name: String,
+        profile: String,
+        avatar: String,
+      },
+      last_message:{
+        user: String,
+        user_name: String,
+        text: String,
+        is_read: Boolean,
+        created_at: String
+      },
+    }
   },
-  data() {
-    return {}
+  methods: {
+    chooseConversation(chooseConversationId,oponentUser) {
+       this.$emit('clicked', chooseConversationId,oponentUser)
+    },
   },
-
-  methods: {},
 };
 </script>
 

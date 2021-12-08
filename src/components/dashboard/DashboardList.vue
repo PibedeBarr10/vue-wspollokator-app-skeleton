@@ -9,9 +9,10 @@
     v-else
     v-for="user in users"
     :key="user"
-    class="flex mb-4 rounded-box shadow-md mx-2 group"
+    class="flex mb-4 rounded-box shadow-md mx-2 btn-ghost cursor-pointer "
     @mouseover.native="getUserOnHover(user)"
     @mouseleave.native="getUserOnHover"
+    @click="showUserProfile(user.profile_id)"
   >
     <div class="m-4 px-4">
       <img
@@ -23,10 +24,10 @@
     </div>
 
     <div class="flex justify-between flex-grow pl-0 pr-4 py-4">
+      
       <div>
         <p class="card-title">
-          <!-- <a href="/group-chat">{{ group.membersNames }}</a> -->
-          <a href="/group-chat">{{ `${user.first_name} ${user.last_name}` }}</a>
+            {{ `${user.first_name} ${user.last_name}` }}
         </p>
 <!--        <div class="space-x-4">-->
 <!--          <div class="badge badge-primary">Warszawa</div>-->
@@ -59,18 +60,10 @@ export default {
   },
   data () {
     return {
-      // filteredUsers: [],
       activeUser: -1
     }
   },
-  mounted () {
-    console.log(this.users)
-  },
   methods: {
-    // filterMembers () {
-    //   // deep copy
-    //   this.filteredUsers = JSON.parse(JSON.stringify(this.users))
-    // },
     getUserOnHover(user = null) {
       const oldActiveUserIndex = this.activeUser
       user ? this.activeUser = this.users.indexOf(user) : this.activeUser = -1
@@ -81,6 +74,10 @@ export default {
     },
     sendToFavourite() {
       alert('Heart clicked!')
+    },
+    showUserProfile(id)
+    {
+      this.$router.push({name: 'Profil użytkownika', params:{id: id} })
     }
   }
 }

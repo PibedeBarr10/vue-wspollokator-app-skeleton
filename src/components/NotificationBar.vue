@@ -2,11 +2,11 @@
   <transition name="fade" mode="out-in">
     <div
       v-if="show"
-      class="notification text-gray-50"
-      :class="color"
+      class="notification"
+      :class="type"
       style="z-index: 500;"
     >
-      {{ msg }}
+      {{ text }}
     </div>
   </transition>
 </template>
@@ -15,14 +15,14 @@
 export default {
   name: "NotificationBar",
   computed: {
-    msg: {
+    text: {
       get () {
-        return this.$store.getters['notificationModule/msg']
+        return this.$store.getters['notificationModule/text']
       }
     },
-    color: {
+    type: {
       get () {
-        return this.$store.getters['notificationModule/color']
+        return this.$store.getters['notificationModule/type']
       }
     },
     show: {
@@ -41,6 +41,16 @@ export default {
 .notification {
   padding: 8px 12px;
   border-radius: 6px;
+}
+
+.success {
+  background-color: rgb(15, 217, 0);
+  color: rgb(255, 255, 255);
+}
+
+.error {
+  background-color: rgb(225, 0, 1);
+  color: rgb(255, 255, 255);
 }
 
 .fade-enter-active, .fade-leave-active {

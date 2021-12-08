@@ -1,12 +1,12 @@
 const getters = {
-    msg: state => state.msg,
-    color: state => state.color,
+    text: state => state.text,
+    type: state => state.type,
     show: state => state.show
 }
 
 const actions = {
-    show ({ commit }, { msg, color }) {
-        commit('SET_NOTIFICATION_SHOW', { msg, color })
+    show ({ commit }, { text, type }) {
+        commit('SET_NOTIFICATION_SHOW', { text, type })
 
         setTimeout(() => {
             commit('SET_NOTIFICATION_HIDE')
@@ -18,10 +18,9 @@ const actions = {
 }
 
 const mutations = {
-    SET_NOTIFICATION_SHOW: (state, { msg, color }) => {
-        state.msg = msg
-        state.color = color
-        // state.icon = icon
+    SET_NOTIFICATION_SHOW: (state, { text, type }) => {
+        state.text = text
+        state.type = type
         state.show = true
     },
     SET_NOTIFICATION_HIDE: (state) => {
@@ -30,9 +29,8 @@ const mutations = {
 }
 
 const state = () => ({
-    msg: '',
-    color: 'bg-red-500',
-    // icon: '',
+    text: '',
+    type: 'success',
     show: false
 })
 

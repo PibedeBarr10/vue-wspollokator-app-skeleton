@@ -12,13 +12,12 @@ export default {
             preferable_price: 1000,
             description: 'Domyślny opis',
             is_searchable: true,
-            avatar: null
+            avatar: 'http://wspolokator.livs.pl:8000/media/default_avatar.png'
         },
         profileCreated: false
     },
     mutations: {
         SET_PROFILE(state, data) {
-            // state.profile = data
             state.profile.id = data.id
             state.profile.sex = data.sex
             state.profile.age = data.age
@@ -44,7 +43,7 @@ export default {
                 preferable_price: 1000,
                 description: 'Domyślny opis',
                 is_searchable: true,
-                avatar: null
+                avatar: 'http://wspolokator.livs.pl:8000/media/default_avatar.png'
             }
 
             state.profileCreated = false
