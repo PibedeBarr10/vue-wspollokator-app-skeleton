@@ -190,13 +190,13 @@ export default {
   {
     if(this.profile.conversation_id!=null)
     {
-      this.$router.push({name: 'Wiadomości', params:{chooseConversationId: this.profile.conversation_id} })
+      this.$router.push({name: 'Wiadomości', params:{chooseConversationId: 0} })  //this.profile.conversation_id
     }
     else{
       chatService.createConversation(this.profile.user_id).then(data => {
         this.profile.conversation_id= data.id;
         console.log(data)
-        this.$router.push({name: 'Wiadomości', params:{chooseConversationId: this.profile.conversation_id} })
+        this.$router.push({name: 'Wiadomości', params:{chooseConversationId: 0} }) //this.profile.conversation_id
     })
     }
   },
