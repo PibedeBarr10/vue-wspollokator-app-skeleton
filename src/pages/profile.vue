@@ -161,8 +161,9 @@ export default {
     getProfileData() {
       usersService.getProfile(this.id).then((data) => {
         this.profile = JSON.parse(JSON.stringify(data))
+        this.profile.preferable_price = parseInt(this.profile.preferable_price, 10)
       }).then(() => {
-        console.log(this.profile);
+        // console.log(this.profile);
         this.coordinates= this.profile.point[0].location.coordinates;
         this.radius= this.profile.point[0].radius;
         this.drawMap();
