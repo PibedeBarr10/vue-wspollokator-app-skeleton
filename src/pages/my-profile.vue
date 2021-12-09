@@ -337,6 +337,8 @@ export default {
           pk: this.currentUser.user.pk
         }).then(() => {
           this.profile = JSON.parse(JSON.stringify(data))
+          this.profile.preferable_price = parseInt(this.profile.preferable_price, 10)
+          console.log(this.profile.preferable_price)
         })
       }).catch(error => {
         console.log(error.response.data)
