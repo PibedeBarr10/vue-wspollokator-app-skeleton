@@ -10,14 +10,18 @@
           <div class="text-sm text-gray-500 ">
             {{ text }}
           </div>
-<!--          <div class="text-xs text-gray-400">-->
-<!--            {{ created_at.split('T')[1].split('.')[0].split(':').slice(0, -1).join(':') }}-->
-<!--          </div>-->
+         <div class="text-xs text-gray-400">
+            <!-- {{ created_at.split('T')[1].split('.')[0].split(':').slice(0, -1).join(':') }} -->
+            {{ moment(created_at) }}
+            <!-- {{ created_at.split('T')[1].split('.')[0].split(':').slice(0, -1).join(':') }} -->
+         </div>
         </div>
       </div>
 </template>
 
 <script>
+
+import moment from 'moment';
 
 export default {
   props: {
@@ -30,7 +34,11 @@ export default {
   data() {
     return {}
   },
-  methods: {},
+  methods: {
+    moment: function (data) {
+      return moment(data).format('LT');
+    }
+  },
 };
 </script>
 
