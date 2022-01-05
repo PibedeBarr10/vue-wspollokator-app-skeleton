@@ -11,9 +11,7 @@
             {{ text }}
           </div>
          <div class="text-xs text-gray-400">
-            <!-- {{ created_at.split('T')[1].split('.')[0].split(':').slice(0, -1).join(':') }} -->
             {{ moment(created_at) }}
-            <!-- {{ created_at.split('T')[1].split('.')[0].split(':').slice(0, -1).join(':') }} -->
          </div>
         </div>
       </div>
