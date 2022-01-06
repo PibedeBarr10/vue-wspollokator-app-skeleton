@@ -11,6 +11,7 @@ import LandingPage from "../pages/landing-page.vue";
 import Chat from "../pages/chat.vue";
 import Profile from "../pages/profile.vue";
 import Favourite from "../pages/favourite.vue";
+import Notifications from "../pages/notifications.vue";
 
 const routes = [
   {
@@ -59,6 +60,11 @@ const routes = [
     path: "/favourite",
     name: "Favourite",
     component: Favourite,
+  },
+  {
+    path: "/notifications",
+    name: "Notifications",
+    component: Notifications,
   },
 ];
 
