@@ -14,7 +14,7 @@
         <div class="flex-grow p-3">
           <div class="flex justify-between text-xs">
             <div>{{ index.first_name}} {{index.last_name}}</div>
-            <div v-if="conversation.last_message.text !==''" class=" text-gray-400">{{ conversation.last_message.created_at.split('T')[1].split('.')[0].split(':').slice(0, -1).join(':') }}</div> <!-- v-if by wyświetlać tylko raz  -->  <!-- {{conversation.last_message_created_at}} -->
+            <div v-if="conversation.last_message.text !==''" class=" text-gray-400">{{ moment(conversation.last_message.created_at) }}</div> <!-- v-if by wyświetlać tylko raz  -->  <!-- {{conversation.last_message_created_at}} -->
           </div>
           <div class="text-xs text-gray-500">
             <span v-if="conversation.last_message.user === currentUserId">Ty:</span>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+
+import moment from 'moment';
 
 export default {
   props:{
@@ -53,8 +55,11 @@ export default {
   },
   methods: {
     chooseConversation(chooseConversationId,oponentUser) {
-       this.$emit('clicked', chooseConversationId,oponentUser)
+       this.$emit('clicked', chooseConversationId, oponentUser)
     },
+    moment: function (data) {
+      return moment(data).format('LT');
+    }
   },
 };
 </script>

@@ -5,9 +5,9 @@
               <div class="text-sm text-gray-100 ">
                {{ text }}
               </div>
-<!--              <div class="text-xs text-gray-300">-->
-<!--                {{ created_at.split('T')[1].split('.')[0].split(':').slice(0, -1).join(':') }}-->
-<!--              </div>-->
+             <div class="text-xs text-gray-300">
+               {{ moment(created_at) }}
+             </div>
             </div>
               <!-- <img class="w-8 rounded-full m-3 mb-0" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" /> -->
           </div>
@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 
 export default {
   props: {
@@ -28,7 +29,11 @@ export default {
   data() {
     return {}
   },
-  methods: {},
+  methods: {
+    moment: function (data) {
+      return moment(data).format('LT');
+    }
+  },
 };
 </script>
 
