@@ -8,7 +8,7 @@
         <router-link to="/"> Współlokator </router-link>
       </span>
     </div>
-    <div class="flex-1 px-2 mx-2">
+    <div class="flex-1 px-0 mx-0">
       <div class="items-stretch hidden lg:flex"></div>
     </div>
     <div class="flex-none">

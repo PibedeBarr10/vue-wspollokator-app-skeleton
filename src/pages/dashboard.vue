@@ -7,18 +7,18 @@
     </div>
 
     <div
-      class="flex flex-row w-full space-x-2 py-4 pr-6 list"
+      class="flex-styling w-full py-4 pr-6 list"
       style="height: 100%"
     >
       <div
-        class="w-1/2 h-full flex-50"
+        class="dashboard-list-container h-full flex-50"
         style="overflow: hidden; overflow-y: scroll"
       >
         <DashboardList :users="users" @setMarkersOnMap="setMarkersOnMap" />
       </div>
       <div
         id="mapContainer"
-        class="rounded-box shadow-xl w-1/2 h-full flex-50"
+        class="map-container rounded-box shadow-md h-full flex-50"
         style="position: relative"
       />
     </div>
@@ -162,5 +162,31 @@ export default {
 ::-webkit-scrollbar-thumb {
   background: mediumpurple;
   border-radius: 10px;
+}
+
+.flex-styling {
+  display: flex;
+  flex-direction: row;
+}
+
+.dashboard-list-container, .map-container {
+  width: 50%;
+}
+.dashboard-list-container {
+  margin-left: 0.5rem;
+}
+
+@media only screen and (max-width: 659px) {
+  .flex-styling {
+    flex-direction: column-reverse;
+  }
+
+  .dashboard-list-container, .map-container {
+    width: 100%;
+  }
+
+  .dashboard-list-container {
+    padding-top: 20px;
+  }
 }
 </style>
