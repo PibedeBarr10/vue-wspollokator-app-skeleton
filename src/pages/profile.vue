@@ -1,25 +1,32 @@
 <template>
- <div
+  <div
     class="flex flex-col my-0 py-0 "
     style="height: 100vh; max-height: 100vh; overflow:scroll; display:block"
   >
-     <Navbar/>
-     <div>
+    <Navbar/>
+    <div>
       <div class="lg:w-3/5 lg:h-2/5 mx-auto flex flex-wrap">
-         <div class="lg:w-2/5 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
+        <div class="lg:w-2/5 w-full lg:pr-10 lg:py-6 mb-6 lg:mb-0">
           <div class="flex mb-4">
             <a class="flex-grow border-b-2 border-gray-500 py-2 text-lg px-1 font-bold">Opis</a>
           </div>
-           <label class="label bg-gray-100 rounded-lg"  style="height: 49%; align-items: start;">
-                <span class="label-text my-1 mx-2">{{this.profile.description}}</span>
-              </label>
+          <label
+            class="label bg-gray-100 rounded-lg"
+            style="height: 49%; align-items: start;"
+          >
+            <span class="label-text my-1 mx-2">
+              {{this.profile.description}}
+            </span>
+          </label>
           <div class="mb-4">
             <div class="w-full">
               <label class="label">
                 <span class="label-text">Wiek</span>
               </label>
-               <label class="label bg-gray-100 rounded-lg ">
-                <span class="label-text my-1 mx-2">{{this.profile.age}}</span>
+              <label class="label bg-gray-100 rounded-lg ">
+                <span class="label-text my-1 mx-2">
+                  {{this.profile.age}}
+                </span>
               </label>
             </div>
           </div>
@@ -44,8 +51,10 @@
               <label class="label">
                 <span class="label-text">Osoby palące</span>
               </label>
-               <label class="label bg-gray-100 rounded-lg ">
-                <span class="label-text my-1 mx-2">{{ getOption(this.profile.smoking) }}</span>
+              <label class="label bg-gray-100 rounded-lg ">
+                <span class="label-text my-1 mx-2">
+                  {{ getOption(this.profile.smoking) }}
+                </span>
               </label>
             </div>
           </div>
@@ -54,8 +63,10 @@
               <label class="label">
                 <span class="label-text">Preferowana kwota</span>
               </label>
-               <label class="label bg-gray-100 rounded-lg ">
-                <span class="label-text my-1 mx-2">{{ this.profile.preferable_price }}</span>
+              <label class="label bg-gray-100 rounded-lg ">
+                <span class="label-text my-1 mx-2">
+                  {{ this.profile.preferable_price }}
+                </span>
               </label>
             </div>
           </div>
@@ -72,15 +83,15 @@
         </div>
         <div class="flex w-full items-center justify-between">
           <span class="text-lg font-bold">Punkt</span>
-
         </div>
       </div>
     </div>
-      <div
-        v-if="coordinates !== []"
-        id="mapContainer"
-        class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"
-      />
+
+    <div
+      v-if="coordinates !== []"
+      id="mapContainer"
+      class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"
+    />
   </div>
 </template>
 
@@ -163,51 +174,53 @@ export default {
         this.profile = JSON.parse(JSON.stringify(data))
         this.profile.preferable_price = parseInt(this.profile.preferable_price, 10)
       }).then(() => {
-        // console.log(this.profile);
         this.coordinates= this.profile.point[0].location.coordinates;
         this.radius= this.profile.point[0].radius;
         this.drawMap();
       })
     },
-  
-  drawMap() {
-        this.createMap()
-        this.setCircleOnMap()
+    drawMap() {
+      this.createMap()
+      this.setCircleOnMap()
     },
-     createMap() {
+    createMap() {
       const container = L.DomUtil.get('mapContainer');
       if (container !== null) {
-        container._leaflet_id = null;
+        container._leaflet_id = null
       }
       this.map = L.map('mapContainer').setView(this.coordinates, 13);
       L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(this.map);
+      }).addTo(this.map)
 
       let customPane = this.map.createPane("customPane");
-      customPane.style.zIndex = 399;
+      customPane.style.zIndex = 399
     },
     setCircleOnMap() {
-     this.circle = L.circle(this.coordinates, this.radius * 1000);
-     this.map.addLayer(this.circle);
+     this.circle = L.circle(this.coordinates, this.radius * 1000)
+     this.map.addLayer(this.circle)
     },
-
-    sendMessageToUser()
-  {
-    if(this.profile.conversation_id!=null)
-    {
-      this.$router.push({name: 'Wiadomości', params:{chooseConversationId: 0} })  //this.profile.conversation_id
-    }
-    else{
-      chatService.createConversation(this.profile.user_id).then(data => {
-        this.profile.conversation_id= data.id;
-        console.log(data)
-        this.$router.push({name: 'Wiadomości', params:{chooseConversationId: 0} }) //this.profile.conversation_id
-    })
-    }
-  },
-  },
-  
+    sendMessageToUser() {
+      if (this.profile.conversation_id !== null) {
+        this.$router.push({
+          name: 'Wiadomości',
+          params: {
+            chooseConversationId: this.profile.conversation_id // this.profile.conversation_id
+          }
+        })
+      } else {
+        chatService.createConversation(this.profile.user_id).then(data => {
+          this.profile.conversation_id= data.id
+          this.$router.push({
+            name: 'Wiadomości',
+            params: {
+              chooseConversationId: 0 // this.profile.conversation_id
+            }
+          })
+        })
+      }
+    },
+  }
 }
 </script>
 

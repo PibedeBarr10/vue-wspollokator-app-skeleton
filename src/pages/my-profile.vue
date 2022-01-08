@@ -1,30 +1,7 @@
 <template>
-  <div
-    v-if="newProfileModalVisibility"
-    class="flex flex-col justify-center items-center fixed w-full"
-    style="height: 100vh; z-index: 600; background-color: rgba(0,0,0,0.3)"
-  >
-    <div
-      class="flex flex-col justify-center items-center p-6 border-black border-4"
-      style="background-color: rgb(240, 240, 240); border-radius: 10px"
-    >
-      <h1 class="text-2xl font-extrabold pb-3">
-        Witamy w systemie Współlokator!
-      </h1>
-      <p>
-        Aby swobodnie poruszać się w systemie musisz skonfigurować swój profil
-      </p>
-      <div class="w-full">
-        <p class="font-bold mt-3">Rzeczy do wykonania:</p>
-        <p v-for="value in toDoForUser">
-          - {{ value }}
-        </p>
-      </div>
-      <button class="btn btn-primary mt-4" @click="newProfileModalVisibility = false">
-        Przejdź do Profilu
-      </button>
-    </div>
-  </div>
+  <FirstConfigurationModal
+    :toDoForUser = toDoForUser
+  />
   <div
     class="flex flex-col my-0 py-0 "
     style="height: 100vh; max-height: 100vh; overflow:scroll; display:block"
@@ -36,9 +13,6 @@
           <div class="flex mb-4">
             <a class="flex-grow border-b-2 border-gray-500 py-2 text-lg px-1 font-bold">Mój opis</a>
           </div>
-          <!-- <p class="leading-relaxed mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum ipsam pariatur ex? Sunt dolorum dolores provident rem numquam, eius placeat officia, veritatis accusantium quod blanditiis excepturi, voluptate incidunt odit quis! </p>
-           -->
-          <!-- dopasowanie h do poziomu przycisków? -->
           <textarea
             v-model="profile.description"
             placeholder="Opis"
@@ -132,36 +106,12 @@
 
               <div class="modal-action">
                 <label for="modal-change-picture" class="btn btn-primary" @click="uploadAvatar">Zatwierdź</label>
-                <!-- <label for="modal-change-picture" class="btn btn-primary">Zatwierdź</label>  -->
                 <label for="modal-change-picture" class="btn">Anuluj</label>
               </div>
             </div>
           </div>
 
-          <label for="modal-change-password" class="my-1 btn btn-primary modal-button w-full">Zmień hasło</label>
-          <input type="checkbox" id="modal-change-password" class="modal-toggle">
-          <div class="modal">
-            <div class="modal-box">
-              <input
-                v-model="newpassword.password"
-                type="password"
-                placeholder="Nowe hasło"
-                class="mt-5"
-              />
-
-              <input
-                v-model="newpassword.repeatedPassword"
-                type="password"
-                placeholder="Powtórz nowe hasło"
-                class="mt-5"
-              />
-
-              <div class="modal-action">
-                <label for="modal-change-password" class="btn btn-primary" @click="changePassword">Zatwierdź</label>
-                <label for="modal-change-password" class="btn">Anuluj</label>
-              </div>
-            </div>
-          </div>
+          <ChangePasswordModal />
 
           <button
             :class="[profileDataChanged ? 'btn btn-primary w-full my-1 border-0 py-2 px-4 btn-disabled' : 'btn btn-primary w-full my-1 border-0 py-2 px-4']"
@@ -171,84 +121,37 @@
             Zapisz zmiany w profilu
           </button>
         </div>
-
-        <div class="flex w-full items-center justify-between">
-          <span class="text-lg font-bold">Mój punkt</span>
-          <button
-              v-if="!pointEditing"
-              id="myPointEdit"
-              class="text-xs m-2 border-0 py-2 px-4 btn btn-primary"
-              @click="changeMyPoint"
-          >
-            Edytuj
-          </button>
-
-          <div v-else>
-            <div class="flex">
-              <button
-                id="myPointAccept"
-                class=" text-xs m-2 border-0 py-2 px-4 btn btn-primary"
-                @click="updateMyPoint"
-              >
-                Zatwierdź
-              </button>
-              <button
-                id="myPointClose"
-                class="text-xs m-2 border-0 py-2 px-4 btn"
-                @click="cancelUpdateMyPoint"
-              >
-                Anuluj
-              </button>
-            </div>
-          </div>
-          
-        </div>
-
-        <label class="cursor-pointer flex flex-row content-center items-center pr-4">
-          <span class="label-text pr-2">Odl. od mojego punktu (km)</span>
-          <input v-model="radius" :disabled="!pointEditing" type="range" min="1" max="10" oninput="this.nextElementSibling.value = this.value" class="range">
-          <output>{{ radius }}</output>
-        </label>
       </div>
     </div>
 
+    <Map />
 
-    <div
-      v-if="coordinates !== []"
-      id="mapContainer"
-      class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"
-    />
   </div>
 </template>
+
 <script>
-import 'leaflet/dist/leaflet.css'
-import L from 'leaflet'
-import Navbar from '../components/reusable-components/Navbar.vue'
 import { LogoutIcon } from '@heroicons/vue/outline'
-import BaseButton from "../components/reusable-components/BaseButton.vue";
-import profileService from "../services/profileService";
+import profileService from "../services/profileService"
+import Navbar from '../components/reusable-components/Navbar.vue'
+import BaseButton from "../components/reusable-components/BaseButton.vue"
+import FirstConfigurationModal from "../components/my-profile/FirstConfigurationModal.vue"
+import ChangePasswordModal from "../components/my-profile/ChangePasswordModal.vue"
+import Map from "../components/my-profile/Map.vue"
 
 export default {
   components: {
-    Navbar,
     LogoutIcon,
+    Navbar,
     BaseButton,
+    FirstConfigurationModal,
+    ChangePasswordModal,
+    Map
   },
   data () {
     return {
-      map: null,
-      marker: null,
-      circle: null,
-      newpassword: {
-        password:'',
-        repeatedPassword:''
-      },
       avatar: {
         name: ''
       },
-      pointEditing: false,
-      coordinates: [52, 20],
-      radius: 1,
       profile: {
         id: '',
         updated_at: '',
@@ -268,7 +171,6 @@ export default {
       ],
       profileDataChanged: false,
       newAvatar: null,
-      newProfileModalVisibility: false,
       toDoForUser: []
     }
   },
@@ -284,14 +186,6 @@ export default {
       handler(value) {
         this.compareProfilesData()
       }
-    },
-    toDoForUser: {
-      deep: true,
-      handler() {
-        if (this.toDoForUser.length > 0) {
-          this.newProfileModalVisibility = true
-        }
-      }
     }
   },
   mounted () {
@@ -299,13 +193,9 @@ export default {
       this.$router.push('/login');
     }
 
-    document.getElementById('mapContainer').innerHTML = '<div v-if="coordinates !== []" id="mapContainer" class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"/>';
-
-    this.newProfileModalVisibility = false
     this.toDoForUser = []
 
     this.getProfileData()
-    this.drawMap()
   },
   methods: {
     compareProfilesData() {
@@ -332,16 +222,13 @@ export default {
     },
     getProfileData() {
       profileService.getProfile(this.currentUser.user.pk).then(data => {
-        console.log(data)
         this.$store.dispatch('getProfile', {
           pk: this.currentUser.user.pk
         }).then(() => {
           this.profile = JSON.parse(JSON.stringify(data))
           this.profile.preferable_price = parseInt(this.profile.preferable_price, 10)
-          console.log(this.profile.preferable_price)
         })
       }).catch(error => {
-        console.log(error.response.data)
         if (error.response.data.detail === 'Not found.') {
           this.toDoForUser.push('Uzupełnij dane profilu (zapisz zmiany klikając w przycisk "Zapisz zmiany w profilu")')
         } else {
@@ -357,90 +244,28 @@ export default {
         this.$store.dispatch('notificationModule/show', { text: 'Pomyślnie zaktualizowano dane profilu', type: 'success' })
         this.profileDataChanged = true
       }).catch(error => {
-        // console.log(error)
         this.$store.dispatch('notificationModule/show', {
           text: error.response.data[Object.keys(error.response.data)[0]],
           type: 'error'
         })
       })
     },
-    drawMap() {
-      this.$store.dispatch('getUserPoint').then(() => {
-        this.radius = this.$store.getters.radius
-
-        if (this.$store.getters.point !== null) {
-          this.coordinates = this.$store.getters.point
-        } else {
-          this.coordinates = [52, 20]
-          this.toDoForUser.push('Ustaw swój punkt na mapie')
-        }
-
-        this.createMap()
-        this.setCircleOnMap()
-      })
-    },
-    createMap() {
-      const container = L.DomUtil.get('mapContainer');
-      if (container !== null) {
-        container._leaflet_id = null;
-      }
-      this.map = L.map('mapContainer').setView(this.coordinates, 13);
-      L.tileLayer("http://{s}.tile.osm.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(this.map);
-
-      let customPane = this.map.createPane("customPane");
-      customPane.style.zIndex = 399;
-    },
-    setCircleOnMap() {
-     this.circle = L.circle(this.coordinates, this.radius * 1000);
-     this.map.addLayer(this.circle);
-    },
-    changeMyPoint() {
-      this.pointEditing = true
-
-      this.map.removeLayer(this.circle);
-
-      this.marker = L.marker(this.coordinates, {
-        draggable: true
-      })
-      this.map.addLayer(this.marker);
-    },
-    updateMyPoint()
-    {
-      // aktualizacja mojego punktu
-      this.coordinates = [
-        this.marker.getLatLng().lat,
-        this.marker.getLatLng().lng
-      ]
-
-      this.$store.dispatch('changeUserPoint', {
-        location: this.coordinates,
-        radius: this.radius
-      }).then(() => {
-        this.map.removeLayer(this.marker);
-        this.circle = L.circle(this.coordinates, this.radius * 1000);
-        this.map.addLayer(this.circle);
-
-        this.pointEditing = false
-        this.$store.dispatch('notificationModule/show', { text: 'Zmieniono punkt', type: 'success' })
-      })
-    },
-    cancelUpdateMyPoint()
-    {
-      // powrót do danych wcześniejszych
-      this.map.removeLayer(this.marker);
-      this.map.addLayer(this.circle);
-
-      this.pointEditing = false
-    },
     onFileSelected(event) {
       this.newAvatar = event.target.files[0]
       this.avatar.name = event.target.files[0].name
     },
+    isFileImage(file) {
+      return file && file['type'].split('/')[0] === 'image';
+    },
     uploadAvatar() {
+      if (!this.isFileImage(this.newAvatar)) {
+        this.$store.dispatch('notificationModule/show', { text: 'Wybrany plik nie jest obrazem', type: 'error' })
+        return
+      }
+
       this.avatar.name = ''
       let data = JSON.parse(JSON.stringify(this.profile))
+
       data.avatar = this.newAvatar
       this.$store.dispatch('setProfile', {
         profile: data,
@@ -451,58 +276,15 @@ export default {
       }).then(() => {
         this.$store.dispatch('notificationModule/show', { text: 'Pomyślnie zaktualizowano zdjęcie', type: 'success' })
       }).catch(error => {
-        this.$store.dispatch('notificationModule/show', { text: 'Błąd w trakcie aktualizacji zdjęcia', type: 'success' })
+        this.$store.dispatch('notificationModule/show', { text: 'Błąd w trakcie aktualizacji zdjęcia', type: 'error' })
       })
-    },
-    changePassword(e) {
-      e.preventDefault()
-
-      const errorsArray = [
-        this.passwordRequired(this.newpassword.password),
-        this.passwordRegex(this.newpassword.password),
-        this.samePasswords(this.newpassword.password, this.newpassword.repeatedPassword),
-      ]
-      // console.log(errorsArray)
-
-      const firstError = errorsArray.find(element => element !== true)
-
-      if (firstError) {
-        this.$store.dispatch('notificationModule/show', { text: firstError, type: 'error' })
-        return
-      }
-
-      this.$store.dispatch('auth/changePassword', this.newpassword).then(() => {
-        this.$store.dispatch('notificationModule/show', { text: 'Pomyślnie zmieniono hasło', type: 'success' })
-      })
-    },
-    passwordRequired(password) {
-      return !!password || 'Hasło jest wymagane'
-    },
-    passwordRegex(password) {
-      return [
-        password.length >= 8 || 'Hasło powinno zawierać co najmniej 8 znaków',
-        password.length <= 255 || 'Maksymalnie 255 znaków',
-        /[0-9]+/.test(password) || 'Hasło powinno zawierać co najmniej jedną cyfrę',
-        /[A-Z]+/.test(password) || 'Hasło powinno zawierać co najmiej jedną wielką literę',
-        /[$@#&!_]+/.test(password) || 'Hasło powinno zawierać co najmniej jeden znak specjalny'
-      ].find(element => element !== true) || true
-    },
-    samePasswords(password1, password2) {
-      return password1 === password2 || 'Hasła nie są takie same'
-    },
+    }
   }
 }
 
 </script>
 
 <style scoped>
-.map {
-  border-bottom: 2px solid #ddd;
-}
-.mapstyle{
-  position: relative;
-  height: 90%;
-}
 
 ::-webkit-scrollbar {
   width: 10px;

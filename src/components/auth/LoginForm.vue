@@ -3,38 +3,39 @@
     <span class="text-2xl font-bold mb-10">Zaloguj się do konta</span>
     <form>
       <input
-          v-model="loginData.email"
-          type="text"
-          placeholder="E-mail"
-          class="mt-5"
-          ref="email"
-          :rules="[emailValidation, emailRequired]"
+        v-model="loginData.email"
+        type="text"
+        placeholder="E-mail"
+        class="mt-5"
+        ref="email"
+        :rules="[emailValidation, emailRequired]"
       />
       <input
-          v-model="loginData.password"
-          type="password"
-          placeholder="Hasło"
-          class="mt-5"
+        v-model="loginData.password"
+        type="password"
+        placeholder="Hasło"
+        class="mt-5"
       />
       <BaseButton
-          @click="login"
-          round
-          size="lg"
-          class="mt-10"
+        @click="login"
+        round
+        size="lg"
+        class="mt-10"
       >
         <span class="normal-case">Zaloguj się</span>
       </BaseButton>
+
+      <BaseButton
+        @click="$router.push('register')"
+        round
+        outline
+        color="gray"
+        size="lg"
+        class="mt-5"
+      >
+        <span class="normal-case">Zarejestruj się</span>
+      </BaseButton>
     </form>
-    <BaseButton
-      @click="$router.push('register')"
-      round
-      outline
-      color="gray"
-      size="lg"
-      class="mt-5"
-    >
-      <span class="normal-case">Zarejestruj się</span>
-    </BaseButton>
   </div>
 </template>
 
@@ -66,7 +67,6 @@ export default {
         this.emailRequired(this.loginData.email),
         this.emailRegex(this.loginData.email),
         this.passwordRequired(this.loginData.password),
-        // this.passwordRegex(this.loginData.password)
       ]
 
       const firstError = errorsArray.find(element => element !== true)
