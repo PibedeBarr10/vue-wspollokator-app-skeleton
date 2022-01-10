@@ -126,6 +126,8 @@
 
     <Map />
 
+    <AllOpinions />
+
   </div>
 </template>
 
@@ -133,10 +135,11 @@
 import { LogoutIcon } from '@heroicons/vue/outline'
 import profileService from "../services/profileService"
 import Navbar from '../components/reusable-components/Navbar.vue'
-import BaseButton from "../components/reusable-components/BaseButton.vue"
-import FirstConfigurationModal from "../components/my-profile/FirstConfigurationModal.vue"
-import ChangePasswordModal from "../components/my-profile/ChangePasswordModal.vue"
-import Map from "../components/my-profile/Map.vue"
+import BaseButton from '../components/reusable-components/BaseButton.vue'
+import FirstConfigurationModal from '../components/my-profile/FirstConfigurationModal.vue'
+import ChangePasswordModal from '../components/my-profile/ChangePasswordModal.vue'
+import Map from '../components/my-profile/Map.vue'
+import AllOpinions from '../components/opinions/AllOpinions.vue'
 
 export default {
   components: {
@@ -145,7 +148,8 @@ export default {
     BaseButton,
     FirstConfigurationModal,
     ChangePasswordModal,
-    Map
+    Map,
+    AllOpinions
   },
   data () {
     return {
