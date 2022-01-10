@@ -278,6 +278,9 @@ export default {
       }).catch(error => {
         this.$store.dispatch('notificationModule/show', { text: 'Błąd w trakcie aktualizacji zdjęcia', type: 'error' })
       })
+    },
+    addMessageToToDoForUser (message) {
+      this.toDoForUser.push(message)
     }
   }
 }

@@ -85,7 +85,8 @@ export default {
           this.coordinates = this.$store.getters.point
         } else {
           this.coordinates = [52, 20]
-          this.toDoForUser.push('Ustaw swój punkt na mapie')
+          this.$emit('addMessageToToDoForUser', 'Ustaw swój punkt na mapie')
+          // this.toDoForUser.push('Ustaw swój punkt na mapie')
         }
 
         this.createMap()
