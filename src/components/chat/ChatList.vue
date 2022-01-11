@@ -19,7 +19,73 @@
           :conversationsList="conversationsList"
           :currentUserId="currentUserId"
           @clicked="onClickChild"
+          @clickedGroup="onClickChildGroup"
         />
+      </div>
+      <div style="height:130px; margin: 0 auto;">
+        <label for="modal-create-group" class="my-1 btn btn-primary text-xs " @click="getUsers">Utwórz grupę</label>
+        <input type="checkbox" id="modal-create-group" class="modal-toggle">
+        <div class="modal">
+          <div class="modal-box" style="height:70%;">
+                      
+              <div
+                v-if="favouriteUsers.length === 0"
+                class="flex justify-center items-center w-full justify-center"
+                style="height: 100%"
+              >
+                <p>Brak osób na liście ulubionych</p>
+              </div>
+              <div v-else class="flex flex-col" style="height:80%;">
+                  <div class="form-control w-full flex " style="max-height:10%;">
+                  <input
+                    v-model="nameGroup"
+                    type="text"
+                    autocomplete="off"
+                    placeholder="Nazwa grupy"
+                    class="input input-md input-bordered"
+                  >
+                </div>
+                <div class="flex flex-col w-full mt-4" style="flex:1; overflow:hidden; overflow-y:auto;">
+                  <div v-for="user in favouriteUsers" :key="user" class="w-full mt-4">
+                    
+                    <div class=" flex w-full items-center">
+                      <input
+                        type="checkbox"
+                        :value="user.user_id"
+                        v-model="checkedUsersId"
+                        class="checkbox checkbox-primary checkbox-sm">
+                      <div class="m-4 px-4">
+                        <img
+                          class="
+                            w-full
+                            rounded-full
+                            object-cover object-center
+                            border-solid border-2 border-black
+                          "
+                          style="object-fit: cover; height: 48px; width: 48px"
+                          :src="user.avatar"
+                          :alt="user.first_name + ' image'"
+                        />
+                      </div>
+
+                      <div class="flex justify-between flex-grow pl-0 pr-4 py-4">                 
+                        <div>
+                          <p class="card-title">
+                            {{ `${user.first_name} ${user.last_name}` }}                      
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            <div class="modal-action">
+              <label for="modal-create-group" class="btn btn-primary" @click="createGroup">Utwórz</label>
+              <label for="modal-create-group" class="btn">Anuluj</label>
+            </div>
+          </div>
+        </div>
       </div>
       
  </div>
@@ -29,12 +95,16 @@
 import UsersTopBar from "../chat/UsersTopBar.vue";
 import AllConversations from "../chat/AllConversations.vue";
 import { SearchIcon } from "@heroicons/vue/outline";
+import favouriteService from "../../services/favouriteService";
+import chatService from "../../services/chatService";
 export default {
   props:{
     currentUserId: String,
     conversationsList:
     {
       id: String,
+      is_group: Boolean,
+      name: String,
       users: {
         id: String,
         first_name: String,
@@ -51,16 +121,54 @@ export default {
       },
     }
   },
+  data() {
+    return {
+      favouriteUsers: [],
+      checkedUsersId: [],
+      nameGroup: '',
+    };
+  },
+   mounted() {
+  },
   components: {
       UsersTopBar,
       AllConversations,
       SearchIcon,
   },
+ 
   methods: {
-    onClickChild (chooseConversationId,oponentUser) {
+    onClickChild (chooseConversationId,oponentUser)
+    {
       this.$emit('clicked', chooseConversationId,oponentUser)
-    }
+    },
+    onClickChildGroup (chooseGroupConversationId,users,name)
+    {
+      this.$emit('clickedGroup', chooseGroupConversationId, users,name)
+    },
+    getUsers() {
+      this.checkedUsersId=[];
+      this.nameGroup="";
+      favouriteService.getFavourite().then((data) => {
+        this.favouriteUsers = data;
+      });
+    },
+    createGroup()
+    {
+      if(this.nameGroup=="" || this.checkedUsersId.length <2 )
+      {
+        this.$store.dispatch('notificationModule/show',{text:'Nie podano nazwy grupy/Za mało osób: minimum 2', type:'error'})
+      }
+      else
+      {
+        
+        chatService.createGroupConversation(this.checkedUsersId,this.nameGroup).then((data)=>{
+          this.$store.dispatch('notificationModule/show',{text:'Utworzono konwersacje grupową', type:'success'})
+          console.log(data);
+        });
+      }
+    },
   },
+  
 };
 </script>
 

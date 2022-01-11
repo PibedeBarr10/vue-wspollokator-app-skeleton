@@ -9,7 +9,6 @@
                {{ moment(created_at) }}
              </div>
             </div>
-              <!-- <img class="w-8 rounded-full m-3 mb-0" src="http://daisyui.com/tailwind-css-component-profile-2@94w.png" /> -->
           </div>
         </div>
 </template>

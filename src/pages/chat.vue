@@ -9,13 +9,22 @@
         :conversationsList="conversationsList"
         :currentUserId="this.currentUser.user.pk"
         @clicked="onClickChildChild"
-      />  <!--  :key="this.componentKey"-->
+        @clickedGroup="onClickChildChildGroup"
+      />
       <Conversation
-        v-if="chooseConversationId !== '0' && !loading"
+        v-if="chooseConversationId !== '0' && !loading && !isGroup"
         :messageList="this.messageList"
         :oponentUser="this.oponentUser"
         @send="sendMessageChild"
-      />  <!--:key="this.componentKey" -->
+      />
+      <ConversationGroup
+        v-else-if="chooseConversationId !== '0' && !loading && isGroup"
+        :messageList="this.messageList"
+        :users="this.users"
+        :name="this.nameGroup"
+        :currentUserId="currentUser.user.pk"
+        @send="sendMessageChild"
+      />
       <div
         v-else-if="chooseConversationId !== '0' && loading"
         class="flex justify-center items-center w-full"
@@ -36,6 +45,7 @@
 import Navbar from "../components/reusable-components/Navbar.vue";
 import ChatList from "../components/chat/ChatList.vue";
 import Conversation from "../components/chat/Conversation.vue";
+import ConversationGroup from "../components/chat/ConversationGroup.vue";
 import chatService from "../services/chatService";
 
 export default {
@@ -43,6 +53,7 @@ export default {
     Navbar,
     ChatList,
     Conversation,
+    ConversationGroup,
   },
   props:{
     chooseConversationId:{
@@ -54,6 +65,8 @@ export default {
     return {
       conversationsList: {
         id: '',
+        is_group: false,
+        name: '',
         users:
         {
           id: '',
@@ -85,8 +98,10 @@ export default {
          profile: '',
          avatar: '',
       },
+      nameGroup: '',
       loading: true,
-      interval: null
+      interval: null,
+      isGroup: false,
     }
   },
   computed: {
@@ -129,7 +144,16 @@ export default {
     onClickChildChild(chooseConversationId, oponentUser) {
       this.oponentUser = oponentUser
       this.loading = true
+      this.isGroup = false 
       this.$router.push({name: 'Wiadomości', params: { chooseConversationId: chooseConversationId } })
+    },
+    onClickChildChildGroup(chooseGroupConversationId,users,name)
+    {
+      this.users = users
+      this.loading= true
+      this.isGroup=true
+      this.nameGroup=name
+      this.$router.push({name: 'Wiadomości', params: { chooseConversationId: chooseGroupConversationId } })
     },
     sendMessageChild(message)
     {
@@ -140,7 +164,7 @@ export default {
     getConversation()
     {
       if(this.chooseConversationId!=='0'){
-        console.log(this.conversationsList)
+        
           this.conversationsList.forEach(item => {
             if (item.id ===this.chooseConversationId) {
               item.users.forEach(item2 => {
