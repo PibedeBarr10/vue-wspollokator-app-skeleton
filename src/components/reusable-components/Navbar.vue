@@ -21,6 +21,11 @@
         </router-link>
       </div>
       <div>
+        <router-link to="/notifications" class="btn btn-ghost btn-sm rounded-btn">
+          <InformationCircleIcon class="h-6 w-6" />
+        </router-link>
+      </div>
+      <div>
         <router-link to="/chat/0" class="btn btn-ghost btn-sm rounded-btn">
           <ChatIcon class="h-6 w-6" />
         </router-link>
@@ -42,7 +47,8 @@
 <script>
 import { LogoutIcon } from "@heroicons/vue/outline";
 import NotificationBar from "../NotificationBar.vue";
-import { ChatIcon, HeartIcon } from "@heroicons/vue/outline";
+import { ChatIcon, HeartIcon, InformationCircleIcon } from "@heroicons/vue/outline";
+
 export default {
   name: "Navbar",
   components: {
@@ -50,6 +56,7 @@ export default {
     LogoutIcon,
     ChatIcon,
     HeartIcon,
+    InformationCircleIcon,
   },
   computed: {
     currentUser() {
