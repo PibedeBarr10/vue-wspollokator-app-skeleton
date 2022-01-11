@@ -42,4 +42,14 @@ export default {
                 return response.data
             })
      },
+    createGroupConversation(usersId, name)
+    {
+        return axios
+            .post(`${API_URL}/conversation/group/`,{user_ids: usersId, name: name}, {
+                withCredentials: true
+            })
+            .then(response => {
+                return response.data
+            })
+    },
 }
