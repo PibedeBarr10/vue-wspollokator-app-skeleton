@@ -94,7 +94,7 @@ export default {
           });
         })
         .catch((err) => {
-          console.log("chuj", err);
+          console.log("blad", err);
         });
     },
     showUserProfile(id) {
