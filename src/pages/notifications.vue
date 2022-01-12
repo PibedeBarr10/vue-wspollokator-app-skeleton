@@ -9,7 +9,7 @@
       style="height: 100%"
     >
       <div
-        class="dashboard-list-container h-full flex-50"
+        class="dashboard-list-container h-full "
         style="overflow: hidden; overflow-y: scroll"
       >
         <DashboardList :users="users" />
@@ -48,7 +48,7 @@ export default {
     if (!this.currentUser) {
       this.$router.push("/login");
     }
-    this.getUsers();
+    this.searchUsers();
   },
   methods: {
     getUsers() {
@@ -81,6 +81,24 @@ export default {
           // console.log(this.users)
         });
     },
+    searchUsers() {
+      const today = new Date();
+      const data = new Date();
+      data.setDate(today.getDate() - 1);
+      usersService.getFilteredProfiles({ min_updated_at: data }).then((data) => {
+      console.log(data.response)
+        this.users = [];
+        data.forEach((data) => {
+          this.users.push({
+            id: data.user.id,
+            profile_id: data.user.profile,
+            first_name: data.user.first_name,
+            last_name: data.user.last_name,
+            avatar: data.avatar,
+          });
+        });
+      });
+    },
   },
 };
 </script>
@@ -103,7 +121,7 @@ export default {
 }
 
 .dashboard-list-container {
-  width: 50%;
+  width: 100%;
 }
 .dashboard-list-container {
   margin-left: 0.5rem;
