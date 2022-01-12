@@ -126,8 +126,10 @@
 
     <Map @addMessageToToDoForUser="addMessageToToDoForUser"/>
 
-    <AllOpinions />
-
+    <AllOpinions
+      v-if="dataLoaded"
+      :user-id="this.currentUser.user.pk"
+    />
   </div>
 </template>
 
@@ -175,7 +177,8 @@ export default {
       ],
       profileDataChanged: false,
       newAvatar: null,
-      toDoForUser: []
+      toDoForUser: [],
+      dataLoaded: false
     }
   },
 
@@ -225,12 +228,14 @@ export default {
       this.profileDataChanged = true;
     },
     getProfileData() {
+      this.dataLoaded = false
       profileService.getProfile(this.currentUser.user.pk).then(data => {
         this.$store.dispatch('getProfile', {
           pk: this.currentUser.user.pk
         }).then(() => {
           this.profile = JSON.parse(JSON.stringify(data))
           this.profile.preferable_price = parseInt(this.profile.preferable_price, 10)
+          this.dataLoaded = true
         })
       }).catch(error => {
         if (error.response.data.detail === 'Not found.') {

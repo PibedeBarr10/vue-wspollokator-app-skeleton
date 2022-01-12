@@ -95,22 +95,29 @@
       id="mapContainer"
       class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"
     />
+
+    <AllOpinions
+      v-if="dataLoaded"
+      :user-id="this.profile.user_id"
+    />
   </div>
 </template>
 
 <script>
 import 'leaflet/dist/leaflet.css'
 import L from 'leaflet'
-import usersService from "../services/usersService";
-import chatService from "../services/chatService";
-import Navbar from '../components/reusable-components/Navbar.vue';
-import OpinionModal from "../components/my-profile/OpinionModal.vue"
+import usersService from '../services/usersService'
+import chatService from '../services/chatService'
+import Navbar from '../components/reusable-components/Navbar.vue'
+import OpinionModal from '../components/my-profile/OpinionModal.vue'
+import AllOpinions from '../components/opinions/AllOpinions.vue'
 
 export default {
   name: 'Profil użytkownika',
   components: {
     Navbar,
     OpinionModal,
+    AllOpinions
   },
   props: {
     id: String,
@@ -149,6 +156,7 @@ export default {
         { text: 'Nie akceptuję', value: 'N' },
         { text: 'Nieistotne', value: 'I' }
       ],
+      dataLoaded: false
     }
   },
   mounted() {
@@ -175,9 +183,11 @@ export default {
       return option[0].text
     },
     getProfileData() {
+      this.dataLoaded = false
       usersService.getProfile(this.id).then((data) => {
         this.profile = JSON.parse(JSON.stringify(data))
         this.profile.preferable_price = parseInt(this.profile.preferable_price, 10)
+        this.dataLoaded = true
       }).then(() => {
         this.coordinates= this.profile.point[0].location.coordinates;
         this.radius= this.profile.point[0].radius;

@@ -1,8 +1,10 @@
 <template>
-  <div class="flex w-full flex-col bg-base-300 my-1 p-1">
+  <div class="flex w-full flex-col bg-base-300 my-2 p-2 rounded border-2 border-black">
     <div class="flex w-full">
-      <div class="flex w-full">
-        {{ opinion.uuid }}
+      <div class="flex w-full text-2xs">
+        <p v-if="name !== ''">
+          {{ name }}
+        </p>
       </div>
 
       <div class="flex">
@@ -24,6 +26,8 @@
 <script>
 import { StarIcon as StarOutlineIcon } from '@heroicons/vue/outline'
 import { StarIcon as StarSolidIcon } from '@heroicons/vue/solid'
+import usersService from '../../services/usersService'
+import profileService from '../../services/profileService'
 
 export default {
   components: {
@@ -37,8 +41,22 @@ export default {
     }
   },
   data() {
-    return {}
-  }
+    return {
+      name: ''
+    }
+  },
+  // mounted () {
+  //   this.getUserName()
+  // },
+  // methods: {
+  //   getUserName() {
+  //     console.log(this.opinion.issued_by)
+  //     usersService.getProfile(this.opinion.issued_by).then((data) => {
+  //       console.log(data)
+  //       this.name = data.first_name + ' ' + data.last_name
+  //     })
+  //   }
+  // }
 }
 </script>
 

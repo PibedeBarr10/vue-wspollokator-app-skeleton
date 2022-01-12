@@ -168,7 +168,7 @@ export default {
           this.conversationsList.forEach(item => {
             if (item.id ===this.chooseConversationId) {
               item.users.forEach(item2 => {
-                if(item2.id !== this.currentUser.id) {
+                if(item2.id !== this.currentUser.user.pk) {
                   this.oponentUser.id = item2.id;
                   this.oponentUser.last_name = item2.last_name;
                   this.oponentUser.first_name = item2.first_name;

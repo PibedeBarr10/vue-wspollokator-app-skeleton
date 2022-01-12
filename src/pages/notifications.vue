@@ -85,7 +85,7 @@ export default {
       const today = new Date();
       const data = new Date();
       data.setDate(today.getDate() - 1);
-      usersService.getFilteredProfiles({ min_updated_at: data }).then((data) => {
+      usersService.getFilteredProfiles({ min_updated_at: data.toLocaleString() }).then((data) => {
       console.log(data.response)
         this.users = [];
         data.forEach((data) => {
