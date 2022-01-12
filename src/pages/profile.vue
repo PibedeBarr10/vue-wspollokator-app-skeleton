@@ -80,6 +80,9 @@
           >
           <h2 class="text-gray-900 text-xl font-medium mt-4">{{ this.profile.first_name }} {{ this.profile.last_name }}</h2>
           <button @click="sendMessageToUser" class="my-4 btn btn-primary w-full">Napisz wiadomość</button>
+
+          <OpinionModal :profileUserID="this.profile.user_id" />
+
         </div>
         <div class="flex w-full items-center justify-between">
           <span class="text-lg font-bold">Punkt</span>
@@ -101,11 +104,13 @@ import L from 'leaflet'
 import usersService from "../services/usersService";
 import chatService from "../services/chatService";
 import Navbar from '../components/reusable-components/Navbar.vue';
+import OpinionModal from "../components/my-profile/OpinionModal.vue"
 
 export default {
   name: 'Profil użytkownika',
   components: {
     Navbar,
+    OpinionModal,
   },
   props: {
     id: String,
@@ -199,6 +204,11 @@ export default {
     setCircleOnMap() {
      this.circle = L.circle(this.coordinates, this.radius * 1000)
      this.map.addLayer(this.circle)
+    },
+    giveUserOpinion(){
+
+
+
     },
     sendMessageToUser() {
       if (this.profile.conversation_id !== null) {
