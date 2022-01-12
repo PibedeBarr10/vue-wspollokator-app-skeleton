@@ -234,7 +234,7 @@ export default {
           this.$router.push({
             name: 'Wiadomości',
             params: {
-              chooseConversationId: 0 // this.profile.conversation_id
+              chooseConversationId: this.profile.conversation_id // this.profile.conversation_id
             }
           })
         })
