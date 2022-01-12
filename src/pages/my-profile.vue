@@ -124,7 +124,7 @@
       </div>
     </div>
 
-    <Map />
+    <Map @addMessageToToDoForUser="addMessageToToDoForUser"/>
 
     <AllOpinions />
 

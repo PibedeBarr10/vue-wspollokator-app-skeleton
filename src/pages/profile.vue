@@ -210,7 +210,7 @@ export default {
         })
       } else {
         chatService.createConversation(this.profile.user_id).then(data => {
-          this.profile.conversation_id= data.id
+          this.profile.conversation_id = data.id
           this.$router.push({
             name: 'Wiadomości',
             params: {
