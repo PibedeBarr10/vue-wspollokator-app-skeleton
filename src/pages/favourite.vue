@@ -44,7 +44,6 @@ export default {
   methods: {
     getUsers() {
       favouriteService.getFavourite().then((data) => {
-        console.log(data);
         this.users = [];
         data.forEach((data) => {
           this.users.push({

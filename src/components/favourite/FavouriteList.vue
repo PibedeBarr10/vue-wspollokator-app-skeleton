@@ -28,7 +28,7 @@
             border-solid border-2 border-black
           "
           style="object-fit: cover; height: 48px; width: 48px"
-          :src="API_URL + user.avatar"
+          :src="user.avatar"
           :alt="user.first_name + ' image'"
         />
       </div>
