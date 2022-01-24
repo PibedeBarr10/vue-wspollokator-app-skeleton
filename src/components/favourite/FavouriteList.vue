@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="users.length === 0"
-    class="flex justify-center items-center w-full justify-center"
+    class="flex justify-center items-center w-full"
     style="height: 100%"
   >
     <p>Brak wyników</p>
@@ -28,12 +28,15 @@
             border-solid border-2 border-black
           "
           style="object-fit: cover; height: 48px; width: 48px"
-          :src="user.avatar"
+          :src="API_URL + user.avatar"
           :alt="user.first_name + ' image'"
         />
       </div>
 
-      <div class="flex justify-between flex-grow pl-0 pr-4 py-4" @click="showUserProfile(user.profile_id)">
+      <div
+        class="flex justify-between flex-grow pl-0 pr-4 py-4"
+        @click="showUserProfile(user.profile_id)"
+      >
         <div>
           <p class="card-title">
             {{ `${user.first_name} ${user.last_name}` }}
@@ -54,6 +57,7 @@
 <script>
 import { TrashIcon } from "@heroicons/vue/outline";
 import favouriteService from "../../services/favouriteService";
+const API_URL = import.meta.env.VITE_API_URL;
 export default {
   components: {
     TrashIcon,
@@ -67,6 +71,7 @@ export default {
   data() {
     return {
       activeUser: -1,
+      API_URL,
     };
   },
   methods: {
