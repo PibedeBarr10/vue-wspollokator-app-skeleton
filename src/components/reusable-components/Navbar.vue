@@ -66,6 +66,7 @@
         space-y-4
         md:flex md:space-y-0 md:flex-row md:mt-0
       "
+      style="z-index: 1000"
     >
       <router-link to="/my-profile" class="btn btn-ghost btn-sm rounded-btn">
         Mój profil

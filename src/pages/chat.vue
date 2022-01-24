@@ -1,5 +1,5 @@
 <template>
-<div class="flex flex-col" style="height: 100vh; overflow: hidden;">
+<div class="flex flex-col" style="max-height: 100vh; overflow: hidden;">
   <div style="max-height:10%;">
         <Navbar/>
   </div>
