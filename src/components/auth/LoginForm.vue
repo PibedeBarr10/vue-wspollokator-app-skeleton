@@ -72,12 +72,20 @@ export default {
       const firstError = errorsArray.find(element => element !== true)
 
       if (firstError) {
-        this.$store.dispatch('notificationModule/show', { text: firstError, type: 'error' })
+        this.$store.dispatch('notificationModule/show', {
+          text: firstError,
+          type: 'error'
+        })
         return
       }
 
       this.$store.dispatch('auth/login', this.loginData).then(() => {
         this.$router.push('dashboard')
+      }).catch(error => {
+        this.$store.dispatch('notificationModule/show', {
+          text: error.response.data.non_field_errors[0],
+          type: 'error'
+        })
       })
     },
     emailRequired(email) {

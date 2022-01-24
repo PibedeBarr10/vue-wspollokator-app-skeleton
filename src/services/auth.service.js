@@ -15,7 +15,9 @@ class AuthService {
                 if (response.data.access_token) {
                     localStorage.setItem('user', JSON.stringify(response.data));
                 }
-                return response.data;
+                return Promise.resolve(response.data);
+            }).catch(error => {
+                return Promise.reject(error);
             });
     }
 
