@@ -65,7 +65,7 @@ export default {
       usersService
         .getProfiles()
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           this.users = [];
           data.forEach((data) => {
             this.users.push({
@@ -94,27 +94,35 @@ export default {
         });
     },
     searchUsers(filters) {
-      usersService.getFilteredProfiles(filters).then((data) => {
-        this.users = [];
-        data.forEach((data) => {
-          this.users.push({
-            id: data.user.id,
-            profile_id: data.user.profile,
-            localization: data.point[0].location.coordinates,
-            radius: data.point[0].radius,
-            first_name: data.user.first_name,
-            last_name: data.user.last_name,
-            avatar: data.avatar,
-            filters: {
-              accepts_animals: data.accepts_animals,
-              age: data.age,
-              preferable_price: data.preferable_price,
-              sex: data.sex,
-              smoking: data.smoking,
-            },
+      usersService.getFilteredProfiles(filters)
+        .then((data) => {
+          this.users = [];
+          data.forEach((data) => {
+            this.users.push({
+              id: data.user.id,
+              profile_id: data.user.profile,
+              localization: data.point[0].location.coordinates,
+              radius: data.point[0].radius,
+              first_name: data.user.first_name,
+              last_name: data.user.last_name,
+              avatar: data.avatar,
+              filters: {
+                accepts_animals: data.accepts_animals,
+                age: data.age,
+                preferable_price: data.preferable_price,
+                sex: data.sex,
+                smoking: data.smoking,
+              },
+            });
           });
+        })
+        .then(() => {
+          console.log(this.users)
+          // this.createMap();
+          this.map.removeLayer(this.markers);
+          this.getAllMarkers();
+          this.setAllMarkersOnMap();
         });
-      });
     },
     createMap() {
       this.map = L.map("mapContainer").setView([52, 19.05], 6);
