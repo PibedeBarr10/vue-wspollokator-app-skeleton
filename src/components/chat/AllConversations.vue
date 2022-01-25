@@ -1,11 +1,8 @@
 <template>
   <div class="flex flex-col">
     <button v-on:click="onInputChange"></button>
-    <!-- {{ searchInput }} -->
     <div v-for="conversation in filterByFullName()" :key="conversation">
       <button v-on:click="onInputChange"></button>
-      <!-- {{ conversation.name }} -->
-      <!-- <div v-if="test(conversation)"> -->
       <div v-if="conversation.is_group">
         <div
           class="flex m-2 bg-white rounded-lg p-2 cursor-pointer btn-ghost"
@@ -36,7 +33,6 @@
           </div>
         </div>
       </div>
-      <!-- </div> -->
       <div v-else v-for="index in conversation.users" :key="index">
         <div
           v-if="index.id !== currentUserId"
