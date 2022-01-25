@@ -70,6 +70,9 @@ export default {
       radius: 1,
     }
   },
+  emits: [
+    "addMessageToToDoForUser"
+  ],
   mounted () {
     // reset znaczników na mapie
     document.getElementById('mapContainer').innerHTML = '<div v-if="coordinates !== []" id="mapContainer" class="lg:w-3/5 lg:h-2/5 mapstyle py-4 rounded-box mx-auto my-4"/>'

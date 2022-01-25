@@ -25,7 +25,6 @@
       'rounded-full': round,
     }"
     v-bind="$attrs"
-    v-on="$listeners"
   >
     <slot></slot>
   </button>

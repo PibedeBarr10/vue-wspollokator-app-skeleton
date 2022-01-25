@@ -70,18 +70,18 @@ export default {
             bodyFormData.append('description', data.profile.description)
             bodyFormData.append('is_searchable', data.profile.is_searchable)
 
-            console.log(this.getters.profileCreated)
+            // console.log(this.getters.profileCreated)
 
             if (this.getters.profileCreated) {
                 bodyFormData.append('id', data.profile.id)
                 if (data.profile.avatar !== null && typeof data.profile.avatar !== "string") {
-                    console.log(data.profile.avatar, typeof data.profile.avatar)
+                    // console.log(data.profile.avatar, typeof data.profile.avatar)
                     bodyFormData.append('avatar', data.profile.avatar)
                 }
 
                 return profileService.changeProfile(data.user.pk, bodyFormData)
                     .then(data => {
-                        console.log(data)
+                        // console.log(data)
                         return data
                     }).catch(error => {
                         return error

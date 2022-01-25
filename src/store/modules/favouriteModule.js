@@ -44,7 +44,7 @@ export default {
   },
   mutations: {
     saveFavourite(state, list) {
-      console.log(list);
+      // console.log(list);
     //   state.list.push(list);
     },
     loginFailure(state) {

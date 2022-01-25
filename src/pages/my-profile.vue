@@ -290,14 +290,14 @@ export default {
       const isEqual = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 
       if (!isEqual(keys1, keys2)) {
-        console.error("Different keys", keys1, keys2);
+        // console.error("Different keys", keys1, keys2);
         return;
       }
 
       for (let key of keys1) {
         if (this.profile[key] !== storeProfile[key]) {
           this.profileDataChanged = false;
-          console.log(this.profile[key], storeProfile[key], key, "diff");
+          // console.log(this.profile[key], storeProfile[key], key, "diff");
           return;
         }
       }
@@ -309,8 +309,7 @@ export default {
       profileService
         .getProfile(this.currentUser.user.pk)
         .then((data) => {
-          this.$store
-            .dispatch("getProfile", {
+          this.$store.dispatch("getProfile", {
               pk: this.currentUser.user.pk,
             })
             .then(() => {
@@ -323,7 +322,7 @@ export default {
             });
         })
         .catch((error) => {
-          if (error.response.data.detail === "Not found.") {
+          if (error.response.data.detail === "Not found." || error.response.data.detail === "Nie znaleziono.") {
             this.toDoForUser.push(
               'Uzupełnij dane profilu (zapisz zmiany klikając w przycisk "Zapisz zmiany w profilu")'
             );

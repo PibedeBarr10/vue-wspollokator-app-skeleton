@@ -88,13 +88,14 @@ router.beforeEach((to, from, next) => {
         .getProfile(JSON.parse(loggedIn).user.pk)
         .then(() => {
           pointService.getUserPoint().then((data) => {
+            // console.log(data)
             if (data.length === 0) {
               router.push("/my-profile");
             }
           });
         })
         .catch((error) => {
-          if (error.response.data.detail === "Not found.") {
+          if (error.response.data.detail === "Not found." || error.response.data.detail === "Nie znaleziono.") {
             router.push("/my-profile");
           }
         });

@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     deleteFromFavourite(id) {
-      console.log(this.users === 0);
+      // console.log(this.users === 0);
       favouriteService
         .removeFavourite(id)
         .then(() => window.location.reload(true));

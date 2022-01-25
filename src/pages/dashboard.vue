@@ -117,7 +117,7 @@ export default {
           });
         })
         .then(() => {
-          console.log(this.users)
+          // console.log(this.users)
           // this.createMap();
           this.map.removeLayer(this.markers);
           this.getAllMarkers();

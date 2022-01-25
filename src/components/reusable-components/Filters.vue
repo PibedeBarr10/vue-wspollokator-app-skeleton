@@ -101,6 +101,9 @@
 <script>
 export default {
   name: "Filters",
+  emits: [
+    "searchUsers"
+  ],
   data () {
     return {
       accepts_animals: 'I',

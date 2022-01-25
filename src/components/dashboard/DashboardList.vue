@@ -68,6 +68,9 @@ export default {
       required: true,
     },
   },
+  emits: [
+    "setMarkersOnMap"
+  ],
   data() {
     return {
       activeUser: -1,
@@ -93,8 +96,11 @@ export default {
             type: "success",
           });
         })
-        .catch((err) => {
-          console.log("blad", err);
+        .catch(() => {
+          this.$store.dispatch("notificationModule/show", {
+            text: "Wystąpił błąd przy dodawaniu do ulubionych",
+            type: "error",
+          });
         });
     },
     showUserProfile(id) {

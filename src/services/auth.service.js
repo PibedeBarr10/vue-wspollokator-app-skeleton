@@ -52,6 +52,10 @@ class AuthService {
             last_name: user.lastName,
             email: user.email,
             password: user.password
+        }).then(response => {
+            return Promise.resolve(response);
+        }).catch(error => {
+            return Promise.reject(error);
         });
     }
     changePassword(newpassword)

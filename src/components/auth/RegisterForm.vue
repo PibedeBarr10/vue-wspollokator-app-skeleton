@@ -102,7 +102,18 @@ export default {
       }
 
       this.$store.dispatch('auth/register', this.registerData).then(() => {
+        this.$store.dispatch('notificationModule/show', {
+          text: 'Rejestracja przebiegła pomyślnie, możesz teraz się zalogować',
+          type: 'success'
+        })
         this.$router.push('login')
+      }).catch((error) => {
+        const firstKey = Object.keys(error.response.data)[0]
+
+        this.$store.dispatch('notificationModule/show', {
+          text: error.response.data[firstKey][0],
+          type: 'error'
+        })
       })
     },
     emailRequired(email) {

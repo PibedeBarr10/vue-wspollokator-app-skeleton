@@ -26,8 +26,6 @@
 <script>
 import { StarIcon as StarOutlineIcon } from '@heroicons/vue/outline'
 import { StarIcon as StarSolidIcon } from '@heroicons/vue/solid'
-import usersService from '../../services/usersService'
-import profileService from '../../services/profileService'
 
 export default {
   components: {
@@ -44,19 +42,7 @@ export default {
     return {
       name: ''
     }
-  },
-  // mounted () {
-  //   this.getUserName()
-  // },
-  // methods: {
-  //   getUserName() {
-  //     console.log(this.opinion.issued_by)
-  //     usersService.getProfile(this.opinion.issued_by).then((data) => {
-  //       console.log(data)
-  //       this.name = data.first_name + ' ' + data.last_name
-  //     })
-  //   }
-  // }
+  }
 }
 </script>
 

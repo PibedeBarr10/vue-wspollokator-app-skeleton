@@ -55,7 +55,7 @@ export default {
       usersService
         .getProfiles()
         .then((data) => {
-          console.log(data);
+          // console.log(data);
           this.users = [];
           data.forEach((data) => {
             this.users.push({
@@ -86,7 +86,7 @@ export default {
       const data = new Date();
       data.setDate(today.getDate() - 1);
       usersService.getFilteredProfiles({ min_updated_at: data }).then((data) => {
-      console.log(data.response)
+      // console.log(data.response)
         this.users = [];
         data.forEach((data) => {
           this.users.push({

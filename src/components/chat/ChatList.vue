@@ -163,7 +163,7 @@ export default {
         
         chatService.createGroupConversation(this.checkedUsersId,this.nameGroup).then((data)=>{
           this.$store.dispatch('notificationModule/show',{text:'Utworzono konwersacje grupową', type:'success'})
-          console.log(data);
+          // console.log(data);
         });
       }
     },

@@ -12,11 +12,11 @@ export default {
         return response.data;
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   },
   addFavourite(id) {
-    console.log(id);
+    // console.log(id);
     return axios
       .post(
         `${API_URL}/favourite/add/`,
@@ -29,7 +29,7 @@ export default {
         return response.data;
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   },
   removeFavourite(id) {

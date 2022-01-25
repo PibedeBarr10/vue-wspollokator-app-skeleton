@@ -8,7 +8,7 @@
         placeholder="E-mail"
         class="mt-5"
         ref="email"
-        :rules="[emailValidation, emailRequired]"
+        :rules="[emailRegex, emailRequired]"
       />
       <input
         v-model="loginData.password"
@@ -82,8 +82,10 @@ export default {
       this.$store.dispatch('auth/login', this.loginData).then(() => {
         this.$router.push('dashboard')
       }).catch(error => {
+        const firstKey = Object.keys(error.response.data)[0]
+
         this.$store.dispatch('notificationModule/show', {
-          text: error.response.data.non_field_errors[0],
+          text: error.response.data[firstKey][0],
           type: 'error'
         })
       })

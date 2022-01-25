@@ -4,7 +4,7 @@ const API_URL = import.meta.env.VITE_API_URL;
 
 export default {
   addOpinion(issuedBy, issuedTo, rate, textOpinion) {
-    console.log(issuedBy, issuedTo, rate, textOpinion);
+    // console.log(issuedBy, issuedTo, rate, textOpinion);
     return axios
       .post(
         `${API_URL}/opinions/`,
@@ -20,7 +20,7 @@ export default {
         return response.data;
       })
       .catch((err) => {
-        console.log(err);
+        // console.log(err);
       });
   },
   getOpinionsAboutMe() {
