@@ -21,6 +21,27 @@ class AuthService {
             });
     }
 
+    refresh() {
+        let user = JSON.parse(localStorage.getItem('user'))
+
+        return axios.post(
+          API_URL + '/auth/token/refresh/',
+          {
+              refresh: user.refreshToken,
+          },
+          { withCredentials: true, }
+        ).then(response => {
+            if (response.data.access) {
+                user.access_token = response.data.access
+                user.refresh_token = response.data.refresh
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+            return Promise.resolve(response.data);
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    }
+
     logout() {
         localStorage.removeItem('user');
     }
