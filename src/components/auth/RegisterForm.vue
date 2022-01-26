@@ -85,6 +85,7 @@ export default {
 
       const errorsArray = [
         this.emailRequired(this.registerData.email),
+        this.emailLowercase(this.registerData.email),
         this.emailRegex(this.registerData.email),
         this.passwordRequired(this.registerData.password),
         this.passwordRegex(this.registerData.password),
@@ -118,6 +119,9 @@ export default {
     },
     emailRequired(email) {
       return !!email || 'E-mail jest wymagany'
+    },
+    emailLowercase(email) {
+      return email.toLowerCase() === email || 'Podaj poprawny adres e-mail.'
     },
     emailRegex(email) {
       return /.+@.+\..+/.test(email) || 'Nieprawidłowy e-mail'
