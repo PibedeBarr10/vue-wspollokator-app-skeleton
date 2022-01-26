@@ -54,7 +54,7 @@ export default {
         ocena: 1,
         textOpinion: ''
       },
-      opinionCharactersLimit: 500,
+      opinionCharactersLimit: 1000,
       opinionLengthError: false
     }
   },

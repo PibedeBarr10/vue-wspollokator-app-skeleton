@@ -39,46 +39,54 @@ import { ArrowRightIcon } from "@heroicons/vue/outline";
 import MessageOut from "./MessageOut.vue";
 
 export default {
-   props:{
+  props: {
     name: String,
     currentUserId: String,
-    messageList:{
-       user:String,
-        user_name:String,
-        text:String,
-        is_read:Boolean,
-        created_at:String
+    messageList: {
+      user: String,
+      user_name: String,
+      text: String,
+      is_read: Boolean,
+      created_at: String
     },
-    users:{
-       id: String,
-       first_name: String,
-       last_name: String,
-       profile: String,
-       avatar: String,
+    users: {
+      id: String,
+      first_name: String,
+      last_name: String,
+      profile: String,
+      avatar: String,
     },
-   },
-  components: {
-      MessageIn,
-      MessageOut,
-      ArrowRightIcon,
   },
-  data() {
+  components: {
+    MessageIn,
+    MessageOut,
+    ArrowRightIcon,
+  },
+  data () {
     return {
-      message:'',
+      message: '',
+      messageLimit: 500,
     }
   },
  
   methods: {
-    sendMessage() {
-      this.$emit('send', this.message);
-      this.message='';
+    sendMessage () {
+      if (this.message.length > this.messageLimit) {
+        this.$store.dispatch('notificationModule/show', {
+          text: `Treść wiadomości nie może przekroczyć ${this.messageLimit} znaków`,
+          type: 'error'
+        })
+        return
+      }
+
+      this.$emit('send', this.message)
+      this.message = ''
     },
-    getAvatar(oponentUserId)
-    {
-      var avatar='';
+    getAvatar (oponentUserId) {
+      let avatar = ''
       this.users.forEach(user => {
-        if(user.id === oponentUserId) avatar=user.avatar;  
-      });
+        if (user.id === oponentUserId) avatar = user.avatar
+      })
       return avatar
     },
   },

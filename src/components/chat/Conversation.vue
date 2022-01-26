@@ -43,22 +43,22 @@ import { ArrowRightIcon } from "@heroicons/vue/outline";
 import MessageOut from "../chat/MessageOut.vue";
 
 export default {
-   props:{
-    messageList:{
-       user:String,
-        user_name:String,
-        text:String,
-        is_read:Boolean,
-        created_at:String
+  props:{
+    messageList: {
+      user:String,
+      user_name:String,
+      text:String,
+      is_read:Boolean,
+      created_at:String
     },
-    oponentUser:{
-       id: String,
-       first_name: String,
-       last_name: String,
-       profile: String,
-       avatar: String,
+    oponentUser: {
+      id: String,
+      first_name: String,
+      last_name: String,
+      profile: String,
+      avatar: String,
     },
-   },
+  },
   components: {
       MessageIn,
       MessageOut,
@@ -66,7 +66,8 @@ export default {
   },
   data() {
     return {
-      message:'',
+      message: '',
+      messageLimit: 500,
     }
   },
   // watch: {
@@ -78,14 +79,22 @@ export default {
   //    }
   // },
   methods: {
-    scrollDown() {
+    scrollDown () {
       const elem = document.getElementById('conversationData');
       elem.scrollIntoView({ behavior: "smooth" })
       elem.scrollTop = elem.scrollHeight;
     },
-    sendMessage() {
-      this.$emit('send', this.message);
-      this.message='';
+    sendMessage () {
+      if (this.message.length > this.messageLimit) {
+        this.$store.dispatch('notificationModule/show', {
+          text: `Treść wiadomości nie może przekroczyć ${this.messageLimit} znaków`,
+          type: 'error'
+        })
+        return
+      }
+
+      this.$emit('send', this.message)
+      this.message = ''
     },
   },
 };
