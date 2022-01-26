@@ -1,12 +1,13 @@
 <template>
   <div class="flex flex-col w-3/12 bg-gray-100" style="height:100vh;" >
-     <div class="flex text-lg font-extrabold p-3" style="max-height:10%;">
+     <div class="font-extrabold p-3 hidden sm:flex sm:text-sm md:text-lg" style="max-height:10%;">
          Wiadomości
      </div> 
      <!-- poki co ukryta wyszukiwarka -->
-      <div class ="p-3 ">
+      <div class ="p-3">
           <div class="relative">
-              <input type="text" placeholder="Wyszukaj" class=" w-full input" v-model="searchInput">
+              <input type="text" placeholder="Wyszukaj" class="w-full input hidden md:flex" v-model="searchInput">
+              <input type="text" placeholder="" class="w-full input flex md:hidden" v-model="searchInput">
               <button class="absolute top-0 right-0 rounded-l-none btn btn-ghost"><SearchIcon class="h-6 w-6"/></button>
           </div> 
       </div>
@@ -14,7 +15,7 @@
       
       <UsersTopBar/> 
       -->
-      <div class="flex flex-col mb-20" style="flex:1; overflow:hidden; overflow-y:auto;">
+      <div class="flex flex-col mb-20" style="flex:1; overflow: hidden; overflow-y: auto;">
         <AllConversations
           :searchInput="searchInput"
           :conversationsList="conversationsList"

@@ -19,12 +19,12 @@
               <div>{{ conversation.name }}</div>
               <div
                 v-if="conversation.last_message.text !== ''"
-                class="text-gray-400"
+                class="text-gray-400 hidden md:flex"
               >
                 {{ moment(conversation.last_message.created_at) }}
               </div>
             </div>
-            <div class="text-xs text-gray-500">
+            <div class="text-xs text-gray-500 hidden sm:flex">
               <span v-if="conversation.last_message.user === currentUserId"
                 >Ty:</span
               >
@@ -41,25 +41,28 @@
         >
           <div>
             <img
-              class="w-14 rounded-full"
-              style="max-height: 3.5rem; max-width: 3.5rem"
+              class="rounded-full w-14"
+              style="max-height: 3.5rem; max-width: 3.5rem;"
               :src="index.avatar"
               alt="avatar"
             />
           </div>
+
+<!--          invisible md:visible-->
+
           <div class="flex-grow p-3">
-            <div class="flex justify-between text-xs">
+            <div class="flex justify-between text-xs hidden sm:flex">
               <div>{{ index.first_name }} {{ index.last_name }}</div>
               <div
                 v-if="conversation.last_message.text !== ''"
-                class="text-gray-400"
+                class="text-gray-400 hidden md:block"
               >
                 {{ moment(conversation.last_message.created_at) }}
               </div>
               <!-- v-if by wyświetlać tylko raz  -->
               <!-- {{conversation.last_message_created_at}} -->
             </div>
-            <div class="text-xs text-gray-500">
+            <div class="text-xs text-gray-500 w-full hidden sm:block truncate text-ellipsis overflow-hidden">
               <span v-if="conversation.last_message.user === currentUserId"
                 >Ty:</span
               >
@@ -104,7 +107,7 @@ export default {
       this.$emit("clicked", chooseConversationId, oponentUser)
     },
     moment: function (data) {
-      return moment(data).format("LT")
+      return moment(data).format('HH:mm')
     },
     chooseGroupConversation(chooseGroupConversationId, users, name) {
       this.$emit("clickedGroup", chooseGroupConversationId, users, name)

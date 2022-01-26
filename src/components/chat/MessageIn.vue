@@ -34,7 +34,7 @@ export default {
   },
   methods: {
     moment: function (data) {
-      return moment(data).format('LT');
+      return moment(data).format('HH:mm');
     }
   },
 };
