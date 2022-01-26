@@ -14,7 +14,7 @@
         class="dashboard-list-container h-full flex-50"
         style="overflow: hidden; overflow-y: scroll"
       >
-        <DashboardList :users="users" @setMarkersOnMap="setMarkersOnMap" />
+        <DashboardList :users="users" @setMarkersOnMap="setMarkersOnMap" @addToFav="addToFav" />
       </div>
       <div
         id="mapContainer"
@@ -33,6 +33,7 @@ import DashboardList from "../components/dashboard/DashboardList.vue";
 import Navbar from "../components/reusable-components/Navbar.vue";
 import Filters from "../components/reusable-components/Filters.vue";
 import usersService from "../services/usersService";
+import favouriteService from "../services/favouriteService";
 
 export default {
   components: {
@@ -46,7 +47,8 @@ export default {
       map: null,
       markers: [],
       groupMarker: null,
-      users: [],
+      users: []
+      // favouriteUsers: []
     };
   },
   computed: {
@@ -56,9 +58,9 @@ export default {
   },
   mounted() {
     if (!this.currentUser) {
-      this.$router.push("/login");
+      this.$router.push('/login')
     }
-    this.getUsers();
+    this.getUsers()
   },
   methods: {
     getUsers() {
@@ -83,20 +85,22 @@ export default {
                 sex: data.sex,
                 smoking: data.smoking,
               },
-            });
-          });
+              favourite: false
+            })
+          })
         })
         .then(() => {
           // console.log(this.users)
-          this.createMap();
-          this.getAllMarkers();
-          this.setAllMarkersOnMap();
+          this.createMap()
+          this.getAllMarkers()
+          this.setAllMarkersOnMap()
+          this.getFavouriteUsers()
         });
     },
     searchUsers(filters) {
       usersService.getFilteredProfiles(filters)
         .then((data) => {
-          this.users = [];
+          this.users = []
           data.forEach((data) => {
             this.users.push({
               id: data.user.id,
@@ -113,15 +117,17 @@ export default {
                 sex: data.sex,
                 smoking: data.smoking,
               },
-            });
-          });
+              favourite: false
+            })
+          })
         })
         .then(() => {
           // console.log(this.users)
           // this.createMap();
-          this.map.removeLayer(this.markers);
-          this.getAllMarkers();
-          this.setAllMarkersOnMap();
+          this.map.removeLayer(this.markers)
+          this.getAllMarkers()
+          this.setAllMarkersOnMap()
+          this.getFavouriteUsers()
         });
     },
     createMap() {
@@ -132,7 +138,7 @@ export default {
           '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(this.map);
 
-      let customPane = this.map.createPane("customPane");
+      let customPane = this.map.createPane('customPane');
       customPane.style.zIndex = 399;
     },
     getAllMarkers() {
@@ -156,6 +162,28 @@ export default {
       this.groupMarker = L.marker(this.users[groupIndex].localization);
       this.map.addLayer(this.groupMarker);
     },
+    getFavouriteUsers() {
+      favouriteService.getFavourite().then((data) => {
+        // this.favouriteUsers = []
+        data.forEach((favUser) => {
+          this.users.forEach((user) => {
+            // console.log('1', user.id, favUser.user_id)
+            if (user.id === favUser.user_id) {
+              user.favourite = true
+              // console.log('tak')
+            }
+          })
+        })
+        // console.log(this.users[0])
+      })
+    },
+    addToFav (id) {
+      this.users.forEach((user) => {
+        if (user.id === id) {
+          user.favourite = true
+        }
+      })
+    }
   },
 };
 </script>

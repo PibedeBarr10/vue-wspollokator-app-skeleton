@@ -100,38 +100,37 @@ export default {
     },
   },
   methods: {
-    chooseConversation(chooseConversationId, oponentUser) {
-      this.$emit("clicked", chooseConversationId, oponentUser);
+    chooseConversation (chooseConversationId, oponentUser) {
+      this.$emit("clicked", chooseConversationId, oponentUser)
     },
     moment: function (data) {
-      return moment(data).format("LT");
+      return moment(data).format("LT")
     },
     chooseGroupConversation(chooseGroupConversationId, users, name) {
-      this.$emit("clickedGroup", chooseGroupConversationId, users, name);
+      this.$emit("clickedGroup", chooseGroupConversationId, users, name)
     },
     filterByFullName() {
-      const search = this.searchInput;
+      const search = this.searchInput
       const current_user_id = this.currentUserId
   
-      if (!search) return this.conversationsList;
+      if (!search) return this.conversationsList
       for (let index = 0; index < this.conversationsList.length; index++) {
-          const value = this.conversationsList[index];
+          const value = this.conversationsList[index]
           let opposite_name_user = ""
           for (let user of value.users) {
-            if (user.id != current_user_id) {
+            if (user.id !== current_user_id) {
                 opposite_name_user = user.first_name + " " + user.last_name
-                break;
+                break
             }
           }
           let valid_full_name = opposite_name_user.toLowerCase().includes(this.searchInput.toLowerCase())
-          if (valid_full_name == true) {
-            console.log('dodac')
-          }
-          else {
+          if (valid_full_name === true) {
+            // console.log('dodac')
+          } else {
             this.conversationsList.splice(index, 1)
           }
       }
-      return this.conversationsList;
+      return this.conversationsList
     },
   },
 };

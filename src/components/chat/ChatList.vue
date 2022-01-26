@@ -6,7 +6,7 @@
      <!-- poki co ukryta wyszukiwarka -->
       <div class ="p-3 ">
           <div class="relative">
-              <input type="text" placeholder="Wyszukaj" class=" w-full input"  v-model="searchInput"> 
+              <input type="text" placeholder="Wyszukaj" class=" w-full input" v-model="searchInput">
               <button class="absolute top-0 right-0 rounded-l-none btn btn-ghost"><SearchIcon class="h-6 w-6"/></button>
           </div> 
       </div>
@@ -88,7 +88,6 @@
           </div>
         </div>
       </div>
-      
  </div>
 </template>
 
@@ -99,10 +98,15 @@ import { SearchIcon } from "@heroicons/vue/outline";
 import favouriteService from "../../services/favouriteService";
 import chatService from "../../services/chatService";
 export default {
-  props:{
+  components: {
+    UsersTopBar,
+    AllConversations,
+    SearchIcon,
+  },
+  props: {
+    searchInput: String,
     currentUserId: String,
-    conversationsList:
-    {
+    conversationsList: {
       id: String,
       is_group: Boolean,
       name: String,
@@ -113,7 +117,7 @@ export default {
         profile: String,
         avatar: String,
       },
-      last_message:{
+      last_message: {
         user: String,
         user_name: String,
         text: String,
@@ -122,58 +126,44 @@ export default {
       },
     }
   },
-  data() {
+  data () {
     return {
       favouriteUsers: [],
       checkedUsersId: [],
       nameGroup: '',
-    };
-  },
-   mounted() {
-  },
-  components: {
-      UsersTopBar,
-      AllConversations,
-      SearchIcon,
-  },
- 
-  methods: {
-    onClickChild (chooseConversationId,oponentUser)
-    {
-      this.$emit('clicked', chooseConversationId,oponentUser)
-    },
-    onClickChildGroup (chooseGroupConversationId,users,name)
-    {
-      this.$emit('clickedGroup', chooseGroupConversationId, users,name)
-    },
-    getUsers() {
-      this.checkedUsersId=[];
-      this.nameGroup="";
-      favouriteService.getFavourite().then((data) => {
-        this.favouriteUsers = data;
-      });
-    },
-    createGroup()
-    {
-      if(this.nameGroup=="" || this.checkedUsersId.length <2 )
-      {
-        this.$store.dispatch('notificationModule/show',{text:'Nie podano nazwy grupy/Za mało osób: minimum 2', type:'error'})
-      }
-      else
-      {
-        
-        chatService.createGroupConversation(this.checkedUsersId,this.nameGroup).then((data)=>{
-          this.$store.dispatch('notificationModule/show',{text:'Utworzono konwersacje grupową', type:'success'})
-          // console.log(data);
-        });
-      }
-    },
-    searchConversations(input){
-      console.log(input)
     }
   },
-  
-};
+  methods: {
+    onClickChild (chooseConversationId, oponentUser) {
+      this.$emit('clicked', chooseConversationId, oponentUser)
+    },
+    onClickChildGroup (chooseGroupConversationId, users, name) {
+      this.$emit('clickedGroup', chooseGroupConversationId, users, name)
+    },
+    getUsers() {
+      this.checkedUsersId = []
+      this.nameGroup = ""
+      favouriteService.getFavourite().then((data) => {
+        this.favouriteUsers = data
+      })
+    },
+    createGroup() {
+      if (this.nameGroup === "" || this.checkedUsersId.length < 2) {
+        this.$store.dispatch('notificationModule/show',{
+          text: 'Nie podano nazwy grupy/Za mało osób: minimum 2',
+          type: 'error'
+        })
+      } else {
+        chatService.createGroupConversation(this.checkedUsersId, this.nameGroup).then(() => {
+          this.$store.dispatch('notificationModule/show', {
+            text:'Utworzono konwersacje grupową',
+            type:'success'
+          })
+        })
+      }
+    }
+  }
+}
 </script>
 
 <style scoped>

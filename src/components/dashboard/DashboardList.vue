@@ -44,9 +44,15 @@
         </div>
       </div>
       <div class="flex items-center justify-center w-10">
-        <HeartIcon
+        <HeartIconOutline
+          v-if="!user.favourite"
           class="h-5 w-5 text-red-500 cursor-pointer"
           @click="sendToFavourite(user.id)"
+        />
+
+        <HeartIconSolid
+          v-else
+          class="h-5 w-5 text-red-500 cursor-pointer"
         />
       </div>
     </div>
@@ -55,12 +61,14 @@
 </template>
 
 <script>
-import { HeartIcon } from "@heroicons/vue/outline";
-import favouriteService from "../../services/favouriteService";
+import { HeartIcon as HeartIconOutline } from '@heroicons/vue/outline'
+import { HeartIcon as HeartIconSolid } from '@heroicons/vue/solid'
+import favouriteService from '../../services/favouriteService'
 
 export default {
   components: {
-    HeartIcon,
+    HeartIconOutline,
+    HeartIconSolid
   },
   props: {
     users: {
@@ -69,43 +77,50 @@ export default {
     },
   },
   emits: [
-    "setMarkersOnMap"
+    'setMarkersOnMap',
+    'addToFav'
   ],
   data() {
     return {
-      activeUser: -1,
-    };
+      activeUser: -1
+    }
   },
   methods: {
     getUserOnHover(user = null) {
-      const oldActiveUserIndex = this.activeUser;
+      const oldActiveUserIndex = this.activeUser
       user
         ? (this.activeUser = this.users.indexOf(user))
-        : (this.activeUser = -1);
+        : (this.activeUser = -1)
 
       if (this.activeUser !== oldActiveUserIndex) {
-        this.$emit("setMarkersOnMap", this.activeUser);
+        this.$emit('setMarkersOnMap', this.activeUser)
       }
     },
     sendToFavourite(id) {
       favouriteService
         .addFavourite(id)
         .then(() => {
-          this.$store.dispatch("notificationModule/show", {
-            text: "Dodano do ulubionych",
-            type: "success",
-          });
+          this.$store.dispatch('notificationModule/show', {
+            text: 'Dodano do ulubionych',
+            type: 'success',
+          })
+          this.$emit('addToFav', id)
         })
         .catch(() => {
           this.$store.dispatch("notificationModule/show", {
-            text: "Wystąpił błąd przy dodawaniu do ulubionych",
-            type: "error",
+            text: 'Wystąpił błąd przy dodawaniu do ulubionych',
+            type: 'error',
           });
         });
     },
     showUserProfile(id) {
-      this.$router.push({ name: "Profil użytkownika", params: { id: id } });
-    },
+      this.$router.push({
+        name: 'Profil użytkownika',
+        params: {
+          id: id
+        }
+      })
+    }
   },
 };
 </script>
