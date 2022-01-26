@@ -4,18 +4,19 @@
          Wiadomości
      </div> 
      <!-- poki co ukryta wyszukiwarka -->
-     <!-- <div class ="p-3 ">
-         <div class="relative">
-            <input type="text" placeholder="Wyszukaj" class=" w-full input"> 
-            <button class="absolute top-0 right-0 rounded-l-none btn btn-ghost"><SearchIcon class="h-6 w-6"/></button>
-         </div> 
-      </div> -->
+      <div class ="p-3 ">
+          <div class="relative">
+              <input type="text" placeholder="Wyszukaj" class=" w-full input"  v-model="searchInput"> 
+              <button class="absolute top-0 right-0 rounded-l-none btn btn-ghost"><SearchIcon class="h-6 w-6"/></button>
+          </div> 
+      </div>
       <!-- póki co ukryte
       
       <UsersTopBar/> 
       -->
       <div class="flex flex-col mb-20" style="flex:1; overflow:hidden; overflow-y:auto;">
         <AllConversations
+          :searchInput="searchInput"
           :conversationsList="conversationsList"
           :currentUserId="currentUserId"
           @clicked="onClickChild"
@@ -167,6 +168,9 @@ export default {
         });
       }
     },
+    searchConversations(input){
+      console.log(input)
+    }
   },
   
 };
