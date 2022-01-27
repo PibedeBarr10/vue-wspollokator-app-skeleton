@@ -1,7 +1,7 @@
 <template>
 <div class="flex flex-col" style="max-height: 100vh; overflow: hidden;">
   <div style="max-height:10%;">
-        <Navbar/>
+    <Navbar/>
   </div>
   <div class="flex flex-col" style=" flex:1;">
     <div class="flex flex-grow">
@@ -13,6 +13,7 @@
       />
       <Conversation
         v-if="chooseConversationId !== '0' && !loading && !isGroup"
+        ref="conversationComponent"
         :messageList="this.messageList"
         :oponentUser="this.oponentUser"
         @send="sendMessageChild"
@@ -67,15 +68,14 @@ export default {
         id: '',
         is_group: false,
         name: '',
-        users:
-        {
+        users: {
           id: '',
           first_name: '',
           last_name: '',
           profile: '',
           avatar: '',
         },
-        last_message:{
+        last_message: {
           user: '',
           user_name: '',
           text: '',
@@ -84,14 +84,14 @@ export default {
         },
 
       },
-      messageList:{ 
-        user:'',
-        user_name:'',
-        text:'',
-        is_read:false,
-        created_at:''
+      messageList: {
+        user: '',
+        user_name: '',
+        text: '',
+        is_read: false,
+        created_at: ''
       },
-      oponentUser:{
+      oponentUser: {
          id: '',
          first_name: '',
          last_name: '',
@@ -102,6 +102,7 @@ export default {
       loading: true,
       interval: null,
       isGroup: false,
+      canScroll: false
     }
   },
   computed: {
@@ -120,20 +121,24 @@ export default {
         }
       })
       if(this.chooseConversationId !== '0'){
-          chatService.getConversation(this.chooseConversationId).then(data => {
-            this.messageList = JSON.parse(JSON.stringify(data))
-           });
+        chatService.getConversation(this.chooseConversationId).then(data => {
+          this.messageList = JSON.parse(JSON.stringify(data))
+        }).then(() => {
+          if (this.canScroll) {
+            this.$refs.conversationComponent.scrollDown()
+            this.canScroll = false
+          }
+        })
       }
       this.loading = false
-    },1500);
+    },1500)
     this.getConversations()
   },
   beforeUnmount(){
     clearInterval(this.interval);
   },
   methods: {
-    getConversations()
-    {
+    getConversations () {
         chatService.getConversations().then(data => {
           if (data.length > 0) {
             this.conversationsList = JSON.parse(JSON.stringify(data))
@@ -141,13 +146,13 @@ export default {
       }).then(()=> {
         this.getConversation()})
     },
-    onClickChildChild(chooseConversationId, oponentUser) {
+    onClickChildChild (chooseConversationId, oponentUser) {
       this.oponentUser = oponentUser
       this.loading = true
       this.isGroup = false 
       this.$router.push({name: 'Wiadomości', params: { chooseConversationId: chooseConversationId } })
     },
-    onClickChildChildGroup(chooseGroupConversationId,users,name)
+    onClickChildChildGroup (chooseGroupConversationId,users,name)
     {
       this.users = users
       this.loading= true
@@ -155,32 +160,31 @@ export default {
       this.nameGroup=name
       this.$router.push({name: 'Wiadomości', params: { chooseConversationId: chooseGroupConversationId } })
     },
-    sendMessageChild(message)
-    {
+    sendMessageChild (message) {
       chatService.sendMessage(this.chooseConversationId, message).then(() => {
-        console.log("wysłano wiadomość")
+        // console.log("wysłano wiadomość")
+
+        this.canScroll = true
       })
     },
-    getConversation()
-    {
-      if(this.chooseConversationId!=='0'){
-        
-          this.conversationsList.forEach(item => {
-            if (item.id ===this.chooseConversationId) {
-              item.users.forEach(item2 => {
-                if(item2.id !== this.currentUser.user.pk) {
-                  this.oponentUser.id = item2.id;
-                  this.oponentUser.last_name = item2.last_name;
-                  this.oponentUser.first_name = item2.first_name;
-                  this.oponentUser.profile = item2.profile;
-                  this.oponentUser.avatar = item2.avatar;
-                }
-              })
-            }
-          });
-          chatService.getConversation(this.chooseConversationId).then(data => {
-            this.messageList = JSON.parse(JSON.stringify(data))
-          });
+    getConversation () {
+      if(this.chooseConversationId !== '0') {
+        this.conversationsList.forEach(item => {
+          if (item.id ===this.chooseConversationId) {
+            item.users.forEach(item2 => {
+              if (item2.id !== this.currentUser.user.pk) {
+                this.oponentUser.id = item2.id
+                this.oponentUser.last_name = item2.last_name
+                this.oponentUser.first_name = item2.first_name
+                this.oponentUser.profile = item2.profile
+                this.oponentUser.avatar = item2.avatar
+              }
+            })
+          }
+        })
+        chatService.getConversation(this.chooseConversationId).then(data => {
+          this.messageList = JSON.parse(JSON.stringify(data))
+        })
       }
     }
   }

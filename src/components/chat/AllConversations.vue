@@ -50,7 +50,7 @@
 
 <!--          invisible md:visible-->
 
-          <div class="flex-grow p-3">
+          <div class="flex-grow p-3" style="overflow: hidden">
             <div class="flex justify-between text-xs hidden sm:flex">
               <div>{{ index.first_name }} {{ index.last_name }}</div>
               <div

@@ -4,7 +4,7 @@
          Wiadomości
      </div> 
      <!-- poki co ukryta wyszukiwarka -->
-      <div class ="p-3">
+      <div class ="px-2">
           <div class="relative">
               <input type="text" placeholder="Wyszukaj" class="w-full input hidden md:flex" v-model="searchInput">
               <input type="text" placeholder="" class="w-full input flex md:hidden" v-model="searchInput">
@@ -15,7 +15,7 @@
       
       <UsersTopBar/> 
       -->
-      <div class="flex flex-col mb-20" style="flex:1; overflow: hidden; overflow-y: auto;">
+      <div class="flex flex-col mb-4" style="flex:1; overflow-x: hidden; overflow-y: auto;">
         <AllConversations
           :searchInput="searchInput"
           :conversationsList="conversationsList"
