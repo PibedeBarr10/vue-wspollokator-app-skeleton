@@ -125,6 +125,9 @@ export default {
           this.messageList = JSON.parse(JSON.stringify(data))
         }).then(() => {
           if (this.canScroll) {
+            // setTimeout(() => {
+            //   this.$refs.conversationComponent.scrollDown()
+            // }, 300)
             this.$refs.conversationComponent.scrollDown()
             this.canScroll = false
           }
