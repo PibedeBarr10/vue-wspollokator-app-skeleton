@@ -82,25 +82,8 @@ export default {
       currentCoords: []
     }
   },
-  // watch: {
-  //    messageList: {
-  //      deep: true,
-  //      handler(value) {
-  //        this.scrollDown()
-  //      }
-  //    }
-  // },
   methods: {
-    // scrollDown () {
-    //   const elem = document.getElementById('conversationData');
-    //   elem.scrollIntoView({ behavior: "smooth" })
-    //   elem.scrollTop = elem.scrollHeight;
-    // },
     sendMessage () {
-      if (this.messageList.length > 0) {
-        const lastMessage = this.messageList[this.messageList.length - 1]
-      }
-
       if (this.message.length <= 0) {
         this.$store.dispatch('notificationModule/show', {
           text: `Nie można wysłać pustej wiadomości`,
@@ -123,19 +106,7 @@ export default {
     scrollDown () {
       let container = document.querySelector('#conversationData')
       let lastMessage = document.querySelector('#lastMessage')
-      // let lastMessageIds = document.querySelectorAll('#lastMessage')
-      //
-      // if (lastMessageIds.length <= 0) {
-      //   return
-      // }
-      //
-      // let lastMessage = lastMessageIds[lastMessageIds.length - 1]
 
-      // console.log(lastMessageIds)
-      // console.log(lastMessage.getBoundingClientRect())
-
-      // console.log(lastMessage.getBoundingClientRect())
-      // container.scrollTo(lastMessage.getBoundingClientRect().left, lastMessage.getBoundingClientRect().top)
       container.scrollTo(lastMessage.getBoundingClientRect().left, 100000)
     }
   },

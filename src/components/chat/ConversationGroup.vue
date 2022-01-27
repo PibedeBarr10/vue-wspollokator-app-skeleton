@@ -18,10 +18,12 @@
       </div>
     <div id="conversationData" class ="w-full border-b-2 border-gray-50 flex flex-col " style=" overflow:hidden; overflow-y: auto; flex:1;"> <!-- v-if="messageList !=0 " -->
       <div v-for="index in messageList" :key="index">
-        <!--  wiadomosc otrzymana --> 
-        <MessageIn :text="index.text" :avatar="getAvatar(index.user)" :created_at="index.created_at" v-if="index.user!=currentUserId"/>
-        <!-- wiadomość użytkownika --> 
-        <MessageOut :text="index.text" :created_at="index.created_at" v-else/>
+        <!--  wiadomosc otrzymana -->
+        <div :id="(messageList.length > 0 && messageList[messageList.length - 1] === index) ? 'lastMessage' : ''">
+          <MessageIn :text="index.text" :avatar="getAvatar(index.user)" :created_at="index.created_at" v-if="index.user!=currentUserId"/>
+          <!-- wiadomość użytkownika -->
+          <MessageOut :text="index.text" :created_at="index.created_at" v-else/>
+        </div>
       </div>
      </div>
     <div class ="p-2" style="height:130px; " >
@@ -71,6 +73,14 @@ export default {
  
   methods: {
     sendMessage () {
+      if (this.message.length <= 0) {
+        this.$store.dispatch('notificationModule/show', {
+          text: `Nie można wysłać pustej wiadomości`,
+          type: 'error'
+        })
+        return
+      }
+
       if (this.message.length > this.messageLimit) {
         this.$store.dispatch('notificationModule/show', {
           text: `Treść wiadomości nie może przekroczyć ${this.messageLimit} znaków`,
@@ -81,6 +91,12 @@ export default {
 
       this.$emit('send', this.message)
       this.message = ''
+    },
+    scrollDown () {
+      let container = document.querySelector('#conversationData')
+      let lastMessage = document.querySelector('#lastMessage')
+
+      container.scrollTo(lastMessage.getBoundingClientRect().left, 100000)
     },
     getAvatar (oponentUserId) {
       let avatar = ''

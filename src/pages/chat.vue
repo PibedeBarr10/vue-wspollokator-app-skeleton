@@ -20,6 +20,7 @@
       />
       <ConversationGroup
         v-else-if="chooseConversationId !== '0' && !loading && isGroup"
+        ref="groupConversationComponent"
         :messageList="this.messageList"
         :users="this.users"
         :name="this.nameGroup"
@@ -102,7 +103,7 @@ export default {
       loading: true,
       interval: null,
       isGroup: false,
-      canScroll: false
+      canScroll: false,
     }
   },
   computed: {
@@ -124,11 +125,16 @@ export default {
         chatService.getConversation(this.chooseConversationId).then(data => {
           this.messageList = JSON.parse(JSON.stringify(data))
         }).then(() => {
-          if (this.canScroll) {
+          if (this.canScroll && !this.isGroup) {
             // setTimeout(() => {
             //   this.$refs.conversationComponent.scrollDown()
             // }, 300)
             this.$refs.conversationComponent.scrollDown()
+            this.canScroll = false
+          }
+
+          if (this.canScroll && this.isGroup) {
+            this.$refs.groupConversationComponent.scrollDown()
             this.canScroll = false
           }
         })
@@ -158,9 +164,9 @@ export default {
     onClickChildChildGroup (chooseGroupConversationId,users,name)
     {
       this.users = users
-      this.loading= true
-      this.isGroup=true
-      this.nameGroup=name
+      this.loading = true
+      this.isGroup = true
+      this.nameGroup = name
       this.$router.push({name: 'Wiadomości', params: { chooseConversationId: chooseGroupConversationId } })
     },
     sendMessageChild (message) {
